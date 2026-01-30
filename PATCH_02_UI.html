@@ -1,0 +1,178 @@
+<!-- PATCH_02_UI.html -->
+<script>
+(function () {
+  const PATCH_ID = "PATCH_02_UI_V1";
+
+  function $(sel, root=document) { return root.querySelector(sel); }
+  function $all(sel, root=document) { return Array.from(root.querySelectorAll(sel)); }
+
+  function ensureHost() {
+    return document.getElementById("modulesMount")
+      || document.getElementById("modulesHost")
+      || document.body;
+  }
+
+  function injectThemeCss() {
+    if (document.getElementById("peon2ThemeVars")) return;
+
+    const style = document.createElement("style");
+    style.id = "peon2ThemeVars";
+    style.textContent = `
+      :root{
+        --p2-bg:#f6f7fb;
+        --p2-card:#ffffff;
+        --p2-text:#111827;
+        --p2-muted:#6b7280;
+        --p2-border:rgba(0,0,0,0.12);
+        --p2-accent:#2563eb;
+      }
+      [data-peon2-theme="dark"]{
+        --p2-bg:#0b1020;
+        --p2-card:#111827;
+        --p2-text:#e5e7eb;
+        --p2-muted:#9ca3af;
+        --p2-border:rgba(255,255,255,0.14);
+        --p2-accent:#60a5fa;
+      }
+      [data-peon2-theme="paper"]{
+        --p2-bg:#fbf6ea;
+        --p2-card:#fffaf0;
+        --p2-text:#1f2937;
+        --p2-muted:#6b7280;
+        --p2-border:rgba(31,41,55,0.18);
+        --p2-accent:#b45309;
+      }
+
+      body{
+        background:var(--p2-bg) !important;
+        color:var(--p2-text) !important;
+      }
+      .peon2-card{
+        background:var(--p2-card) !important;
+        border-color:var(--p2-border) !important;
+        color:var(--p2-text) !important;
+      }
+      .peon2-muted{ color:var(--p2-muted) !important; }
+      .peon2-accent{ color:var(--p2-accent) !important; }
+      .peon2-btn{
+        border:1px solid var(--p2-border) !important;
+        background:var(--p2-card) !important;
+        color:var(--p2-text) !important;
+        border-radius:10px;
+        padding:10px 12px;
+        cursor:pointer;
+      }
+      .peon2-select{
+        border:1px solid var(--p2-border) !important;
+        background:var(--p2-card) !important;
+        color:var(--p2-text) !important;
+        border-radius:10px;
+        padding:10px 12px;
+      }
+    `;
+    document.head.appendChild(style);
+  }
+
+  function getTheme() {
+    try { return localStorage.getItem("peon2.theme") || "light"; }
+    catch (_) { return "light"; }
+  }
+  function setTheme(t) {
+    try { localStorage.setItem("peon2.theme", t); } catch (_) {}
+    document.documentElement.setAttribute("data-peon2-theme", t);
+  }
+
+  function renderThemePicker() {
+    const host = ensureHost();
+
+    if ($("#peon2ThemePicker")) return;
+
+    const wrap = document.createElement("section");
+    wrap.id = "peon2ThemePicker";
+    wrap.className = "peon2-card";
+    wrap.style.margin = "12px 0";
+    wrap.style.padding = "14px";
+    wrap.style.border = "1px solid var(--p2-border)";
+    wrap.style.borderRadius = "12px";
+
+    wrap.innerHTML = `
+      <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
+        <div style="font-weight:700;">Wygląd</div>
+        <div class="peon2-muted" style="font-size:13px;">szybka zmiana kolorów interfejsu</div>
+        <div style="margin-left:auto;display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+          <select id="peon2ThemeSelect" class="peon2-select">
+            <option value="light">Jasny</option>
+            <option value="dark">Ciemny</option>
+            <option value="paper">Papier</option>
+          </select>
+          <button type="button" id="peon2ThemeReset" class="peon2-btn">Reset</button>
+        </div>
+      </div>
+    `;
+
+    host.prepend(wrap);
+
+    const sel = $("#peon2ThemeSelect", wrap);
+    const cur = getTheme();
+    sel.value = cur;
+    setTheme(cur);
+
+    sel.addEventListener("change", () => setTheme(sel.value));
+    $("#peon2ThemeReset", wrap).addEventListener("click", () => {
+      setTheme("light");
+      sel.value = "light";
+    });
+  }
+
+  function hideDuplicateMse() {
+    // Zostawiamy tylko #mse2
+    const keep = document.getElementById("mse2");
+    const candidates = [
+      document.getElementById("mse"),
+      document.getElementById("MSE"),
+      document.getElementById("statusMentis"),
+      document.getElementById("StatusMentis")
+    ].filter(Boolean);
+
+    candidates.forEach(el => {
+      if (keep && el === keep) return;
+      el.style.display = "none";
+    });
+
+    // Dodatkowo ukryj sekcje, które wyglądają jak MSE po nagłówku
+    $all("section, div").forEach(el => {
+      if (el.id === "mse2") return;
+      const h2 = el.querySelector && el.querySelector("h2,h3");
+      const t = (h2 && (h2.innerText || "").toLowerCase()) || "";
+      if (t.includes("status mentalis") || t.includes("mse")) {
+        // jeżeli to nie jest nasz mse2, chowamy
+        if (!el.querySelector("#mse2")) el.style.display = "none";
+      }
+    });
+  }
+
+  function apply() {
+    injectThemeCss();
+    renderThemePicker();
+    hideDuplicateMse();
+  }
+
+  function register() {
+    window.PEON2_PATCHER.register({ id: PATCH_ID, apply });
+  }
+
+  (function waitForPatcher() {
+    const max = 120;
+    let i = 0;
+    const t = setInterval(() => {
+      i++;
+      if (window.PEON2_PATCHER && typeof window.PEON2_PATCHER.register === "function") {
+        clearInterval(t);
+        register();
+      }
+      if (i >= max) clearInterval(t);
+    }, 50);
+  })();
+})();
+</script>
+<!-- PATCH_02_UI_V1_GUARD -->

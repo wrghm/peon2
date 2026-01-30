@@ -1,0 +1,339 @@
+<!-- Module_SUD.html -->
+<template id="tpl-module_sud" data-module="module_sud">
+  <style>
+    .sudGrid{ display:grid; grid-template-columns: 1fr 1fr; gap:12px }
+    .sudGrid3{ display:grid; grid-template-columns: 1fr 1fr 1fr; gap:10px }
+    .sudPill{
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(232,238,252,.16);
+      color: rgba(232,238,252,.70);
+      background: rgba(16,31,56,.45);
+    }
+    .sudHelp{
+      font-size: 12px;
+      color: rgba(232,238,252,.70);
+      line-height: 1.35;
+      border: 1px dashed rgba(232,238,252,.18);
+      background: rgba(11,18,32,.18);
+      border-radius: 14px;
+      padding: 10px;
+    }
+    .sudLabel{ display:block; font-size:12px; color: rgba(232,238,252,.60); margin-bottom:6px }
+    .sudCheck{
+      display:flex; gap:8px; align-items:flex-start;
+      border: 1px solid rgba(232,238,252,.14);
+      background: rgba(11,18,32,.22);
+      padding: 10px;
+      border-radius: 14px;
+      cursor:pointer;
+      user-select:none;
+      min-height: 44px;
+    }
+    .sudCheck input{ margin-top: 2px }
+    .sudCheck b{ color: rgba(232,238,252,.90); font-size: 12.5px }
+    .sudCheck small{ display:block; color: rgba(232,238,252,.60); font-size: 11.5px; line-height: 1.25 }
+    .sudBox{
+      border: 1px solid rgba(232,238,252,.14);
+      background: rgba(11,18,32,.18);
+      border-radius: 14px;
+      padding: 10px;
+    }
+    .sudInput, .sudText{
+      width: 100%;
+      border: 1px solid rgba(232,238,252,.16);
+      background: rgba(11,18,32,.45);
+      color: rgba(232,238,252,.92);
+      border-radius: 12px;
+      padding: 10px 10px;
+      font-size: 13px;
+      outline: none;
+      box-sizing: border-box;
+    }
+    .sudText{ min-height: 86px; resize: vertical }
+    .sudSub{
+      font-weight: 800;
+      font-size: 12.5px;
+      color: rgba(232,238,252,.92);
+      margin: 8px 0 10px;
+      display:flex;
+      align-items:center;
+      gap: 10px;
+    }
+    .sudRule{ height:1px; background: rgba(232,238,252,.10); margin: 10px 0 }
+    @media (max-width: 980px){
+      .sudGrid, .sudGrid3{ grid-template-columns: 1fr }
+    }
+  </style>
+
+  <details class="acc" open>
+    <summary class="acc-head">
+      <span class="acc-title">Uzależnienia (SUD) — wywiad pogłębiony</span>
+      <span class="acc-sub">Alkohol, substancje, odstawienie, konsekwencje, leczenie, ryzyko</span>
+    </summary>
+
+    <div class="sudHelp">
+      Moduł do zebrania danych o alkoholu i innych substancjach.
+      Zaznaczenia w polach mogą być wyzwalaczem auto-otwierania.
+      <span class="sudPill">placeholdery znikają po pisaniu</span>
+    </div>
+
+    <div class="sudRule"></div>
+    <div class="sudSub">1) Szybki przesiew</div>
+
+    <div class="sudGrid">
+      <div class="sudBox">
+        <div class="sudLabel">Problem z alkoholem</div>
+        <label class="sudCheck">
+          <input type="checkbox" id="sud_alcohol_problem" data-auto-module="module_sud" />
+          <div>
+            <b>Tak</b>
+            <small>pacjent potwierdza nadużywanie, utratę kontroli lub szkody</small>
+          </div>
+        </label>
+        <div style="margin-top:10px" data-sud-show-when="sud_alcohol_problem">
+          <div class="sudLabel">Opis w 1–2 zdaniach</div>
+          <textarea class="sudText" id="sud_alcohol_problem_desc" placeholder="Co dokładnie pacjent podaje, od kiedy, jakie szkody i konsekwencje"></textarea>
+        </div>
+      </div>
+
+      <div class="sudBox">
+        <div class="sudLabel">Problem z narkotykami lub lekami</div>
+        <label class="sudCheck">
+          <input type="checkbox" id="sud_drugs_problem" data-auto-module="module_sud" />
+          <div>
+            <b>Tak</b>
+            <small>konopie, stymulanty, opioidy, benzo, pregabalina, inne</small>
+          </div>
+        </label>
+        <div style="margin-top:10px" data-sud-show-when="sud_drugs_problem">
+          <div class="sudLabel">Jakie substancje</div>
+          <input class="sudInput" id="sud_drugs_list" type="text" placeholder="np. konopie, amfetamina, kokaina, opioidy, benzo, pregabalina, ketamina" />
+        </div>
+      </div>
+    </div>
+
+    <div class="sudGrid3" style="margin-top:12px">
+      <div class="sudBox">
+        <div class="sudLabel">Czy pacjent był pod wpływem w ostatnich 24–48 h</div>
+        <select class="sudInput" id="sud_recent_intox">
+          <option value="">Wybierz…</option>
+          <option value="Nie">Nie</option>
+          <option value="Tak — alkohol">Tak — alkohol</option>
+          <option value="Tak — narkotyki">Tak — narkotyki</option>
+          <option value="Tak — mieszane">Tak — mieszane</option>
+          <option value="Nie wiadomo">Nie wiadomo</option>
+        </select>
+      </div>
+      <div class="sudBox">
+        <div class="sudLabel">Ostatnie użycie — kiedy</div>
+        <input class="sudInput" id="sud_last_use_when" type="text" placeholder="data i godzina, orientacyjnie" />
+      </div>
+      <div class="sudBox">
+        <div class="sudLabel">Motywacja do zmiany</div>
+        <select class="sudInput" id="sud_readiness">
+          <option value="">Wybierz…</option>
+          <option value="Brak gotowości">Brak gotowości</option>
+          <option value="Ambiwalencja">Ambiwalencja</option>
+          <option value="Gotowość do ograniczania">Gotowość do ograniczania</option>
+          <option value="Gotowość do abstynencji">Gotowość do abstynencji</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="sudRule"></div>
+    <div class="sudSub">2) Alkohol — wzorzec używania</div>
+
+    <div class="sudGrid">
+      <div class="sudBox">
+        <div class="sudLabel">Średnie spożycie w dniu picia</div>
+        <input class="sudInput" id="sud_alc_amount" type="text" placeholder="np. 0,5 l wódki lub 6–10 piw" />
+      </div>
+      <div class="sudBox">
+        <div class="sudLabel">Częstość</div>
+        <select class="sudInput" id="sud_alc_freq">
+          <option value="">Wybierz…</option>
+          <option value="Okazjonalnie">Okazjonalnie</option>
+          <option value="1–3 dni w tygodniu">1–3 dni w tygodniu</option>
+          <option value="4–6 dni w tygodniu">4–6 dni w tygodniu</option>
+          <option value="Codziennie">Codziennie</option>
+          <option value="Ciągi">Ciągi</option>
+        </select>
+      </div>
+
+      <div class="sudBox">
+        <div class="sudLabel">Ciągi — długość i przerwy</div>
+        <textarea class="sudText" id="sud_alc_binges" placeholder="ile trwa typowy ciąg, jak długie przerwy, co go przerywa"></textarea>
+      </div>
+      <div class="sudBox">
+        <div class="sudLabel">Utrata kontroli i tolerancja</div>
+        <textarea class="sudText" id="sud_alc_control" placeholder="czy zdarzają się epizody utraty kontroli, wzrost tolerancji, picie rano"></textarea>
+      </div>
+    </div>
+
+    <div class="sudRule"></div>
+    <div class="sudSub">3) Inne substancje — wzorzec używania</div>
+
+    <div class="sudGrid">
+      <div class="sudBox">
+        <div class="sudLabel">Substancja główna</div>
+        <input class="sudInput" id="sud_primary_substance" type="text" placeholder="np. konopie, amfetamina, benzo, opioidy" />
+      </div>
+      <div class="sudBox">
+        <div class="sudLabel">Droga podania</div>
+        <input class="sudInput" id="sud_route" type="text" placeholder="doustnie, donosowo, wziewnie, dożylnie, mieszane" />
+      </div>
+      <div class="sudBox">
+        <div class="sudLabel">Dawka i częstość</div>
+        <textarea class="sudText" id="sud_dose_freq" placeholder="ile, jak często, okresy nasilenia, epizody ryzykowne"></textarea>
+      </div>
+      <div class="sudBox">
+        <div class="sudLabel">Mieszanie substancji</div>
+        <textarea class="sudText" id="sud_mixing" placeholder="z czym miesza, w jakich sytuacjach, ryzyko interakcji i intoksykacji"></textarea>
+      </div>
+    </div>
+
+    <div class="sudRule"></div>
+    <div class="sudSub">4) Zespół abstynencyjny i powikłania</div>
+
+    <div class="sudGrid3">
+      <div class="sudBox">
+        <div class="sudLabel">Objawy odstawienne</div>
+        <textarea class="sudText" id="sud_withdraw_symptoms" placeholder="drżenia, poty, bezsenność, lęk, nudności, pobudzenie, głód"></textarea>
+      </div>
+      <div class="sudBox">
+        <div class="sudLabel">Drgawki po odstawieniu</div>
+        <select class="sudInput" id="sud_withdraw_seizures">
+          <option value="">Wybierz…</option>
+          <option value="Nie">Nie</option>
+          <option value="Tak">Tak</option>
+          <option value="Nie wiadomo">Nie wiadomo</option>
+        </select>
+        <div style="margin-top:10px">
+          <div class="sudLabel">Jeśli tak, opis</div>
+          <input class="sudInput" id="sud_withdraw_seizures_desc" type="text" placeholder="kiedy, ile, okoliczności, hospitalizacja" />
+        </div>
+      </div>
+      <div class="sudBox">
+        <div class="sudLabel">Epizody majaczeniowe</div>
+        <select class="sudInput" id="sud_delirium">
+          <option value="">Wybierz…</option>
+          <option value="Nie">Nie</option>
+          <option value="Tak">Tak</option>
+          <option value="Nie wiadomo">Nie wiadomo</option>
+        </select>
+        <div style="margin-top:10px">
+          <div class="sudLabel">Jeśli tak, opis</div>
+          <input class="sudInput" id="sud_delirium_desc" type="text" placeholder="omamy, dezorientacja, leczenie, kiedy" />
+        </div>
+      </div>
+    </div>
+
+    <div class="sudRule"></div>
+    <div class="sudSub">5) Konsekwencje i kryteria kliniczne</div>
+
+    <div class="sudGrid">
+      <div class="sudBox">
+        <div class="sudLabel">Szkody somatyczne i urazy</div>
+        <textarea class="sudText" id="sud_harms_somatic" placeholder="urazy, wypadki, problemy wątrobowe, trzustkowe, inne"></textarea>
+      </div>
+      <div class="sudBox">
+        <div class="sudLabel">Szkody psychiczne</div>
+        <textarea class="sudText" id="sud_harms_psych" placeholder="nasilenie lęku, depresji, psychozy, bezsenności, dysforii"></textarea>
+      </div>
+      <div class="sudBox">
+        <div class="sudLabel">Konsekwencje społeczne i prawne</div>
+        <textarea class="sudText" id="sud_harms_social" placeholder="praca, relacje, zadłużenia, konflikty, prawo jazdy, sprawy karne"></textarea>
+      </div>
+      <div class="sudBox">
+        <div class="sudLabel">Kontynuacja mimo szkód i głód</div>
+        <textarea class="sudText" id="sud_craving" placeholder="czy pije lub bierze mimo oczywistych szkód, jak wygląda głód i wyzwalacze"></textarea>
+      </div>
+    </div>
+
+    <div class="sudRule"></div>
+    <div class="sudSub">6) Leczenie dotychczasowe i zasoby</div>
+
+    <div class="sudGrid">
+      <div class="sudBox">
+        <div class="sudLabel">Detoksy i hospitalizacje</div>
+        <textarea class="sudText" id="sud_treatment_detox" placeholder="liczba, kiedy, gdzie, przebieg, powikłania"></textarea>
+      </div>
+      <div class="sudBox">
+        <div class="sudLabel">Farmakoterapia i jej tolerancja</div>
+        <textarea class="sudText" id="sud_treatment_meds" placeholder="leki przeciwgłodowe, przeciwdepresyjne, BZD w detoksie, działania niepożądane"></textarea>
+      </div>
+      <div class="sudBox">
+        <div class="sudLabel">Psychoterapia, grupy, programy</div>
+        <textarea class="sudText" id="sud_treatment_psy" placeholder="AA, NA, terapia uzależnień, DDA, programy dzienne, wsparcie"></textarea>
+      </div>
+      <div class="sudBox">
+        <div class="sudLabel">Czynniki chroniące i plan</div>
+        <textarea class="sudText" id="sud_protective_plan" placeholder="kto wspiera, co działa, co przeszkadza, gotowość do działań"></textarea>
+      </div>
+    </div>
+
+    <div class="sudRule"></div>
+    <div class="sudSub">7) Ryzyko i bezpieczeństwo</div>
+
+    <div class="sudGrid3">
+      <div class="sudBox">
+        <div class="sudLabel">Zachowania ryzykowne pod wpływem</div>
+        <textarea class="sudText" id="sud_risk_behaviors" placeholder="agresja, wypadki, seks ryzykowny, prowadzenie pojazdów, samouszkodzenia"></textarea>
+      </div>
+      <div class="sudBox">
+        <div class="sudLabel">Myśli samobójcze w kontekście używania</div>
+        <select class="sudInput" id="sud_suicide_context">
+          <option value="">Wybierz…</option>
+          <option value="Nie">Nie</option>
+          <option value="Bierne">Bierne</option>
+          <option value="Czynne bez planu">Czynne bez planu</option>
+          <option value="Czynne z planem">Czynne z planem</option>
+        </select>
+        <div style="margin-top:10px">
+          <div class="sudLabel">Opis</div>
+          <textarea class="sudText" id="sud_suicide_desc" placeholder="związek czasowy z używaniem, dostęp do metod, czynniki chroniące"></textarea>
+        </div>
+      </div>
+      <div class="sudBox">
+        <div class="sudLabel">Zalecenia wstępne</div>
+        <textarea class="sudText" id="sud_initial_recs" placeholder="detoks, konsultacja uzależnieniowa, plan bezpieczeństwa, ograniczenie dostępu do substancji"></textarea>
+      </div>
+    </div>
+  </details>
+</template>
+
+<script>
+(() => {
+  const setShow = (root, id, show) => {
+    const x = root.querySelector(`#${id}`);
+    if (!x) return;
+    x.closest(`[data-sud-show-when]`)?.style && (x.closest(`[data-sud-show-when]`).style.display = show ? "" : "none");
+  };
+
+  const initInHost = (hostEl) => {
+    if (!hostEl) return;
+    if (hostEl.__sudInited) return;
+    hostEl.__sudInited = true;
+
+    const a = hostEl.querySelector("#sud_alcohol_problem");
+    const d = hostEl.querySelector("#sud_drugs_problem");
+
+    const sync = () => {
+      if (a) setShow(hostEl, "sud_alcohol_problem_desc", !!a.checked);
+      if (d) setShow(hostEl, "sud_drugs_list", !!d.checked);
+    };
+
+    a?.addEventListener("change", sync);
+    d?.addEventListener("change", sync);
+    sync();
+  };
+
+  document.addEventListener("peon2:moduleMounted", (e) => {
+    const { moduleId, hostEl } = (e.detail || {});
+    if (moduleId !== "module_sud") return;
+    initInHost(hostEl);
+  });
+})();
+</script>

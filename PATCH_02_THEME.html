@@ -1,0 +1,83 @@
+<!-- PATCH_02_THEME.html -->
+<script>
+(function () {
+  const PATCH_ID = "PATCH_02_THEME_V1";
+  const KEY = "peon2.theme";
+
+  function ensureTopbarSlot() {
+    return document.querySelector("#topbar, .topbar, header") || document.body;
+  }
+
+  function applyTheme(name) {
+    const root = document.documentElement;
+    root.setAttribute("data-peon2-theme", name);
+
+    // bazowe zmienne, bez ingerencji w resztę CSS
+    const themes = {
+      light:  { bg:"#f6f7fb", fg:"#111", card:"#fff", input:"#fff", btn:"#fff" },
+      dark:   { bg:"#0f1218", fg:"#e9edf4", card:"#151a22", input:"#121722", btn:"#151a22" },
+      hc:     { bg:"#000", fg:"#fff", card:"#000", input:"#000", btn:"#000" }
+    };
+    const t = themes[name] || themes.light;
+
+    root.style.setProperty("--p2-bg", t.bg);
+    root.style.setProperty("--p2-fg", t.fg);
+    root.style.setProperty("--p2-card", t.card);
+    root.style.setProperty("--p2-input", t.input);
+    root.style.setProperty("--p2-btn", t.btn);
+
+    try { localStorage.setItem(KEY, name); } catch (_) {}
+  }
+
+  function mountUI() {
+    if (document.getElementById("peon2ThemePicker")) return;
+
+    const host = ensureTopbarSlot();
+    const wrap = document.createElement("div");
+    wrap.id = "peon2ThemePicker";
+    wrap.style.cssText = "position:sticky;top:0;z-index:9999;padding:8px 10px;border-bottom:1px solid rgba(0,0,0,0.08);background:var(--p2-card,#fff);color:var(--p2-fg,#111);display:flex;gap:10px;align-items:center;";
+
+    wrap.innerHTML = `
+      <style>
+        body{background:var(--p2-bg,#f6f7fb);color:var(--p2-fg,#111);}
+        .peon2ThemeSel{padding:8px 10px;border-radius:10px;border:1px solid rgba(0,0,0,0.18);background:var(--p2-input,#fff);color:var(--p2-fg,#111);}
+      </style>
+      <div style="font-weight:600;">Widok</div>
+      <select class="peon2ThemeSel" id="peon2ThemeSel">
+        <option value="light">Jasny</option>
+        <option value="dark">Ciemny</option>
+        <option value="hc">Wysoki kontrast</option>
+      </select>
+      <div style="opacity:.75;font-size:12px;">zapamiętywane lokalnie</div>
+    `;
+
+    // wstaw na samą górę body, żeby działało zawsze
+    document.body.prepend(wrap);
+
+    const sel = document.getElementById("peon2ThemeSel");
+    const saved = (function(){ try { return localStorage.getItem(KEY) || "light"; } catch(_) { return "light"; } })();
+    sel.value = saved;
+    applyTheme(saved);
+
+    sel.addEventListener("change", () => applyTheme(sel.value));
+  }
+
+  function applyPatch() {
+    window.PEON2_PATCHER.register({ id: PATCH_ID, apply: () => mountUI() });
+  }
+
+  (function waitForPatcher() {
+    const max = 80;
+    let i = 0;
+    const t = setInterval(() => {
+      i++;
+      if (window.PEON2_PATCHER && typeof window.PEON2_PATCHER.register === "function") {
+        clearInterval(t);
+        applyPatch();
+      }
+      if (i >= max) clearInterval(t);
+    }, 50);
+  })();
+})();
+</script>
+<!-- PATCH_02_THEME_V1_GUARD -->

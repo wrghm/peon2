@@ -1,0 +1,328 @@
+<!-- mode_knowledge.html -->
+<style>
+  .knWrap{display:grid;gap:14px}
+  .knCard{
+    border:1px solid rgba(0,0,0,.12);
+    border-radius:16px;
+    padding:12px;
+    background:#fff;
+    display:grid;
+    gap:12px
+  }
+  .knGrid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .field{display:grid;gap:6px}
+  .field label{font-size:12px;opacity:.78;font-weight:900;letter-spacing:.2px}
+  .control{
+    border:1px solid rgba(0,0,0,.16);
+    border-radius:12px;
+    padding:10px;
+    font-size:14px;
+    background:#fff;
+    outline:none
+  }
+  .big{
+    width:100%;
+    min-height:120px;
+    border:1px solid rgba(0,0,0,.16);
+    border-radius:14px;
+    padding:10px;
+    font-size:14px;
+    resize:vertical;
+    line-height:1.35;
+    outline:none;
+    background:#fff
+  }
+  .hint{font-size:12px;opacity:.72;line-height:1.35}
+  .btnRow{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  .btn{
+    border:1px solid rgba(0,0,0,.16);
+    background:#fff;
+    padding:9px 12px;
+    border-radius:12px;
+    cursor:pointer;
+    font-weight:900;
+    font-size:13px
+  }
+  .btn.secondary{opacity:.9;font-weight:800}
+  .badge{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:7px 10px;
+    border-radius:999px;
+    border:1px solid rgba(0,0,0,.12);
+    background:rgba(0,0,0,.03);
+    font-size:12px;
+    font-weight:900
+  }
+  @media(max-width:900px){
+    .knGrid2{grid-template-columns:1fr}
+  }
+</style>
+
+<script>
+  const ensureKnowledgeState = () => {
+    window.STATE = window.STATE || {}
+    window.STATE.knowledge = window.STATE.knowledge || {
+      query: '',
+      answer: '',
+      sourceType: 'ChPL',
+      sourceName: '',
+      tags: '',
+      notes: '',
+      history: [] // {q,a,sourceType,sourceName,ts}
+    }
+  }
+
+  const kn = () => { ensureKnowledgeState(); return window.STATE.knowledge }
+  const mark = () => { if (window.markEdited) window.markEdited() }
+  const v = (x) => String(x || '').trim()
+
+  const nowStamp = () => {
+    const d = new Date()
+    const pad = (n) => String(n).padStart(2,'0')
+    return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`
+  }
+
+  const renderKnowledgePanel = (container) => {
+    ensureKnowledgeState()
+    const st = kn()
+
+    const wrap = document.createElement('div')
+    wrap.className = 'knWrap'
+
+    const card = document.createElement('div')
+    card.className = 'knCard'
+
+    const head = document.createElement('div')
+    head.innerHTML = `
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
+        <strong style="letter-spacing:.2px">Wiedza – pytanie i notatka źródłowa</strong>
+        <span class="badge">Tryb: Wiedza</span>
+      </div>
+      <div class="hint">
+        Tu zapisujesz „pytanie → odpowiedź → źródło”. Źródło wybierasz ręcznie (ChPL / Stahl / Wytyczne / Inne).
+        Później podepniemy do tego automatyczne cytowanie z Twoich PDF.
+      </div>
+    `
+
+    const grid = document.createElement('div')
+    grid.className = 'knGrid2'
+
+    const f1 = document.createElement('div')
+    f1.className = 'field'
+    const l1 = document.createElement('label')
+    l1.textContent = 'Pytanie'
+    const q = document.createElement('textarea')
+    q.className = 'big'
+    q.style.minHeight = '90px'
+    q.placeholder = 'Wpisz pytanie kliniczne… (np. dawkowanie, interakcje, działania niepożądane, przeciwwskazania)'
+    q.value = st.query || ''
+    q.addEventListener('input', () => { st.query = q.value; mark() })
+    f1.appendChild(l1); f1.appendChild(q)
+
+    const f2 = document.createElement('div')
+    f2.className = 'field'
+    const l2 = document.createElement('label')
+    l2.textContent = 'Odpowiedź (Twoja synteza)'
+    const a = document.createElement('textarea')
+    a.className = 'big'
+    a.style.minHeight = '90px'
+    a.placeholder = 'Wpisz krótką, praktyczną odpowiedź…'
+    a.value = st.answer || ''
+    a.addEventListener('input', () => { st.answer = a.value; mark() })
+    f2.appendChild(l2); f2.appendChild(a)
+
+    grid.appendChild(f1)
+    grid.appendChild(f2)
+
+    const meta = document.createElement('div')
+    meta.className = 'knGrid2'
+
+    const f3 = document.createElement('div')
+    f3.className = 'field'
+    const l3 = document.createElement('label')
+    l3.textContent = 'Typ źródła'
+    const sel = document.createElement('select')
+    sel.className = 'control'
+    sel.innerHTML = `
+      <option value="ChPL">ChPL</option>
+      <option value="Stahl">Stahl</option>
+      <option value="Wytyczne">Wytyczne</option>
+      <option value="Podręcznik">Podręcznik</option>
+      <option value="Inne">Inne</option>
+    `
+    sel.value = st.sourceType || 'ChPL'
+    sel.addEventListener('change', () => { st.sourceType = sel.value; mark() })
+    f3.appendChild(l3); f3.appendChild(sel)
+
+    const f4 = document.createElement('div')
+    f4.className = 'field'
+    const l4 = document.createElement('label')
+    l4.textContent = 'Nazwa źródła (ręcznie)'
+    const src = document.createElement('input')
+    src.className = 'control'
+    src.placeholder = 'np. ChPL: sertralina, URPL; Stahl 5e; Wytyczne PTPS…'
+    src.value = st.sourceName || ''
+    src.addEventListener('input', () => { st.sourceName = src.value; mark() })
+    f4.appendChild(l4); f4.appendChild(src)
+
+    meta.appendChild(f3)
+    meta.appendChild(f4)
+
+    const f5 = document.createElement('div')
+    f5.className = 'field'
+    const l5 = document.createElement('label')
+    l5.textContent = 'Tagi (opcjonalnie)'
+    const tags = document.createElement('input')
+    tags.className = 'control'
+    tags.placeholder = 'np. SSRI, interakcje, QT, ciąża'
+    tags.value = st.tags || ''
+    tags.addEventListener('input', () => { st.tags = tags.value; mark() })
+    f5.appendChild(l5); f5.appendChild(tags)
+
+    const f6 = document.createElement('div')
+    f6.className = 'field'
+    const l6 = document.createElement('label')
+    l6.textContent = 'Notatki dodatkowe'
+    const notes = document.createElement('textarea')
+    notes.className = 'big'
+    notes.placeholder = 'Dodatkowe szczegóły, warianty, przeciwwskazania, alternatywy…'
+    notes.value = st.notes || ''
+    notes.addEventListener('input', () => { st.notes = notes.value; mark() })
+    f6.appendChild(l6); f6.appendChild(notes)
+
+    const btnRow = document.createElement('div')
+    btnRow.className = 'btnRow'
+
+    const bSave = document.createElement('button')
+    bSave.type = 'button'
+    bSave.className = 'btn'
+    bSave.textContent = '💾 Dodaj do historii'
+
+    const bClear = document.createElement('button')
+    bClear.type = 'button'
+    bClear.className = 'btn secondary'
+    bClear.textContent = '🧹 Wyczyść pola'
+
+    btnRow.appendChild(bSave)
+    btnRow.appendChild(bClear)
+
+    const hist = document.createElement('div')
+    hist.className = 'field'
+    const lh = document.createElement('label')
+    lh.textContent = 'Historia (lokalnie w STATE)'
+    const hta = document.createElement('textarea')
+    hta.className = 'big'
+    hta.placeholder = 'Tu zobaczysz wpisy historii…'
+    hta.readOnly = true
+
+    const refreshHist = () => {
+      const arr = (st.history || [])
+      const lines = arr.map((x, i) => {
+        return [
+          `#${i+1} [${x.ts || ''}]`,
+          `Pytanie: ${x.q || ''}`,
+          `Odpowiedź: ${x.a || ''}`,
+          `Źródło: ${x.sourceType || ''} — ${x.sourceName || ''}`
+        ].join('\n')
+      })
+      hta.value = lines.join('\n\n')
+    }
+    refreshHist()
+
+    bSave.addEventListener('click', () => {
+      const item = {
+        ts: nowStamp(),
+        q: v(st.query),
+        a: v(st.answer),
+        sourceType: v(st.sourceType) || 'ChPL',
+        sourceName: v(st.sourceName)
+      }
+      if (!item.q && !item.a) return
+      st.history = st.history || []
+      st.history.unshift(item)
+      mark()
+      refreshHist()
+    })
+
+    bClear.addEventListener('click', () => {
+      st.query = ''
+      st.answer = ''
+      st.sourceType = 'ChPL'
+      st.sourceName = ''
+      st.tags = ''
+      st.notes = ''
+      q.value = ''
+      a.value = ''
+      sel.value = 'ChPL'
+      src.value = ''
+      tags.value = ''
+      notes.value = ''
+      mark()
+    })
+
+    hist.appendChild(lh)
+    hist.appendChild(hta)
+
+    card.appendChild(head)
+    card.appendChild(grid)
+    card.appendChild(meta)
+    card.appendChild(f5)
+    card.appendChild(f6)
+    card.appendChild(btnRow)
+    card.appendChild(hist)
+
+    wrap.appendChild(card)
+    container.appendChild(wrap)
+  }
+
+  // Hook w tryb "Wiedza"
+  window.onModeChanged = ((orig) => (mode) => {
+    if (typeof orig === 'function') orig(mode)
+
+    if (mode !== 'Wiedza') return
+
+    const baseRoot = document.getElementById('baseSections')
+    const mseRoot = document.getElementById('mseSections')
+
+    if (baseRoot) {
+      baseRoot.innerHTML = ''
+      const d = document.createElement('details')
+      d.className = 'section'
+      d.open = true
+      const s = document.createElement('summary')
+      s.textContent = 'Wiedza'
+      d.appendChild(s)
+      const inner = document.createElement('div')
+      inner.className = 'secInner'
+      renderKnowledgePanel(inner)
+      d.appendChild(inner)
+      baseRoot.appendChild(d)
+    }
+
+    if (mseRoot) {
+      mseRoot.innerHTML = ''
+      const det = document.createElement('details')
+      det.className = 'section'
+      det.open = true
+      const sum = document.createElement('summary')
+      sum.textContent = 'Plan rozbudowy'
+      det.appendChild(sum)
+      const inner = document.createElement('div')
+      inner.className = 'secInner'
+      inner.innerHTML = `
+        <div class="hint">
+          Kolejne kroki w trybie Wiedza:
+          <ul style="margin:8px 0 0 18px;line-height:1.35">
+            <li>Wyszukiwanie w lokalnej bazie leków (ChPL jako priorytet) i automatyczne wstawianie źródła</li>
+            <li>Obsługa „karty leku” (dawki, interakcje, ciąża/laktacja, QT, nerki/wątroba)</li>
+            <li>Tryb „porównaj leki” i „zamiennik”</li>
+          </ul>
+        </div>
+      `
+      det.appendChild(inner)
+      mseRoot.appendChild(det)
+    }
+  })(window.onModeChanged)
+</script>

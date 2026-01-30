@@ -1,0 +1,398 @@
+<!-- mode_discharge.html -->
+<style>
+  .disWrap{display:grid;gap:14px}
+  .disCard{
+    border:1px solid rgba(0,0,0,.12);
+    border-radius:16px;
+    padding:12px;
+    background:#fff;
+    display:grid;
+    gap:10px
+  }
+  .disGrid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .disGrid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+  .field{display:grid;gap:6px}
+  .field label{font-size:12px;opacity:.78;font-weight:800;letter-spacing:.2px}
+  .control{
+    border:1px solid rgba(0,0,0,.16);
+    border-radius:12px;
+    padding:10px;
+    font-size:14px;
+    background:#fff;
+    outline:none
+  }
+  .big{
+    width:100%;
+    min-height:120px;
+    border:1px solid rgba(0,0,0,.16);
+    border-radius:14px;
+    padding:10px;
+    font-size:14px;
+    resize:vertical;
+    line-height:1.35;
+    outline:none;
+    background:#fff
+  }
+  .hint{font-size:12px;opacity:.72;line-height:1.35}
+  .btnRow{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  .btn{
+    border:1px solid rgba(0,0,0,.16);
+    background:#fff;
+    padding:9px 12px;
+    border-radius:12px;
+    cursor:pointer;
+    font-weight:900;
+    font-size:13px
+  }
+  .btn.secondary{opacity:.9;font-weight:800}
+  .chips{display:flex;flex-wrap:wrap;gap:8px}
+  .chip{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:8px 10px;
+    border-radius:999px;
+    border:1px solid rgba(0,0,0,.12);
+    background:rgba(0,0,0,.03);
+    font-size:12px;
+    font-weight:900;
+    user-select:none
+  }
+  .chip input{width:18px;height:18px}
+  .titleRow{display:flex;justify-content:space-between;align-items:center;gap:10px}
+  .titleRow strong{letter-spacing:.2px}
+  @media(max-width:900px){
+    .disGrid2,.disGrid3{grid-template-columns:1fr}
+  }
+</style>
+
+<script>
+  const ensureDischargeState = () => {
+    window.STATE = window.STATE || {}
+    window.STATE.discharge = window.STATE.discharge || {
+      meta: {
+        date: '',
+        ward: '',
+        admission_reason: '',
+        discharge_reason: '',
+        diagnosis_working: '',
+        risk_summary: '',
+        followup: '',
+        meds: '',
+        instructions: '',
+        functioning: '',
+        tests: '',
+        course: '',
+        mse_summary: ''
+      },
+      flags: {
+        include_headers: true,
+        include_mse: true,
+        include_tests: true,
+        include_meds: true,
+        include_instructions: true,
+        include_risk: true
+      },
+      generated: ''
+    }
+  }
+
+  const dis = () => {
+    ensureDischargeState()
+    return window.STATE.discharge
+  }
+
+  const mark = () => { if (window.markEdited) window.markEdited() }
+
+  const v = (x) => String(x || '').trim()
+
+  const buildDischargeText = () => {
+    const st = dis()
+    const m = st.meta
+    const f = st.flags
+
+    const parts = []
+
+    if (f.include_headers) {
+      const hdr = []
+      if (v(m.date)) hdr.push(`Data wypisu: ${v(m.date)}`)
+      if (v(m.ward)) hdr.push(`Oddział: ${v(m.ward)}`)
+      if (hdr.length) parts.push(hdr.join('\n'))
+    }
+
+    if (v(m.admission_reason)) parts.push(`Powód przyjęcia\n${v(m.admission_reason)}`)
+    if (v(m.discharge_reason)) parts.push(`Tryb i powód wypisu\n${v(m.discharge_reason)}`)
+
+    if (v(m.diagnosis_working)) parts.push(`Rozpoznanie robocze i problem wiodący\n${v(m.diagnosis_working)}`)
+
+    if (v(m.course)) parts.push(`Przebieg hospitalizacji i interwencje\n${v(m.course)}`)
+
+    if (f.include_tests && v(m.tests)) parts.push(`Diagnostyka i badania\n${v(m.tests)}`)
+
+    if (f.include_mse && v(m.mse_summary)) parts.push(`Stan psychiczny w dniu wypisu\n${v(m.mse_summary)}`)
+
+    if (v(m.functioning)) parts.push(`Funkcjonowanie i ocena kliniczna\n${v(m.functioning)}`)
+
+    if (f.include_risk && v(m.risk_summary)) parts.push(`Ocena ryzyka i bezpieczeństwo\n${v(m.risk_summary)}`)
+
+    if (f.include_meds && v(m.meds)) parts.push(`Farmakoterapia przy wypisie\n${v(m.meds)}`)
+
+    if (v(m.followup)) parts.push(`Kontynuacja leczenia i kontrole\n${v(m.followup)}`)
+
+    if (f.include_instructions && v(m.instructions)) parts.push(`Zalecenia\n${v(m.instructions)}`)
+
+    return parts.filter(Boolean).join('\n\n')
+  }
+
+  const renderDischargePanel = (container) => {
+    ensureDischargeState()
+    const st = dis()
+
+    const wrap = document.createElement('div')
+    wrap.className = 'disWrap'
+
+    const card1 = document.createElement('div')
+    card1.className = 'disCard'
+
+    const t1 = document.createElement('div')
+    t1.className = 'titleRow'
+    const s1 = document.createElement('strong')
+    s1.textContent = 'Wypis – dane wejściowe'
+    const h1 = document.createElement('span')
+    h1.className = 'hint'
+    h1.textContent = 'Dużo pól, wszystkie edytowalne, potem generator składa tekst'
+    t1.appendChild(s1)
+    t1.appendChild(h1)
+
+    const gridA = document.createElement('div')
+    gridA.className = 'disGrid3'
+
+    const mkInput = (label, key, ph) => {
+      const f = document.createElement('div')
+      f.className = 'field'
+      const l = document.createElement('label')
+      l.textContent = label
+      const inp = document.createElement('input')
+      inp.className = 'control'
+      inp.placeholder = ph || ''
+      inp.value = st.meta[key] || ''
+      inp.addEventListener('input', () => {
+        st.meta[key] = inp.value
+        mark()
+      })
+      f.appendChild(l)
+      f.appendChild(inp)
+      return f
+    }
+
+    gridA.appendChild(mkInput('Data wypisu', 'date', 'np. 2026-01-29'))
+    gridA.appendChild(mkInput('Oddział', 'ward', 'np. Oddział X / IP / Dzienny'))
+    gridA.appendChild(mkInput('Hasłowy powód przyjęcia', 'admission_reason', '1–2 zdania albo słowa kluczowe'))
+
+    const gridB = document.createElement('div')
+    gridB.className = 'disGrid2'
+
+    const mkTA = (label, key, ph) => {
+      const f = document.createElement('div')
+      f.className = 'field'
+      const l = document.createElement('label')
+      l.textContent = label
+      const ta = document.createElement('textarea')
+      ta.className = 'big'
+      ta.placeholder = ph || ''
+      ta.value = st.meta[key] || ''
+      ta.addEventListener('input', () => {
+        st.meta[key] = ta.value
+        mark()
+      })
+      f.appendChild(l)
+      f.appendChild(ta)
+      return f
+    }
+
+    gridB.appendChild(mkTA(
+      'Tryb i powód wypisu',
+      'discharge_reason',
+      'np. wypis planowy / wypis na żądanie / wypis dyscyplinarny\nOkoliczności i uzasadnienie'
+    ))
+
+    gridB.appendChild(mkTA(
+      'Rozpoznanie robocze i problem wiodący',
+      'diagnosis_working',
+      'Pisz klinicznie, bez kodów\nObjawy osiowe, tło, czynniki podtrzymujące'
+    ))
+
+    const gridC = document.createElement('div')
+    gridC.className = 'disGrid2'
+    gridC.appendChild(mkTA(
+      'Przebieg hospitalizacji i interwencje',
+      'course',
+      'Najważniejsze: stabilizacja, obserwacje, zmiany leczenia, psychoedukacja, konsultacje'
+    ))
+    gridC.appendChild(mkTA(
+      'Diagnostyka i badania',
+      'tests',
+      'Badania laboratoryjne, EKG, konsultacje, wnioski istotne klinicznie'
+    ))
+
+    const gridD = document.createElement('div')
+    gridD.className = 'disGrid2'
+    gridD.appendChild(mkTA(
+      'Stan psychiczny w dniu wypisu',
+      'mse_summary',
+      'Krótki MSE pod wypis: kontakt, tok, nastrój, wytwórcze, ryzyko, wgląd'
+    ))
+    gridD.appendChild(mkTA(
+      'Funkcjonowanie i ocena kliniczna',
+      'functioning',
+      'Funkcjonowanie w oddziale, współpraca, samoobsługa, wnioski dot. dalszego leczenia'
+    ))
+
+    const gridE = document.createElement('div')
+    gridE.className = 'disGrid2'
+    gridE.appendChild(mkTA(
+      'Ocena ryzyka i bezpieczeństwo',
+      'risk_summary',
+      'Myśli S i H, zachowania autoagresywne, czynniki chroniące, plan bezpieczeństwa'
+    ))
+    gridE.appendChild(mkTA(
+      'Kontynuacja leczenia i kontrole',
+      'followup',
+      'PZP, psychoterapia, terminy kontroli, kontakt kryzysowy, plan 24–72h jeśli trzeba'
+    ))
+
+    const gridF = document.createElement('div')
+    gridF.className = 'disGrid2'
+    gridF.appendChild(mkTA(
+      'Farmakoterapia przy wypisie',
+      'meds',
+      'Każdy lek w osobnej linii\nDawka, pora, uwagi o tolerancji'
+    ))
+    gridF.appendChild(mkTA(
+      'Zalecenia',
+      'instructions',
+      'Psychoedukacja, higiena snu, unikanie substancji, wskazania do pilnej konsultacji'
+    ))
+
+    const flags = document.createElement('div')
+    flags.className = 'chips'
+
+    const mkFlag = (key, label) => {
+      const lab = document.createElement('label')
+      lab.className = 'chip'
+      const cb = document.createElement('input')
+      cb.type = 'checkbox'
+      cb.checked = !!st.flags[key]
+      cb.addEventListener('change', () => {
+        st.flags[key] = !!cb.checked
+        mark()
+      })
+      const sp = document.createElement('span')
+      sp.textContent = label
+      lab.appendChild(cb)
+      lab.appendChild(sp)
+      return lab
+    }
+
+    flags.appendChild(mkFlag('include_headers', 'nagłówki'))
+    flags.appendChild(mkFlag('include_mse', 'MSE'))
+    flags.appendChild(mkFlag('include_tests', 'badania'))
+    flags.appendChild(mkFlag('include_risk', 'ryzyko'))
+    flags.appendChild(mkFlag('include_meds', 'leki'))
+    flags.appendChild(mkFlag('include_instructions', 'zalecenia'))
+
+    const btnRow = document.createElement('div')
+    btnRow.className = 'btnRow'
+
+    const bGen = document.createElement('button')
+    bGen.type = 'button'
+    bGen.className = 'btn'
+    bGen.textContent = '🧾 Złóż tekst wypisu'
+
+    const bAppend = document.createElement('button')
+    bAppend.type = 'button'
+    bAppend.className = 'btn secondary'
+    bAppend.textContent = '➕ Dopisz jako kolejny blok'
+
+    btnRow.appendChild(bGen)
+    btnRow.appendChild(bAppend)
+
+    const out = document.createElement('textarea')
+    out.className = 'big'
+    out.placeholder = 'Tu pojawi się złożony tekst wypisu. Możesz go dalej edytować.'
+    out.value = st.generated || ''
+    out.addEventListener('input', () => {
+      st.generated = out.value
+      mark()
+    })
+
+    bGen.addEventListener('click', () => {
+      out.value = buildDischargeText()
+      st.generated = out.value
+      mark()
+    })
+
+    bAppend.addEventListener('click', () => {
+      const txt = buildDischargeText()
+      out.value = v(out.value) ? (out.value + '\n\n' + txt) : txt
+      st.generated = out.value
+      mark()
+    })
+
+    card1.appendChild(t1)
+    card1.appendChild(gridA)
+    card1.appendChild(gridB)
+    card1.appendChild(gridC)
+    card1.appendChild(gridD)
+    card1.appendChild(gridE)
+    card1.appendChild(gridF)
+    card1.appendChild(flags)
+    card1.appendChild(btnRow)
+    card1.appendChild(out)
+
+    wrap.appendChild(card1)
+    container.appendChild(wrap)
+  }
+
+  // Hook w tryb "Wypis" bez ruszania Twoich nazw plików
+  window.onModeChanged = ((orig) => (mode) => {
+    if (typeof orig === 'function') orig(mode)
+
+    if (mode !== 'Wypis') return
+
+    const baseRoot = document.getElementById('baseSections')
+    const mseRoot = document.getElementById('mseSections')
+
+    if (baseRoot) {
+      baseRoot.innerHTML = ''
+      const d = document.createElement('details')
+      d.className = 'section'
+      d.open = true
+      const s = document.createElement('summary')
+      s.textContent = 'Wypis'
+      d.appendChild(s)
+      const inner = document.createElement('div')
+      inner.className = 'secInner'
+      renderDischargePanel(inner)
+      d.appendChild(inner)
+      baseRoot.appendChild(d)
+    }
+
+    if (mseRoot) {
+      mseRoot.innerHTML = ''
+      const det = document.createElement('details')
+      det.className = 'section'
+      det.open = true
+      const sum = document.createElement('summary')
+      sum.textContent = 'Podgląd i notatki pomocnicze'
+      det.appendChild(sum)
+      const inner = document.createElement('div')
+      inner.className = 'secInner'
+      inner.innerHTML = `<div class="hint">
+        W tym miejscu możemy później dodać: walidator kompletności wypisu, checklistę bezpieczeństwa i szybkie „braki w dokumentacji”.
+      </div>`
+      det.appendChild(inner)
+      mseRoot.appendChild(det)
+    }
+  })(window.onModeChanged)
+</script>

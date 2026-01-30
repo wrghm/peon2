@@ -1,0 +1,221 @@
+<!-- MSE.html -->
+<div id="mseRoot"></div>
+
+<script>
+  ;(() => {
+    const ensureState = () => {
+      window.STATE = window.STATE || {}
+      window.STATE.mse = window.STATE.mse || {}
+    }
+
+    const setM = (secKey, fieldKey, value) => {
+      ensureState()
+      window.STATE.mse[secKey] = window.STATE.mse[secKey] || {}
+      window.STATE.mse[secKey][fieldKey] = value
+      if (window.markEdited) window.markEdited()
+    }
+
+    const getM = (secKey, fieldKey) => {
+      ensureState()
+      return (window.STATE.mse[secKey] && window.STATE.mse[secKey][fieldKey]) ? window.STATE.mse[secKey][fieldKey] : ""
+    }
+
+    const makeEl = (tag, cls, txt) => {
+      const el = document.createElement(tag)
+      if (cls) el.className = cls
+      if (txt !== undefined) el.textContent = txt
+      return el
+    }
+
+    const field = (secKey, k, label, ph) => {
+      const wrap = makeEl("div", "field")
+      const lab = makeEl("label", null, label)
+      const ta = document.createElement("textarea")
+      ta.className = "big"
+      ta.rows = 2
+      ta.placeholder = ph || ""
+      ta.value = getM(secKey, k)
+      ta.addEventListener("input", () => setM(secKey, k, ta.value))
+      wrap.appendChild(lab)
+      wrap.appendChild(ta)
+      return wrap
+    }
+
+    const big = (secKey, k, label, ph) => {
+      const wrap = makeEl("div", "field")
+      const lab = makeEl("label", null, label)
+      const ta = document.createElement("textarea")
+      ta.className = "big"
+      ta.rows = 5
+      ta.placeholder = ph || ""
+      ta.value = getM(secKey, k)
+      ta.addEventListener("input", () => setM(secKey, k, ta.value))
+      wrap.appendChild(lab)
+      wrap.appendChild(ta)
+      return wrap
+    }
+
+    const SECTIONS = [
+      {
+        key: "ogolne",
+        title: "Ogólne wrażenie, kontakt, współpraca",
+        info: "Zacznij opisem obserwacyjnym: postawa, nastawienie do badania, adekwatność kontaktu, wiarygodność.",
+        fields: [
+          ["kontakt", "Kontakt", "Logiczny, adekwatny, ograniczony, wrogi, unikający, ambiwalentny. Cytaty jeśli ważne."],
+          ["wspolpraca", "Współpraca", "Współpracuje, częściowo współpracuje, odmawia, wymaga wielokrotnego dopytywania."],
+          ["wiarygodnosc", "Wiarygodność", "Dobra, umiarkowana, niska. Czynniki zniekształcające: psychoza, intoksykacja, dysocjacja."]
+        ]
+      },
+      {
+        key: "swiadomosc_orientacja",
+        title: "Świadomość i orientacja",
+        info: "Przytomność, fluktuacje, orientacja auto- i allopsychiczna.",
+        fields: [
+          ["przytomnosc", "Świadomość", "Przytomny, przymglony, senność, fluktuacje, cechy majaczenia."],
+          ["orient_autopsych", "Orientacja autopsychiczna", "Zachowana / zaburzona. Jeśli zaburzona: jak."],
+          ["orient_allo", "Orientacja allopsychiczna", "Czas, miejsce, sytuacja. Co dokładnie zaburzone."],
+          ["uwagi", "Uwagi", "Np. trudność w skupieniu uwagi, dezorientacja sytuacyjna."]
+        ]
+      },
+      {
+        key: "zachowanie_motoryka",
+        title: "Zachowanie, psychomotoryka, mowa",
+        info: "Pobudzenie lub spowolnienie, katatonia, zachowania ryzykowne. Mowa: tempo, głośność, spójność.",
+        fields: [
+          ["zachowanie", "Zachowanie", "Spokojny, pobudzony, drażliwy, niepokój psychoruchowy, agresja, wycofanie."],
+          ["motoryka", "Psychomotoryka", "Norma, spowolnienie, pobudzenie, tiki, stereotypie, echopraksje, negatywizm."],
+          ["mowa", "Mowa", "Tempo, płynność, głośność, mutyzm, logorea, ubóstwo mowy, echolalia."]
+        ]
+      },
+      {
+        key: "nastroj_afekt",
+        title: "Nastrój i afekt",
+        info: "Nastrój subiektywny vs afekt obserwowalny: zakres, stabilność, adekwatność, reaktywność.",
+        fields: [
+          ["nastroj", "Nastrój (deklarowany)", "Obniżony, lękowy, drażliwy, podwyższony, chwiejny. Dynamika dobowa."],
+          ["afekt", "Afekt (obserwacja)", "Adekwatny, spłycony, labilny, rozszerzony, nieadekwatny. Reaktywność."],
+          ["anhedonia", "Anhedonia", "Obecna / nieobecna. Zakres i konsekwencje."],
+          ["lek_napiecie", "Lęk i napięcie", "Somatyzacja, napady paniki, unikanie, pobudzenie autonomiczne."]
+        ]
+      },
+      {
+        key: "tok_forma",
+        title: "Tok i forma myślenia",
+        info: "Tok: tempo i płynność. Forma: organizacja wypowiedzi. Zjawiska jakościowe: rozkojarzenie, inkoherencja.",
+        fields: [
+          ["tok", "Tok", "Przyspieszony, spowolniony, natłok, gonitwa, zahamowanie, otamowanie."],
+          ["forma", "Forma", "Logiczna, dygresyjna, rozwlekła, rozkojarzona, inkoherentna, paralogie, neologizmy."],
+          ["specyfika", "Specyfika", "Myślenie konkretne, magiczne, dereistyczne. Perseweracje, lepkość."],
+          ["przyklady", "Przykłady (cytaty)", "Krótko – najbardziej diagnostyczne fragmenty wypowiedzi."]
+        ]
+      },
+      {
+        key: "tresc",
+        title: "Treść myślenia",
+        info: "Urojenia, idee nadwartościowe, natręctwa, myśli rezygnacyjne, S i H, poczucie winy, ksobność.",
+        fields: [
+          ["urojenia", "Urojenia / treści psychotyczne", "Prześladowcze, ksobne, odnoszące, wielkościowe, oddziaływania, odsłonięcia."],
+          ["natretn", "Natręctwa i kompulsje", "Treść, opór, krytycyzm, rytuały, czasochłonność."],
+          ["depresyjne", "Treści depresyjne", "Wina, bezwartościowość, katastrofizacja, ruminacje."],
+          ["suicyd", "Myśli i zamiary samobójcze", "Drabinka: myśli, plan, zamiar, przygotowania, dostęp, impulsywność."],
+          ["homicyd", "Myśli agresywne (H)", "Treść, cel, zamiar, dostęp do narzędzi, czynniki hamujące."]
+        ]
+      },
+      {
+        key: "spostrzeganie",
+        title: "Spostrzeganie i zaburzenia percepcji",
+        info: "Omamy, pseudoomamy, derealizacja, depersonalizacja. Modalność, częstość, krytycyzm.",
+        fields: [
+          ["omamy_sluch", "Omamy słuchowe", "Komentujące, dialogujące, rozkazujące. Lokalizacja, dystans, wpływ na zachowanie."],
+          ["omamy_wzrok", "Omamy wzrokowe", "Sceniczne, elementarne, kontekst, krytycyzm."],
+          ["inne", "Inne modalności", "Węchowe, smakowe, dotykowe, cenestetyczne."],
+          ["dereal_dep", "Derealizacja i depersonalizacja", "Opis doznań, sytuacje wyzwalające."]
+        ]
+      },
+      {
+        key: "poznawcze",
+        title: "Funkcje poznawcze",
+        info: "Uwaga, pamięć, myślenie abstrakcyjne. Jeśli potrzeba: proste próby przesiewowe.",
+        fields: [
+          ["uwaga", "Uwaga i koncentracja", "Łatwo się rozprasza, utrzymuje tok rozmowy, potrzebuje powtórzeń."],
+          ["pamiec_sw", "Pamięć świeża", "Zapamiętywanie, odtwarzanie, konfabulacje."],
+          ["pamiec_da", "Pamięć dawna", "Luki, zniekształcenia, dostęp do faktów autobiograficznych."],
+          ["abstrakcja", "Abstrakcja", "Interpretacja przysłów, myślenie konkretne vs abstrakcyjne."]
+        ]
+      },
+      {
+        key: "wglad_krytycyzm",
+        title: "Wgląd, krytycyzm, osąd",
+        info: "Rozumienie choroby i potrzeby leczenia. Zdolność dopuszczania alternatywnych wyjaśnień.",
+        fields: [
+          ["wglad", "Wgląd", "Pełny / częściowy / brak. Jak pacjent rozumie problem."],
+          ["krytycyzm", "Krytycyzm", "Czy dopuszcza możliwość chorobowego charakteru objawów."],
+          ["osad", "Osąd i decyzyjność", "Konsekwencje, planowanie, impulsywność, ryzyko decyzji."]
+        ]
+      }
+    ]
+
+    const render = () => {
+      ensureState()
+      const root = document.getElementById("mseRoot")
+      if (!root) return
+      root.innerHTML = ""
+
+      SECTIONS.forEach(sec => {
+        const det = document.createElement("details")
+        det.className = "acc"
+        det.open = false
+
+        const sum = document.createElement("summary")
+        sum.className = "acc-head"
+
+        const left = makeEl("span", "acc-title", sec.title)
+        const right = makeEl("span", "acc-sub", "pełny SM")
+
+        sum.appendChild(left)
+        sum.appendChild(right)
+
+        const body = makeEl("div", "acc-body")
+
+        const info = makeEl("div", "info", sec.info || "")
+        body.appendChild(info)
+        body.appendChild(makeEl("div", null, ""))
+
+        const grid = makeEl("div", null)
+        grid.style.display = "grid"
+        grid.style.gridTemplateColumns = "1fr"
+        grid.style.gap = "10px"
+
+        ;(sec.fields || []).forEach(x => {
+          const [k, lab, ph] = x
+          grid.appendChild(field(sec.key, k, lab, ph))
+        })
+
+        body.appendChild(grid)
+
+        const extra = makeEl("div", null, "")
+        extra.style.marginTop = "10px"
+        extra.appendChild(big(sec.key, "cytaty", "Cytaty pacjenta (jeśli diagnostycznie kluczowe)", "Wklej 1–3 krótkie cytaty, które najlepiej oddają objawy lub ryzyko."))
+        body.appendChild(extra)
+
+        det.appendChild(sum)
+        det.appendChild(body)
+        root.appendChild(det)
+      })
+    }
+
+    window.renderMseSections = render
+
+    window.collectMse = () => {
+      ensureState()
+      const out = {}
+      SECTIONS.forEach(sec => {
+        out[sec.key] = { title: sec.title, value: window.STATE.mse[sec.key] || {} }
+      })
+      return out
+    }
+
+    document.addEventListener("DOMContentLoaded", render)
+    document.addEventListener("peon2:modeChanged", render)
+  })()
+</script>

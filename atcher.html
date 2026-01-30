@@ -1,0 +1,83 @@
+<script>
+/**
+ * PEON2 Runtime Patcher (v1)
+ * - rejestruje patche jako funkcje
+ * - uruchamia je 1x (idempotencja) po DOMContentLoaded
+ * - daje stabilne API window.PEON2 do użycia w patchach
+ */
+(function(){
+  "use strict";
+
+  const APPLIED = new Set();
+  const PATCHES = [];
+
+  function ready(fn){
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", fn, { once:true });
+    } else fn();
+  }
+
+  function once(id, fn){
+    PATCHES.push({ id, fn });
+  }
+
+  function applyAll(){
+    for (const p of PATCHES) {
+      if (APPLIED.has(p.id)) continue;
+      try{
+        p.fn(window.PEON2);
+        APPLIED.add(p.id);
+        console.log("[PEON2 PATCH OK]", p.id);
+      } catch (e){
+        console.error("[PEON2 PATCH FAIL]", p.id, e);
+      }
+    }
+  }
+
+  // Bazowe API (minimalne, stabilne)
+  const PEON2 = window.PEON2 || {};
+  PEON2.qs  = (sel, root=document) => root.querySelector(sel);
+  PEON2.qsa = (sel, root=document) => Array.from(root.querySelectorAll(sel));
+  PEON2.on  = (el, ev, fn, opt) => el && el.addEventListener(ev, fn, opt);
+  PEON2.emit = (name, detail={}) => window.dispatchEvent(new CustomEvent(name, { detail }));
+
+  PEON2.getMode = () => document.body.getAttribute("data-mode") || "OddzialDzienny";
+  PEON2.setMode = (mode) => {
+    document.body.setAttribute("data-mode", mode);
+    PEON2.emit("peon2:mode", { mode });
+  };
+
+  PEON2.storage = {
+    get(key, fallback=null){
+      try { const v = localStorage.getItem(key); return v === null ? fallback : v; }
+      catch(_) { return fallback; }
+    },
+    set(key, value){
+      try { localStorage.setItem(key, String(value)); } catch(_) {}
+    }
+  };
+
+  PEON2.toast = PEON2.toast || function(msg, sub){
+    const el = document.getElementById("toast");
+    if (!el) return;
+    el.innerHTML = sub ? `<div>${escapeHtml(msg)}</div><small>${escapeHtml(sub)}</small>` : `<div>${escapeHtml(msg)}</div>`;
+    el.classList.add("show");
+    clearTimeout(el.__t);
+    el.__t = setTimeout(() => el.classList.remove("show"), 2200);
+  };
+
+  function escapeHtml(s){
+    return String(s)
+      .replaceAll("&","&amp;")
+      .replaceAll("<","&lt;")
+      .replaceAll(">","&gt;")
+      .replaceAll('"',"&quot;")
+      .replaceAll("'","&#039;");
+  }
+
+  window.PEON2 = PEON2;
+  window.PEON2_PATCHER = { once, ready, applyAll };
+
+  ready(applyAll);
+})();
+</script>

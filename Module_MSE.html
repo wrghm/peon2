@@ -1,0 +1,424 @@
+<!-- Module_MSE.html -->
+<script>
+(function () {
+  const MOD_ID = "mse"
+
+  function $(sel, root) {
+    return (root || document).querySelector(sel)
+  }
+
+  function $all(sel, root) {
+    return Array.from((root || document).querySelectorAll(sel))
+  }
+
+  function ensureStore() {
+    if (!window.PEON2_STORE) window.PEON2_STORE = {}
+    if (!window.PEON2_STORE[MOD_ID]) window.PEON2_STORE[MOD_ID] = {}
+    return window.PEON2_STORE[MOD_ID]
+  }
+
+  function deepSet(obj, path, val) {
+    const parts = String(path || "").split(".")
+    let cur = obj
+    for (let i = 0; i < parts.length - 1; i++) {
+      const k = parts[i]
+      if (!cur[k] || typeof cur[k] !== "object") cur[k] = {}
+      cur = cur[k]
+    }
+    cur[parts[parts.length - 1]] = val
+  }
+
+  function deepGet(obj, path, fallback) {
+    const parts = String(path || "").split(".")
+    let cur = obj
+    for (const k of parts) {
+      if (!cur || typeof cur !== "object") return fallback
+      if (!(k in cur)) return fallback
+      cur = cur[k]
+    }
+    if (cur === undefined || cur === null) return fallback
+    return cur
+  }
+
+  function mountHost() {
+    return document.getElementById("modulesMount")
+      || document.getElementById("modulesHost")
+      || document.body
+  }
+
+  function tpl() {
+    return `
+      <section class="peon-card" id="mseCard">
+        <style>
+          #mseCard.peon-card{margin:12px 0;padding:14px;border:1px solid rgba(0,0,0,0.16);border-radius:14px;background:#fff}
+          #mseCard h2{margin:0 0 10px 0;font-size:18px;letter-spacing:.2px}
+          #mseCard h3{margin:14px 0 8px 0;font-size:14px;opacity:.9}
+          #mseCard .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+          #mseCard .box{padding:10px;border-radius:12px;border:1px solid rgba(0,0,0,0.10);background:rgba(0,0,0,0.02)}
+          #mseCard .row{display:flex;align-items:flex-start;gap:10px;margin:7px 0;font-size:13px;line-height:1.25}
+          #mseCard .row input[type="checkbox"]{transform:translateY(2px)}
+          #mseCard .textrow{display:grid;grid-template-columns:170px 1fr;gap:10px;align-items:center;margin:8px 0}
+          #mseCard .label{font-size:12px;opacity:.85}
+          #mseCard input[type="text"]{width:100%;padding:9px 10px;border-radius:12px;border:1px solid rgba(0,0,0,0.18);background:#fff;font-size:13px}
+          #mseCard .actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
+          #mseCard button{padding:10px 12px;border-radius:12px;border:1px solid rgba(0,0,0,0.2);background:#fff;font-size:13px;cursor:pointer}
+          #mseCard .out{margin-top:10px;width:100%;min-height:120px;padding:10px;border-radius:12px;border:1px dashed rgba(0,0,0,0.28);background:rgba(0,0,0,0.01);font-size:13px;white-space:pre-wrap}
+          @media (max-width:900px){
+            #mseCard .grid{grid-template-columns:1fr}
+            #mseCard .textrow{grid-template-columns:1fr}
+          }
+        </style>
+
+        <h2>Status mentalis</h2>
+
+        <div class="grid">
+          <div class="box">
+            <h3>Kontakt i współpraca</h3>
+            ${cb("kontakt.logic","Kontakt logiczny i adekwatny")}
+            ${cb("kontakt.utrudniony","Kontakt utrudniony")}
+            ${cb("wspolpraca.zachowana","Współpraca zachowana")}
+            ${cb("wspolpraca.ograniczona","Współpraca ograniczona")}
+            ${txt("kontakt.uwagi","Uwagi","np. nastawienie, wiarygodność, dystans")}
+          </div>
+
+          <div class="box">
+            <h3>Świadomość i orientacja</h3>
+            ${cb("swiadomosc.przytomny","Przytomny")}
+            ${cb("swiadomosc.zaburzona","Zaburzenia świadomości")}
+            ${cb("orientacja.auto.pelna","Orientacja autopsychiczna pełna")}
+            ${cb("orientacja.auto.zaburzona","Orientacja autopsychiczna zaburzona")}
+            ${cb("orientacja.allo.pelna","Orientacja allopsychiczna pełna")}
+            ${cb("orientacja.allo.czesc","Orientacja allopsychiczna częściowo zaburzona")}
+            ${txt("orientacja.uwagi","Uwagi","czas, miejsce, sytuacja")}
+          </div>
+
+          <div class="box">
+            <h3>Zachowanie i psychomotoryka</h3>
+            ${cb("psychomotoryka.norma","Psychomotoryka w normie")}
+            ${cb("psychomotoryka.spowolnienie","Spowolnienie psychoruchowe")}
+            ${cb("psychomotoryka.pobudzenie","Pobudzenie psychoruchowe")}
+            ${cb("zachowanie.niepokoj","Niepokój psychoruchowy")}
+            ${cb("zachowanie.agresja","Zachowania agresywne")}
+            ${txt("zachowanie.inne","Inne","np. manieryzmy, stereotypie, katatonia")}
+          </div>
+
+          <div class="box">
+            <h3>Mowa i tok myślenia</h3>
+            ${cb("mowa.norma","Mowa prawidłowa")}
+            ${cb("mowa.spowolniona","Mowa spowolniona")}
+            ${cb("mowa.przyspieszona","Mowa przyspieszona")}
+            ${cb("tok.logic","Tok myślenia logiczny")}
+            ${cb("tok.rozkojarzenie","Rozkojarzenie")}
+            ${cb("tok.ubogi","Ubogi tok myślenia")}
+            ${cb("tok.natr","Natrętne myśli")}
+            ${txt("tok.inne","Inne","np. gonitwa myśli, lepkość, wielomówność")}
+          </div>
+
+          <div class="box">
+            <h3>Nastrój i afekt</h3>
+            ${txt("afekt.nastroj","Nastrój","np. obniżony, lękowy, drażliwy, podwyższony")}
+            ${txt("afekt.opis","Afekt","np. spłycony, labilny, niedostosowany")}
+            ${cb("afekt.anhedonia","Anhedonia")}
+            ${cb("afekt.lek","Lęk")}
+            ${cb("afekt.drazliwosc","Drażliwość")}
+            ${txt("afekt.uwagi","Uwagi","zakres, kongruencja, reaktywność")}
+          </div>
+
+          <div class="box">
+            <h3>Spostrzeganie</h3>
+            ${cb("percepcja.brak","Bez objawów wytwórczych")}
+            ${cb("percepcja.sluchowe","Omamy słuchowe")}
+            ${cb("percepcja.wzrokowe","Omamy wzrokowe")}
+            ${cb("percepcja.inne","Inne zaburzenia spostrzegania")}
+            ${txt("percepcja.opis","Opis","modalność, treść, krytycyzm")}
+          </div>
+
+          <div class="box">
+            <h3>Treści myślenia</h3>
+            ${cb("tresc.urojenia","Treści urojeniowe")}
+            ${cb("tresc.ksobnosc","Myśli ksobne")}
+            ${cb("tresc.przesladowcze","Myśli prześladowcze")}
+            ${cb("tresc.samooskarz","Ruminacje samooskarżające")}
+            ${cb("tresc.wielkosci","Treści wielkościowe")}
+            ${txt("tresc.opis","Opis","temat, stopień pewności, wpływ na zachowanie")}
+          </div>
+
+          <div class="box">
+            <h3>Funkcje poznawcze</h3>
+            ${cb("poznawcze.koncentracja.ok","Koncentracja zachowana")}
+            ${cb("poznawcze.koncentracja.osl","Koncentracja osłabiona")}
+            ${cb("poznawcze.pamiec.ok","Pamięć zachowana")}
+            ${cb("poznawcze.pamiec.osl","Pamięć osłabiona")}
+            ${cb("poznawcze.abstrakcja","Zaburzenia myślenia abstrakcyjnego")}
+            ${txt("poznawcze.uwagi","Uwagi","uwaga, pamięć świeża, funkcje wykonawcze")}
+          </div>
+
+          <div class="box">
+            <h3>Wgląd i krytycyzm</h3>
+            ${cb("wglad.pelny","Wgląd pełny")}
+            ${cb("wglad.czesc","Wgląd częściowy")}
+            ${cb("wglad.brak","Brak wglądu")}
+            ${cb("krytycyzm.zach","Krytycyzm zachowany")}
+            ${cb("krytycyzm.osl","Krytycyzm osłabiony")}
+            ${cb("naped.obn","Napęd obniżony")}
+            ${cb("naped.wzm","Napęd wzmożony")}
+            ${txt("wglad.uwagi","Uwagi","akceptacja leczenia, rozumienie objawów")}
+          </div>
+        </div>
+
+        <h3>Ryzyko</h3>
+        <div class="box">
+          ${cb("ryzyko.si","Myśli samobójcze")}
+          ${cb("ryzyko.plan","Plan samobójczy")}
+          ${cb("ryzyko.nssi","Samouszkodzenia")}
+          ${cb("ryzyko.hi","Myśli agresywne")}
+          ${txt("ryzyko.uwagi","Uwagi","ochrona, dostęp do metod, intencja")}
+        </div>
+
+        <div class="actions">
+          <button type="button" data-act="short">Generuj MSE krótko</button>
+          <button type="button" data-act="long">Generuj MSE szczegółowo</button>
+          <button type="button" data-act="copy">Kopiuj</button>
+          <button type="button" data-act="clear">Wyczyść</button>
+        </div>
+
+        <div id="mseOut" class="out" contenteditable="true"></div>
+      </section>
+    `
+  }
+
+  function cb(key, label) {
+    return `
+      <label class="row">
+        <input type="checkbox" data-key="${key}">
+        <span>${label}</span>
+      </label>
+    `
+  }
+
+  function txt(key, label, ph) {
+    return `
+      <div class="row textrow">
+        <div class="label">${label}</div>
+        <input type="text" data-key="${key}" placeholder="${ph || ""}">
+      </div>
+    `
+  }
+
+  function render() {
+    const host = mountHost()
+    let root = document.getElementById("mseCard")
+    if (root) return root
+    root = document.createElement("div")
+    root.innerHTML = tpl()
+    host.prepend(root.firstElementChild)
+    return document.getElementById("mseCard")
+  }
+
+  function bind(root) {
+    const st = ensureStore()
+
+    $all("[data-key]", root).forEach(el => {
+      const k = el.getAttribute("data-key")
+      if (el.type === "checkbox") el.checked = !!deepGet(st, k, false)
+      else el.value = String(deepGet(st, k, "") || "")
+
+      el.addEventListener("change", () => {
+        if (el.type === "checkbox") deepSet(st, k, !!el.checked)
+        else deepSet(st, k, String(el.value || ""))
+      })
+
+      el.addEventListener("input", () => {
+        if (el.type !== "checkbox") deepSet(st, k, String(el.value || ""))
+      })
+    })
+
+    $all("button[data-act]", root).forEach(btn => {
+      btn.addEventListener("click", async () => {
+        const act = btn.getAttribute("data-act")
+        if (act === "short") $("#mseOut", root).innerText = buildText("short")
+        if (act === "long") $("#mseOut", root).innerText = buildText("long")
+        if (act === "copy") {
+          const t = $("#mseOut", root).innerText || ""
+          try { await navigator.clipboard.writeText(t) } catch (e) {}
+        }
+        if (act === "clear") {
+          window.PEON2_STORE[MOD_ID] = {}
+          $all("[data-key]", root).forEach(el => {
+            if (el.type === "checkbox") el.checked = false
+            else el.value = ""
+          })
+          $("#mseOut", root).innerText = ""
+        }
+      })
+    })
+  }
+
+  function buildText(mode) {
+    const st = ensureStore()
+    const yes = p => !!deepGet(st, p, false)
+    const txtv = p => String(deepGet(st, p, "") || "").trim()
+
+    function cap(s) { return s ? s.charAt(0).toUpperCase() + s.slice(1) : s }
+    function sent(arr) {
+      if (!arr.length) return ""
+      const s = cap(arr[0]) + (arr.length > 1 ? ", " + arr.slice(1).join(", ") : "")
+      return s + "."
+    }
+
+    const parts = []
+
+    {
+      const a = []
+      if (yes("kontakt.logic")) a.push("kontakt logiczny i adekwatny")
+      if (yes("kontakt.utrudniony")) a.push("kontakt utrudniony")
+      if (yes("wspolpraca.zachowana")) a.push("współpraca zachowana")
+      if (yes("wspolpraca.ograniczona")) a.push("współpraca ograniczona")
+      const uw = txtv("kontakt.uwagi")
+      if (uw) a.push("uwagi: " + uw)
+      const s = sent(a)
+      if (s) parts.push(s)
+    }
+
+    {
+      const a = []
+      if (yes("swiadomosc.przytomny")) a.push("przytomny")
+      if (yes("swiadomosc.zaburzona")) a.push("zaburzenia świadomości")
+      if (yes("orientacja.auto.pelna")) a.push("orientacja autopsychiczna pełna")
+      if (yes("orientacja.auto.zaburzona")) a.push("orientacja autopsychiczna zaburzona")
+      if (yes("orientacja.allo.pelna")) a.push("orientacja allopsychiczna pełna")
+      if (yes("orientacja.allo.czesc")) a.push("orientacja allopsychiczna częściowo zaburzona")
+      const uw = txtv("orientacja.uwagi")
+      if (uw) a.push("uwagi: " + uw)
+      const s = sent(a)
+      if (s) parts.push(s)
+    }
+
+    {
+      const a = []
+      if (yes("psychomotoryka.norma")) a.push("psychomotoryka w normie")
+      if (yes("psychomotoryka.spowolnienie")) a.push("spowolnienie psychoruchowe")
+      if (yes("psychomotoryka.pobudzenie")) a.push("pobudzenie psychoruchowe")
+      if (yes("zachowanie.niepokoj")) a.push("niepokój psychoruchowy")
+      if (yes("zachowanie.agresja")) a.push("zachowania agresywne")
+      const other = txtv("zachowanie.inne")
+      if (other) a.push(other)
+      const s = sent(a)
+      if (s) parts.push(s)
+    }
+
+    {
+      const a = []
+      if (yes("mowa.norma")) a.push("mowa prawidłowa")
+      if (yes("mowa.spowolniona")) a.push("mowa spowolniona")
+      if (yes("mowa.przyspieszona")) a.push("mowa przyspieszona")
+      if (yes("tok.logic")) a.push("tok myślenia logiczny")
+      if (yes("tok.rozkojarzenie")) a.push("rozkojarzenie")
+      if (yes("tok.ubogi")) a.push("ubogi tok myślenia")
+      if (yes("tok.natr")) a.push("natrętne myśli")
+      const other = txtv("tok.inne")
+      if (other) a.push(other)
+      const s = sent(a)
+      if (s) parts.push(s)
+    }
+
+    {
+      const a = []
+      const n = txtv("afekt.nastroj")
+      const af = txtv("afekt.opis")
+      if (n) a.push("nastrój: " + n)
+      if (af) a.push("afekt: " + af)
+      if (yes("afekt.anhedonia")) a.push("anhedonia")
+      if (yes("afekt.lek")) a.push("lęk")
+      if (yes("afekt.drazliwosc")) a.push("drażliwość")
+      const uw = txtv("afekt.uwagi")
+      if (uw) a.push("uwagi: " + uw)
+      const s = sent(a)
+      if (s) parts.push(s)
+    }
+
+    {
+      const a = []
+      if (yes("percepcja.brak")) a.push("bez objawów wytwórczych")
+      if (yes("percepcja.sluchowe")) a.push("omamy słuchowe")
+      if (yes("percepcja.wzrokowe")) a.push("omamy wzrokowe")
+      if (yes("percepcja.inne")) a.push("inne zaburzenia spostrzegania")
+      const op = txtv("percepcja.opis")
+      if (op) a.push("opis: " + op)
+      const s = sent(a)
+      if (s) parts.push(s)
+    }
+
+    {
+      const a = []
+      if (yes("tresc.urojenia")) a.push("treści urojeniowe")
+      if (yes("tresc.ksobnosc")) a.push("myśli ksobne")
+      if (yes("tresc.przesladowcze")) a.push("myśli prześladowcze")
+      if (yes("tresc.samooskarz")) a.push("ruminacje samooskarżające")
+      if (yes("tresc.wielkosci")) a.push("treści wielkościowe")
+      const op = txtv("tresc.opis")
+      if (op) a.push("opis: " + op)
+      const s = sent(a)
+      if (s) parts.push(s)
+    }
+
+    {
+      const a = []
+      if (yes("poznawcze.koncentracja.ok")) a.push("koncentracja zachowana")
+      if (yes("poznawcze.koncentracja.osl")) a.push("koncentracja osłabiona")
+      if (yes("poznawcze.pamiec.ok")) a.push("pamięć zachowana")
+      if (yes("poznawcze.pamiec.osl")) a.push("pamięć osłabiona")
+      if (yes("poznawcze.abstrakcja")) a.push("zaburzenia myślenia abstrakcyjnego")
+      const uw = txtv("poznawcze.uwagi")
+      if (uw) a.push("uwagi: " + uw)
+      const s = sent(a)
+      if (s) parts.push(s)
+    }
+
+    {
+      const a = []
+      if (yes("wglad.pelny")) a.push("wgląd pełny")
+      if (yes("wglad.czesc")) a.push("wgląd częściowy")
+      if (yes("wglad.brak")) a.push("brak wglądu")
+      if (yes("krytycyzm.zach")) a.push("krytycyzm zachowany")
+      if (yes("krytycyzm.osl")) a.push("krytycyzm osłabiony")
+      if (yes("naped.obn")) a.push("napęd obniżony")
+      if (yes("naped.wzm")) a.push("napęd wzmożony")
+      const uw = txtv("wglad.uwagi")
+      if (uw) a.push("uwagi: " + uw)
+      const s = sent(a)
+      if (s) parts.push(s)
+    }
+
+    {
+      const a = []
+      if (yes("ryzyko.si")) a.push("myśli samobójcze")
+      if (yes("ryzyko.plan")) a.push("plan samobójczy")
+      if (yes("ryzyko.nssi")) a.push("autoagresja")
+      if (yes("ryzyko.hi")) a.push("ryzyko heteroagresji")
+      const uw = txtv("ryzyko.uwagi")
+      if (uw) a.push("uwagi: " + uw)
+
+      parts.push(
+        a.length
+          ? "Ryzyko: " + a.join(", ") + "."
+          : "Ryzyko: nie zgłasza myśli samobójczych, nie zgłasza zamiarów agresywnych."
+      )
+    }
+
+    return mode === "short"
+      ? parts.slice(0, 6).join("\n")
+      : parts.join("\n")
+  }
+
+  function boot() {
+    const root = render()
+    bind(root)
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    setTimeout(boot, 0)
+  })
+
+})()
+</script>

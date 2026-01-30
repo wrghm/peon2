@@ -1,0 +1,177 @@
+<!-- Module_Scales.html -->
+<template id="tpl-module-scales">
+  <div class="info" style="margin-bottom:10px">
+    Skale dodajesz pojedynczo. Każdą możesz usunąć bez kasowania reszty danych.
+  </div>
+
+  <div id="scalesAddRow" style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:10px"></div>
+  <div id="scalesBlocks"></div>
+</template>
+
+<script>
+(() => {
+  const SCALES = [
+    { key:'phq9', name:'PHQ-9', desc:'depresja – nasilenie objawów' },
+    { key:'gad7', name:'GAD-7', desc:'lęk uogólniony – nasilenie' },
+    { key:'mdq',  name:'MDQ',  desc:'przesiew CHAD' },
+    { key:'asrs', name:'ASRS', desc:'przesiew ADHD (dorosłych)' },
+    { key:'audit',name:'AUDIT',desc:'alkohol – ryzyko/uzależnienie' },
+    { key:'dast', name:'DAST', desc:'narkotyki – ryzyko/uzależnienie' },
+  ];
+
+  const ensureState = () => {
+    window.STATE = window.STATE || {};
+    window.STATE.modules = window.STATE.modules || {};
+    window.STATE.modules.module_scales = window.STATE.modules.module_scales || {
+      title: 'Skale i przesiewy',
+      enabled: true,
+      picked: [],     // lista kluczy
+      blocks: {}      // {key: {value:"", score:""}}
+    };
+  };
+
+  const uniq = (arr) => {
+    const s = new Set();
+    const out = [];
+    (arr||[]).forEach(x => {
+      const k = String(x||'').trim();
+      if (!k || s.has(k)) return;
+      s.add(k); out.push(k);
+    });
+    return out;
+  };
+
+  const pickScale = (key) => {
+    ensureState();
+    const st = window.STATE.modules.module_scales;
+    st.picked = uniq([...(st.picked||[]), key]);
+    st.blocks[key] = st.blocks[key] || { value: '', score: '' };
+    if (window.markEdited) window.markEdited();
+    render();
+  };
+
+  const removeScale = (key) => {
+    ensureState();
+    const st = window.STATE.modules.module_scales;
+    st.picked = (st.picked||[]).filter(k => k !== key);
+    delete st.blocks[key];
+    if (window.markEdited) window.markEdited();
+    render();
+  };
+
+  const mount = () => {
+    const root = document.querySelector('[data-module-key="module_scales"]') || document;
+    const addRow = root.querySelector('#scalesAddRow');
+    const blocks = root.querySelector('#scalesBlocks');
+    if (!addRow || !blocks) return null;
+    return { addRow, blocks };
+  };
+
+  const render = () => {
+    ensureState();
+    const ui = mount();
+    if (!ui) return;
+
+    const st = window.STATE.modules.module_scales;
+
+    // przyciski dodawania
+    ui.addRow.innerHTML = '';
+    SCALES.forEach(s => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'btn';
+      b.textContent = `+ ${s.name}`;
+      b.title = s.desc || '';
+      b.addEventListener('click', () => pickScale(s.key));
+      ui.addRow.appendChild(b);
+    });
+
+    // bloki skal
+    ui.blocks.innerHTML = '';
+
+    const picked = (st.picked||[]).filter(k => SCALES.some(s=>s.key===k));
+    if (!picked.length) {
+      const empty = document.createElement('div');
+      empty.className = 'info';
+      empty.textContent = 'Nie dodano jeszcze żadnej skali.';
+      ui.blocks.appendChild(empty);
+      return;
+    }
+
+    picked.forEach(key => {
+      const meta = SCALES.find(s => s.key === key);
+
+      const det = document.createElement('details');
+      det.className = 'acc';
+      det.open = true;
+
+      const sum = document.createElement('summary');
+      sum.className = 'acc-head';
+
+      const t = document.createElement('span');
+      t.className = 'acc-title';
+      t.textContent = meta ? meta.name : key;
+
+      const sub = document.createElement('span');
+      sub.className = 'acc-sub';
+      sub.textContent = meta && meta.desc ? meta.desc : 'skala';
+
+      sum.appendChild(t);
+      sum.appendChild(sub);
+
+      const body = document.createElement('div');
+      body.className = 'acc-body';
+
+      const row = document.createElement('div');
+      row.style.display = 'flex';
+      row.style.gap = '10px';
+      row.style.flexWrap = 'wrap';
+      row.style.marginBottom = '10px';
+
+      const btnRm = document.createElement('button');
+      btnRm.type = 'button';
+      btnRm.className = 'btn';
+      btnRm.textContent = 'Usuń tę skalę';
+      btnRm.addEventListener('click', () => removeScale(key));
+
+      row.appendChild(btnRm);
+
+      const ta = document.createElement('textarea');
+      ta.className = 'big';
+      ta.placeholder =
+`Wpisz wynik / odpowiedzi / interpretację (wg Twojego stylu pracy).
+
+Możesz wkleić:
+- surowe odpowiedzi pacjenta
+- punktację
+- krótką interpretację kliniczną`;
+
+      ta.value = (st.blocks[key] && st.blocks[key].value) ? st.blocks[key].value : '';
+      ta.addEventListener('input', () => {
+        ensureState();
+        const s2 = window.STATE.modules.module_scales;
+        s2.blocks[key] = s2.blocks[key] || {};
+        s2.blocks[key].value = ta.value;
+        if (window.markEdited) window.markEdited();
+      });
+
+      body.appendChild(row);
+      body.appendChild(ta);
+
+      det.appendChild(sum);
+      det.appendChild(body);
+      ui.blocks.appendChild(det);
+    });
+  };
+
+  // odśwież po zamontowaniu modułu
+  document.addEventListener("peon2:moduleMounted", (ev) => {
+    if (!ev || !ev.detail) return;
+    if (ev.detail.moduleId !== "module_scales") return;
+    render();
+  });
+
+  // i na wszelki wypadek przy starcie
+  document.addEventListener("DOMContentLoaded", () => render());
+})();
+</script>

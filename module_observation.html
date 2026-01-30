@@ -1,0 +1,404 @@
+<!-- module_observation.html -->
+<div id="obsRoot"></div>
+
+<template id="tplObs">
+  <details class="acc" open>
+    <summary class="acc-head">
+      <span class="acc-title">Obserwacja – baza</span>
+      <span class="acc-sub">wpis zaczyna się od „W dniu dzisiejszym”</span>
+    </summary>
+
+    <div class="acc-body">
+      <div class="card pad" style="margin-bottom:12px">
+        <div class="grid2">
+          <div>
+            <label>Jednostka wiodąca (do modułów)</label>
+            <select data-key="obs.meta.unit" id="obs_unit">
+              <option value="">— wybierz —</option>
+              <option value="Schizofrenia">Schizofrenia/psychoza</option>
+              <option value="CHAD">CHAD</option>
+              <option value="Depresja">Depresja</option>
+              <option value="SUD">Uzależnienia</option>
+              <option value="OCD">OCD</option>
+              <option value="ASD_ADHD">ASD/ADHD</option>
+              <option value="Otępienie">Otępienie/organiczne</option>
+              <option value="PTSD">PTSD/trauma</option>
+            </select>
+          </div>
+
+          <div>
+            <label>Szczegółowość generatora</label>
+            <select data-key="obs.meta.detail" id="obs_detail">
+              <option value="short">Mniej szczegółowa</option>
+              <option value="long">Bardziej szczegółowa</option>
+            </select>
+          </div>
+        </div>
+
+        <div style="height:10px"></div>
+
+        <div class="grid2">
+          <button class="btn" type="button" id="btnObsAddUnit">Dodaj moduł jednostki</button>
+          <button class="btn ghost" type="button" id="btnObsClearUnit">Usuń moduły jednostki</button>
+        </div>
+        <div class="hint" style="margin-top:8px">
+          Moduł jednostki dodaje tylko pytania celowane. Wszystko zapisuje się lokalnie.
+        </div>
+      </div>
+
+      <div class="card pad" style="margin-bottom:12px">
+        <div class="section-title" style="margin-top:0">Bazowe pytania do obserwacji</div>
+
+        <div class="field">
+          <label>Kontakt i współpraca</label>
+          <textarea class="big" rows="2" data-key="obs.base.kontakt" data-label="Kontakt i współpraca"
+            placeholder="Kontakt logiczny/ograniczony. Współpraca pełna/częściowa. Nastawienie do personelu."></textarea>
+        </div>
+
+        <div class="field">
+          <label>Zachowanie i psychomotoryka</label>
+          <textarea class="big" rows="2" data-key="obs.base.motoryka" data-label="Zachowanie i psychomotoryka"
+            placeholder="Spokój/pobudzenie/niepokój. Agresja. Wycofanie. Spowolnienie."></textarea>
+        </div>
+
+        <div class="field">
+          <label>Nastrój i afekt</label>
+          <textarea class="big" rows="2" data-key="obs.base.nastroj" data-label="Nastrój i afekt"
+            placeholder="Nastrój obniżony/lękowy/drażliwy/podwyższony. Afekt adekwatny/spłycony/labilny."></textarea>
+        </div>
+
+        <div class="field">
+          <label>Objawy wytwórcze</label>
+          <textarea class="big" rows="2" data-key="obs.base.wytworcze" data-label="Objawy wytwórcze"
+            placeholder="Omamy/urojenia? Nasilenie. Krytycyzm. Zachowanie sugerujące halucynowanie."></textarea>
+        </div>
+
+        <div class="field">
+          <label>Sen i łaknienie</label>
+          <textarea class="big" rows="2" data-key="obs.base.sen" data-label="Sen i łaknienie"
+            placeholder="Sen: ilość/jakość. Łaknienie: spadek/wzrost."></textarea>
+        </div>
+
+        <div class="field">
+          <label>Ryzyko S i H oraz autoagresja</label>
+          <textarea class="big" rows="2" data-key="obs.base.ryzyko" data-label="Ryzyko S i H oraz autoagresja"
+            placeholder="Myśli S? Plan? Zamiar? Zachowania autoagresywne. Myśli agresywne."></textarea>
+        </div>
+
+        <div class="field">
+          <label>Adherencja i tolerancja leczenia</label>
+          <textarea class="big" rows="2" data-key="obs.base.leczenie" data-label="Adherencja i tolerancja leczenia"
+            placeholder="Czy przyjmuje leki. Działania niepożądane."></textarea>
+        </div>
+
+        <div class="field">
+          <label>Incydenty w oddziale / sytuacje trudne</label>
+          <textarea class="big" rows="2" data-key="obs.base.incydenty" data-label="Incydenty w oddziale"
+            placeholder="Konflikty, ucieczki, odmowy, agresja, samouszkodzenia, interwencje."></textarea>
+        </div>
+
+        <div class="field">
+          <label>Udział w terapii i aktywnościach</label>
+          <textarea class="big" rows="2" data-key="obs.base.terapia" data-label="Udział w terapii"
+            placeholder="Uczestnictwo w zajęciach, rozmowy, postawa wobec zaleceń."></textarea>
+        </div>
+      </div>
+
+      <div class="card pad" style="margin-bottom:12px">
+        <div class="section-title" style="margin-top:0">Moduły jednostki (pytania celowane)</div>
+        <div id="obsUnitMount"></div>
+      </div>
+
+      <div class="card pad">
+        <div class="section-title" style="margin-top:0">Generator obserwacji (wpisuje do pól)</div>
+
+        <div class="grid2">
+          <button class="btn" type="button" id="btnObsGenImprove">Poprawa</button>
+          <button class="btn" type="button" id="btnObsGenSame">Bez zmian</button>
+        </div>
+        <div style="height:10px"></div>
+        <button class="btn" type="button" id="btnObsGenWorse" style="width:100%">Pogorszenie</button>
+
+        <div style="height:12px"></div>
+
+        <div class="field">
+          <label>Wpis roboczy (edytowalny)</label>
+          <textarea class="big" rows="6" data-key="obs.out.note" data-label="Wpis roboczy"
+            placeholder="Generator uzupełni, ale możesz dopisać niuanse kliniczne."></textarea>
+        </div>
+
+        <div class="field">
+          <label>Plan na 24–72 h / zalecenia obserwacyjne (edytowalne)</label>
+          <textarea class="big" rows="3" data-key="obs.out.plan" data-label="Plan 24–72h"
+            placeholder="Nadzór, modyfikacja leczenia, konsultacje, działania środowiskowe, praca terapeutyczna."></textarea>
+        </div>
+
+        <div class="hint">
+          Generator korzysta z Twoich uzupełnionych pól. Przy „bardziej szczegółowej” wersji dopisze więcej elementów i dopasuje do jednostki.
+        </div>
+      </div>
+    </div>
+  </details>
+
+  <!-- Jednostki: templates -->
+  <template id="tplObsUnit_Schizofrenia">
+    <details class="acc" open>
+      <summary class="acc-head"><span class="acc-title">Moduł: psychoza/schizofrenia</span><span class="acc-sub">celowane pytania</span></summary>
+      <div class="acc-body">
+        <div class="field">
+          <label>Omamy i dezorganizacja</label>
+          <textarea class="big" rows="2" data-key="obs.unit.schiz.omamy" data-label="Omamy i dezorganizacja"
+            placeholder="Czy nadal słyszy głosy. Czy zachowanie sugeruje halucynowanie. Dezorganizacja wypowiedzi."></textarea>
+        </div>
+        <div class="field">
+          <label>Urojenia i krytycyzm</label>
+          <textarea class="big" rows="2" data-key="obs.unit.schiz.urojenia" data-label="Urojenia i krytycyzm"
+            placeholder="Treści urojeniowe, nasilenie, podatność na weryfikację, krytycyzm."></textarea>
+        </div>
+        <div class="field">
+          <label>Negatywne i funkcjonowanie</label>
+          <textarea class="big" rows="2" data-key="obs.unit.schiz.neg" data-label="Objawy negatywne"
+            placeholder="Wycofanie, spłycenie afektu, awolicja, anhedonia."></textarea>
+        </div>
+      </div>
+    </details>
+  </template>
+
+  <template id="tplObsUnit_CHAD">
+    <details class="acc" open>
+      <summary class="acc-head"><span class="acc-title">Moduł: CHAD</span><span class="acc-sub">celowane pytania</span></summary>
+      <div class="acc-body">
+        <div class="field">
+          <label>Wskaźniki hipomanii/maniakalności</label>
+          <textarea class="big" rows="2" data-key="obs.unit.chad.mania" data-label="Wskaźniki manii"
+            placeholder="Skrócony sen, gonitwa, natłok, drażliwość, wielkościowość, ryzykowne zachowania."></textarea>
+        </div>
+        <div class="field">
+          <label>Impulsywność i ryzyko</label>
+          <textarea class="big" rows="2" data-key="obs.unit.chad.ryzyko" data-label="Impulsywność i ryzyko"
+            placeholder="Wydatki, konflikty, agresja, zachowania seksualne, substancje."></textarea>
+        </div>
+      </div>
+    </details>
+  </template>
+
+  <template id="tplObsUnit_Depresja">
+    <details class="acc" open>
+      <summary class="acc-head"><span class="acc-title">Moduł: depresja</span><span class="acc-sub">celowane pytania</span></summary>
+      <div class="acc-body">
+        <div class="field">
+          <label>Ruminacje i autokrytycyzm</label>
+          <textarea class="big" rows="2" data-key="obs.unit.dep.ruminacje" data-label="Ruminacje i autokrytycyzm"
+            placeholder="Treści samooskarżające, poczucie winy, bezwartościowość."></textarea>
+        </div>
+        <div class="field">
+          <label>Anhedonia i napęd</label>
+          <textarea class="big" rows="2" data-key="obs.unit.dep.naped" data-label="Anhedonia i napęd"
+            placeholder="Napęd, energia, inicjatywa, odruchowe wycofanie."></textarea>
+        </div>
+      </div>
+    </details>
+  </template>
+
+  <template id="tplObsUnit_SUD">
+    <details class="acc" open>
+      <summary class="acc-head"><span class="acc-title">Moduł: uzależnienia</span><span class="acc-sub">celowane pytania</span></summary>
+      <div class="acc-body">
+        <div class="field">
+          <label>Głód, nawroty, dostęp</label>
+          <textarea class="big" rows="2" data-key="obs.unit.sud.glod" data-label="Głód i nawroty"
+            placeholder="Głód, ryzyko nawrotu, plan bezpieczeństwa, dostęp do substancji."></textarea>
+        </div>
+        <div class="field">
+          <label>Objawy odstawienne / intoksykacja</label>
+          <textarea class="big" rows="2" data-key="obs.unit.sud.odstaw" data-label="Objawy odstawienne"
+            placeholder="Drżenia, poty, niepokój, bezsenność, objawy autonomiczne."></textarea>
+        </div>
+      </div>
+    </details>
+  </template>
+</template>
+
+<script>
+;(() => {
+  const mount = () => {
+    const host = document.getElementById("obsRoot");
+    const tpl = document.getElementById("tplObs");
+    if (!host || !tpl) return;
+    host.innerHTML = "";
+    host.appendChild(tpl.content.cloneNode(true));
+
+    const unitMount = document.getElementById("obsUnitMount");
+
+    const getUnit = () => String(document.getElementById("obs_unit")?.value || "").trim();
+    const getDetail = () => String(document.getElementById("obs_detail")?.value || "short").trim();
+
+    const clearUnitModules = () => {
+      if (unitMount) unitMount.innerHTML = "";
+      window.markEdited && window.markEdited();
+    };
+
+    const addUnitModule = () => {
+      const unit = getUnit();
+      if (!unit) return;
+
+      const map = {
+        Schizofrenia: "tplObsUnit_Schizofrenia",
+        CHAD: "tplObsUnit_CHAD",
+        Depresja: "tplObsUnit_Depresja",
+        SUD: "tplObsUnit_SUD"
+      };
+
+      const tplId = map[unit];
+      if (!tplId) return;
+
+      if (unitMount && unitMount.querySelector(`[data-unit="${unit}"]`)) return;
+
+      const tpl = document.getElementById(tplId);
+      if (!tpl || !unitMount) return;
+
+      const wrap = document.createElement("div");
+      wrap.dataset.unit = unit;
+      wrap.appendChild(tpl.content.cloneNode(true));
+      unitMount.appendChild(wrap);
+
+      window.markEdited && window.markEdited();
+    };
+
+    const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
+
+    const read = (key) => {
+      const node = document.querySelector(`[data-key="${key}"]`);
+      return node ? String(node.value || "").trim() : "";
+    };
+
+    const write = (key, val) => {
+      const node = document.querySelector(`[data-key="${key}"]`);
+      if (!node) return;
+      node.value = val;
+    };
+
+    const normalize = (x) => x && x.length ? x : "";
+
+    const gen = ({ trend, detail }) => {
+      const base = "W dniu dzisiejszym";
+
+      const kontakt = read("obs.base.kontakt");
+      const motoryka = read("obs.base.motoryka");
+      const nastroj = read("obs.base.nastroj");
+      const wytworcze = read("obs.base.wytworcze");
+      const sen = read("obs.base.sen");
+      const ryzyko = read("obs.base.ryzyko");
+      const leczenie = read("obs.base.leczenie");
+      const incyd = read("obs.base.incydenty");
+      const terapia = read("obs.base.terapia");
+
+      const unit = getUnit();
+
+      const unitHints = {
+        Schizofrenia: [read("obs.unit.schiz.omamy"), read("obs.unit.schiz.urojenia"), read("obs.unit.schiz.neg")].filter(Boolean),
+        CHAD: [read("obs.unit.chad.mania"), read("obs.unit.chad.ryzyko")].filter(Boolean),
+        Depresja: [read("obs.unit.dep.ruminacje"), read("obs.unit.dep.naped")].filter(Boolean),
+        SUD: [read("obs.unit.sud.glod"), read("obs.unit.sud.odstaw")].filter(Boolean)
+      };
+
+      const trendPhrases = {
+        improve: {
+          short: [
+            `${base} stan psychiczny stabilniejszy, pacjent spokojniejszy, w lepszym kontakcie. Współpraca lepsza. Bez zachowań autoagresywnych.`
+          ],
+          long: [
+            `${base} pacjent w kontakcie bardziej adekwatnym, współpracuje. Nasilenie napięcia mniejsze. Nie obserwuje się zachowań sugerujących pogorszenie stanu.`
+          ]
+        },
+        same: {
+          short: [
+            `${base} stan psychiczny bez istotnych zmian. Kontakt logiczny, współpraca zachowana. Bez nowych incydentów.`
+          ],
+          long: [
+            `${base} obraz kliniczny zasadniczo stabilny. Funkcjonowanie w oddziale bez istotnych odchyleń od poprzedniej obserwacji.`
+          ]
+        },
+        worse: {
+          short: [
+            `${base} pacjent bardziej napięty i drażliwy, współpraca gorsza. Wymaga zwiększonej czujności i ponownej oceny ryzyka.`
+          ],
+          long: [
+            `${base} obserwuje się pogorszenie regulacji afektu i zachowania, większą chwiejność oraz trudniejszą współpracę. Zalecana ponowna ocena ryzyka i modyfikacja postępowania.`
+          ]
+        }
+      };
+
+      const intro = pick((trendPhrases[trend] && trendPhrases[trend][detail]) || trendPhrases.same.short);
+
+      const piecesShort = [
+        intro,
+        normalize(kontakt ? `Kontakt i współpraca: ${kontakt}.` : ""),
+        normalize(motoryka ? `Zachowanie i psychomotoryka: ${motoryka}.` : ""),
+        normalize(nastroj ? `Nastrój i afekt: ${nastroj}.` : ""),
+        normalize(wytworcze ? `Objawy wytwórcze: ${wytworcze}.` : ""),
+        normalize(sen ? `Sen i łaknienie: ${sen}.` : ""),
+        normalize(ryzyko ? `Ryzyko S i H: ${ryzyko}.` : "")
+      ].filter(Boolean);
+
+      const piecesLong = [
+        ...piecesShort,
+        normalize(leczenie ? `Adherencja i tolerancja leczenia: ${leczenie}.` : ""),
+        normalize(incyd ? `Incydenty: ${incyd}.` : ""),
+        normalize(terapia ? `Udział w terapii: ${terapia}.` : "")
+      ].filter(Boolean);
+
+      const unitPart = (unit && unitHints[unit] && unitHints[unit].length)
+        ? `Aspekt ${unit}: ${unitHints[unit].join(" ")}.`
+        : "";
+
+      const note = (detail === "long" ? piecesLong : piecesShort).join(" ");
+      const finalNote = unitPart ? `${note} ${unitPart}` : note;
+
+      write("obs.out.note", finalNote);
+
+      const planTemplates = {
+        improve: {
+          short: "Kontynuować dotychczasowe postępowanie. Utrzymać obserwację i bieżącą ocenę ryzyka.",
+          long: "Kontynuować leczenie. Wzmacniać psychoedukację i pracę terapeutyczną. Utrzymać codzienną ocenę ryzyka oraz monitorować sen i objawy wytwórcze."
+        },
+        same: {
+          short: "Kontynuować obserwację i leczenie. Monitorować ryzyko oraz tolerancję leczenia.",
+          long: "Kontynuować dotychczasowe postępowanie. Utrzymać strukturę dnia, zachęcać do aktywności. Monitorować ryzyko, sen, apetyt i ewentualne objawy wytwórcze."
+        },
+        worse: {
+          short: "Zwiększyć czujność obserwacyjną. Ponownie ocenić ryzyko. Rozważyć modyfikację leczenia według wskazań klinicznych.",
+          long: "Zwiększyć nadzór i częstotliwość obserwacji. Ponownie ocenić ryzyko S i H. Rozważyć modyfikację leczenia oraz ewentualne konsultacje. Udokumentować czynniki wyzwalające i plan bezpieczeństwa."
+        }
+      };
+
+      const plan = ((planTemplates[trend] && planTemplates[trend][detail]) || planTemplates.same.short);
+      write("obs.out.plan", plan);
+
+      window.markEdited && window.markEdited();
+    };
+
+    document.getElementById("btnObsAddUnit")?.addEventListener("click", addUnitModule);
+    document.getElementById("btnObsClearUnit")?.addEventListener("click", clearUnitModules);
+
+    document.getElementById("btnObsGenImprove")?.addEventListener("click", () => gen({ trend: "improve", detail: getDetail() }));
+    document.getElementById("btnObsGenSame")?.addEventListener("click", () => gen({ trend: "same", detail: getDetail() }));
+    document.getElementById("btnObsGenWorse")?.addEventListener("click", () => gen({ trend: "worse", detail: getDetail() }));
+
+    window.Obs = {
+      generate: gen,
+      getDetail: () => getDetail(),
+      addUnitModule,
+      clearUnitModules
+    };
+  };
+
+  const renderOnMode = () => {
+    const mode = document.body?.dataset?.mode || "";
+    if (mode === "Obserwacja") mount();
+  };
+
+  document.addEventListener("DOMContentLoaded", renderOnMode);
+  document.addEventListener("peon2:modeChanged", renderOnMode);
+})();
+</script>

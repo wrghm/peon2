@@ -1,0 +1,395 @@
+<!-- BaseInterview.html -->
+<div id="baseInterviewRoot"></div>
+
+<script>
+  ;(() => {
+    const MODES = {
+      Poradnia: "Poradnia",
+      IzbaPrzyjec: "IzbaPrzyjec",
+      OddzialDzienny: "OddzialDzienny",
+      OddzialZamkniety: "OddzialZamkniety",
+      Obserwacja: "Obserwacja",
+      Wypis: "Wypis",
+      Wiedza: "Wiedza"
+    }
+
+    const getMode = () => (document.body && document.body.dataset && document.body.dataset.mode) ? document.body.dataset.mode : MODES.OddzialDzienny
+
+    const ensureState = () => {
+      window.STATE = window.STATE || {}
+      window.STATE.base = window.STATE.base || {}
+      window.STATE.baseMeta = window.STATE.baseMeta || {
+        pregnancy: false,
+        lactation: false,
+        allergy: false,
+        allergyText: ""
+      }
+    }
+
+    const setField = (secKey, fieldKey, value) => {
+      ensureState()
+      window.STATE.base[secKey] = window.STATE.base[secKey] || {}
+      window.STATE.base[secKey][fieldKey] = value
+      if (window.markEdited) window.markEdited()
+    }
+
+    const getField = (secKey, fieldKey) => {
+      ensureState()
+      return (window.STATE.base[secKey] && window.STATE.base[secKey][fieldKey]) ? window.STATE.base[secKey][fieldKey] : ""
+    }
+
+    const setMeta = (key, value) => {
+      ensureState()
+      window.STATE.baseMeta[key] = value
+      if (window.markEdited) window.markEdited()
+    }
+
+    const getMeta = (key) => {
+      ensureState()
+      return window.STATE.baseMeta[key]
+    }
+
+    const makeEl = (tag, cls, txt) => {
+      const el = document.createElement(tag)
+      if (cls) el.className = cls
+      if (txt !== undefined) el.textContent = txt
+      return el
+    }
+
+    const makeTextarea = ({ id, placeholder, value, rows }) => {
+      const ta = document.createElement("textarea")
+      ta.className = "big"
+      ta.id = id
+      ta.rows = rows || 2
+      ta.placeholder = placeholder || ""
+      ta.value = value || ""
+      return ta
+    }
+
+    const makeSmallTextarea = ({ id, placeholder, value }) => {
+      const ta = document.createElement("textarea")
+      ta.className = "big"
+      ta.id = id
+      ta.rows = 2
+      ta.placeholder = placeholder || ""
+      ta.value = value || ""
+      return ta
+    }
+
+    const makeFieldBlock = ({ label, placeholder, value, onInput }) => {
+      const wrap = makeEl("div", "field")
+      const lab = makeEl("label", null, label)
+      const ta = makeSmallTextarea({ id: "", placeholder, value })
+      ta.addEventListener("input", () => onInput(ta.value))
+      wrap.appendChild(lab)
+      wrap.appendChild(ta)
+      return wrap
+    }
+
+    const BASE = [
+      {
+        key: "otwarcie_kontrakt",
+        title: "Otwarcie i kontrakt",
+        modes: [MODES.Poradnia, MODES.IzbaPrzyjec, MODES.OddzialDzienny, MODES.OddzialZamkniety],
+        fields: [
+          { k: "ramy", q: "Ramy rozmowy i kontrakt", ph: "Kim jestem, ile potrwa rozmowa, że notuję, tajemnica, zgoda na pytania." },
+          { k: "adresowanie", q: "Preferowane adresowanie", ph: "Jak pacjent chce być adresowany. Imię, zaimki, forma Pan/Pani." },
+          { k: "osoba_tow", q: "Osoba towarzysząca", ph: "Czy ktoś towarzyszący ma być obecny teraz czy później. Zgoda pacjenta." },
+          { k: "przymierze", q: "Kontakt i przymierze terapeutyczne", ph: "Co ułatwia rozmowę. Co utrudnia. Napięcie, opór, zaufanie." }
+        ]
+      },
+
+      {
+        key: "skarga_glowna",
+        title: "Skarga główna i swobodny opis",
+        modes: [MODES.Poradnia, MODES.IzbaPrzyjec, MODES.OddzialDzienny, MODES.OddzialZamkniety],
+        fields: [
+          { k: "co_sprowadza", q: "Co dziś sprowadza", ph: "Główny powód zgłoszenia własnymi słowami pacjenta." },
+          { k: "najbardziej_przeszkadza", q: "Co najbardziej przeszkadza w funkcjonowaniu", ph: "Najbardziej dokuczliwe objawy i konsekwencje." },
+          { k: "kolejnosc_objawow", q: "Kolejność pojawiania się objawów", ph: "Chronologia, dynamika, punkt zwrotny." },
+          { k: "oczekiwania", q: "Oczekiwania wobec pomocy", ph: "Czego pacjent oczekuje tu i teraz." }
+        ]
+      },
+
+      {
+        key: "hpi_os_czasu",
+        title: "Historia obecnego epizodu – oś czasu",
+        modes: [MODES.Poradnia, MODES.IzbaPrzyjec, MODES.OddzialDzienny, MODES.OddzialZamkniety],
+        fields: [
+          { k: "poczatek", q: "Początek pogorszenia", ph: "Kiedy zaczęło się pogorszenie. Co wtedy działo się w życiu." },
+          { k: "czynniki_nasilaja", q: "Co nasila objawy", ph: "Stres, bezsenność, konflikty, substancje, leki, somatyka." },
+          { k: "czynniki_zmniejszaja", q: "Co zmniejsza objawy", ph: "Co pomaga choć trochę. Działania pacjenta." },
+          { k: "interpretacja", q: "Jak pacjent tłumaczy dolegliwości", ph: "Własne wyjaśnienia, przekonania, przypisywanie przyczyn." },
+          { k: "proby_pomocy", q: "Czego próbował, jaki skutek", ph: "Samoleczenie, kontakt z lekarzami, terapia, leki, używki." },
+          { k: "wplyw_sen", q: "Wpływ na sen", ph: "Zasypianie, wybudzenia, wczesne budzenie, odwrócony rytm." },
+          { k: "wplyw_apetyt_waga", q: "Wpływ na apetyt i masę ciała", ph: "Spadek lub wzrost, łaknienie, jedzenie kompulsywne." },
+          { k: "wplyw_higiena", q: "Wpływ na higienę i samoobsługę", ph: "Zaniedbanie, spadek energii, organizacja dnia." },
+          { k: "wplyw_praca", q: "Wpływ na pracę lub naukę", ph: "Absencje, wydajność, konflikty, utrata pracy." },
+          { k: "wplyw_relacje", q: "Wpływ na relacje", ph: "Izolacja, konflikty, wsparcie, wycofanie." },
+          { k: "wplyw_seks", q: "Wpływ na seksualność", ph: "Libido, dysfunkcje, ryzykowne zachowania, przemoc." },
+          { k: "bezpieczenstwo", q: "Bezpieczeństwo bieżące", ph: "Ryzyka w domu, impulsywność, dostęp do metod." }
+        ]
+      },
+
+      {
+        key: "czynniki_wyzw_podtrz",
+        title: "Czynniki wyzwalające i podtrzymujące",
+        modes: [MODES.Poradnia, MODES.IzbaPrzyjec, MODES.OddzialDzienny, MODES.OddzialZamkniety],
+        fields: [
+          { k: "wyzwalacze", q: "Co poprzedzało pogorszenie", ph: "Straty, konflikty, stres, bezsenność, substancje, leki, somatyka." },
+          { k: "podtrzymujace", q: "Co utrzymuje objawy", ph: "Unikanie, izolacja, wtórne korzyści, dysfunkcyjne strategie, brak leczenia." },
+          { k: "zasoby", q: "Zasoby i czynniki chroniące", ph: "Ludzie, rutyny, przekonania, cele, umiejętności." }
+        ]
+      },
+
+      {
+        key: "ryzyko_drabinka",
+        title: "Ryzyko samobójcze i autoagresywne – drabinka",
+        modes: [MODES.Poradnia, MODES.IzbaPrzyjec, MODES.OddzialDzienny, MODES.OddzialZamkniety],
+        fields: [
+          { k: "przyszlosc", q: "Czy widzi przyszłość", ph: "Perspektywa, nadzieja, sens." },
+          { k: "sens", q: "Czy życie ma sens", ph: "Myśli rezygnacyjne, poczucie beznadziei." },
+          { k: "mysli_smierc", q: "Myśli o śmierci", ph: "Częstość, intensywność, czas trwania." },
+          { k: "mysli_auto", q: "Myśli o zrobieniu sobie krzywdy", ph: "Treść, natręctwa, impulsywność." },
+          { k: "plan_metoda", q: "Plan, metoda, zamiar, dostęp", ph: "Konkrety, przygotowania, dostęp do środków." },
+          { k: "proby", q: "Próby w przeszłości i samouszkodzenia", ph: "Kiedy, jak, konsekwencje, co zatrzymało." },
+          { k: "czynniki_chron", q: "Czynniki chroniące", ph: "Oparcie, powody do życia, zobowiązania, wartości." },
+          { k: "bezpieczenstwo_dom", q: "Bezpieczeństwo w domu", ph: "Dostęp do leków, broni, wysokości, narzędzi. Nadzór." }
+        ]
+      },
+
+      {
+        key: "substancje_sito",
+        title: "Używanie substancji – szybkie sito",
+        modes: [MODES.Poradnia, MODES.IzbaPrzyjec, MODES.OddzialDzienny, MODES.OddzialZamkniety],
+        fields: [
+          { k: "alkohol", q: "Alkohol", ph: "Ile, jak często, ostatnio, ciągi, odstawienie, objawy odstawienne." },
+          { k: "narkotyki", q: "Narkotyki", ph: "Jakie, kiedy ostatnio, droga podania, mieszanie substancji." },
+          { k: "leki", q: "Leki potencjalnie nadużywane", ph: "BZD, opioidy, pregabalina, stymulanty, leki nasenne." },
+          { k: "nikotyna_kofeina", q: "Nikotyna i kofeina", ph: "Papierosy, e-papierosy, energetyki. Ilości." },
+          { k: "konsekwencje", q: "Konsekwencje", ph: "Praca, relacje, prawo, zdrowie, urazy." },
+          { k: "motywacja", q: "Motywacja do zmiany", ph: "Czy chce rozmowy o leczeniu uzależnienia. Gotowość." }
+        ]
+      },
+
+      {
+        key: "leczenie_psychiatryczne",
+        title: "Dotychczasowe leczenie psychiatryczne",
+        modes: [MODES.Poradnia, MODES.IzbaPrzyjec, MODES.OddzialDzienny, MODES.OddzialZamkniety],
+        fields: [
+          { k: "rozpoznania", q: "Rozpoznania i epizody", ph: "Co rozpoznawano, kiedy, jak przebiegało." },
+          { k: "hospitalizacje", q: "Hospitalizacje", ph: "Kiedy, powód, przebieg, efekty." },
+          { k: "farmako", q: "Farmakoterapia", ph: "Co działało, co nie, DN, adherencja, przerwy." },
+          { k: "psychoterapia", q: "Psychoterapia", ph: "Jaka, jak długo, efekt, dlaczego przerwana." },
+          { k: "opieka", q: "Forma opieki", ph: "PZP, IP, oddział, prywatnie. Kontynuacja." },
+          { k: "mania_psychoza", q: "Epizody manii, psychozy, katatonii, ECT", ph: "Kiedykolwiek, objawy, leczenie, powikłania." }
+        ]
+      },
+
+      {
+        key: "somatyka_i_leki",
+        title: "Choroby somatyczne i leki + ciąża/laktacja/alergie",
+        modes: [MODES.Poradnia, MODES.IzbaPrzyjec, MODES.OddzialDzienny, MODES.OddzialZamkniety],
+        fields: [
+          { k: "choroby", q: "Choroby przewlekłe", ph: "Neurologiczne, endokrynologiczne, sercowo-naczyniowe, inne." },
+          { k: "operacje", q: "Operacje i powikłania", ph: "Przebyte zabiegi, hospitalizacje somatyczne." },
+          { k: "urazy_glowy", q: "Urazy głowy z U.P.", ph: "Utrata przytomności, następstwa, padaczka." },
+          { k: "zomr", q: "ZOMR, encefalit, drgawki", ph: "Kiedy, leczenie, następstwa." },
+          { k: "leki_przewlekle", q: "Leki przewlekłe i suplementy", ph: "Nazwy, dawki, regularność." }
+        ],
+        meta: true
+      },
+
+      {
+        key: "rodzina",
+        title: "Wywiad rodzinny – prosty genogram",
+        modes: [MODES.Poradnia, MODES.IzbaPrzyjec, MODES.OddzialDzienny, MODES.OddzialZamkniety],
+        fields: [
+          { k: "psychiatria", q: "Zaburzenia psychiczne w rodzinie", ph: "Kto, jakie, przebieg." },
+          { k: "suicydy", q: "Samobójstwa", ph: "Kto, kiedy, kontekst." },
+          { k: "uzaleznienia", q: "Uzależnienia", ph: "Alkohol, narkotyki, leki." },
+          { k: "przemoc", q: "Przemoc", ph: "Wzorce przemocy, przeszłość." },
+          { k: "otepienia", q: "Otępienia i neurologiczne", ph: "Kto, kiedy, rozpoznanie." },
+          { k: "wsparcie", q: "Relacje i wsparcie", ph: "Z kim kontakt, na kim polega." }
+        ]
+      },
+
+      {
+        key: "rozwoj_osobowosc",
+        title: "Rozwój i osobowość przedchorobowa",
+        modes: [MODES.Poradnia, MODES.OddzialDzienny, MODES.OddzialZamkniety],
+        fields: [
+          { k: "dziecinstwo", q: "Dzieciństwo i środowisko", ph: "Relacje, bezpieczeństwo, zaniedbanie, przemoc." },
+          { k: "trauma", q: "Doświadczenia traumatyczne", ph: "Wydarzenia, następstwa, unikanie." },
+          { k: "funkc_szkolne", q: "Funkcjonowanie szkolne i społeczne", ph: "Relacje rówieśnicze, osiągnięcia, trudności." },
+          { k: "cechy", q: "Cechy osobowości przed zachorowaniem", ph: "Impulsywność, perfekcjonizm, lęk, unikanie." },
+          { k: "radzenie", q: "Strategie radzenia sobie", ph: "Jak zwykle radził sobie ze stresem." }
+        ]
+      },
+
+      {
+        key: "spoleczny",
+        title: "Wywiad społeczny",
+        modes: [MODES.Poradnia, MODES.IzbaPrzyjec, MODES.OddzialDzienny, MODES.OddzialZamkniety],
+        fields: [
+          { k: "mieszkanie", q: "Mieszkanie", ph: "Warunki, współlokatorzy, bezpieczeństwo." },
+          { k: "relacje", q: "Relacje i sieć wsparcia", ph: "Kto wspiera, konflikty, izolacja." },
+          { k: "praca_finanse", q: "Praca i finanse", ph: "Źródła utrzymania, ryzyka socjalne." },
+          { k: "prawna", q: "Sytuacja prawna", ph: "Kurator, postępowania, przemoc." },
+          { k: "bezpieczenstwo", q: "Bezpieczeństwo w domu", ph: "Dostęp do środków, nadzór, ryzyko." }
+        ]
+      },
+
+      {
+        key: "szybki_ip",
+        title: "Szybki wywiad w izbie przyjęć",
+        modes: [MODES.IzbaPrzyjec],
+        fields: [
+          { k: "dlaczego_teraz", q: "Dlaczego teraz", ph: "Co stało się bezpośrednio przed przyjazdem." },
+          { k: "ryzyko_ip", q: "Ryzyko S i H", ph: "Zamiar, dostęp, plan, zabezpieczenie." },
+          { k: "substancje_ip", q: "Substancje", ph: "Co i kiedy. Intoksykacja, odstawienie." },
+          { k: "psychoza_ip", q: "Objawy wytwórcze i pobudzenie", ph: "Omamy, urojenia, dezorganizacja, agresja." },
+          { k: "kontakt_bliscy", q: "Kontakt do bliskich i zgoda", ph: "Kto, telefon, czy zgoda na kontakt." },
+          { k: "po_wypisie", q: "Bezpieczeństwo po wypisie", ph: "Gdzie, z kim, plan, leki, kontrola." }
+        ]
+      }
+    ]
+
+    const renderMetaSomatic = (host) => {
+      const box = makeEl("div", "card pad")
+      const ttl = makeEl("div", null, "Szybkie checkboxy bezpieczeństwa farmakoterapii")
+      ttl.style.fontWeight = "700"
+      ttl.style.marginBottom = "10px"
+
+      const row = makeEl("div", "row2")
+      row.style.display = "grid"
+      row.style.gridTemplateColumns = "1fr 1fr 1fr"
+      row.style.gap = "10px"
+
+      const makeCb = (id, label, key) => {
+        const wrap = makeEl("label", null, "")
+        wrap.style.display = "flex"
+        wrap.style.gap = "10px"
+        wrap.style.alignItems = "center"
+        wrap.style.padding = "10px"
+        wrap.style.border = "1px solid rgba(0,0,0,.10)"
+        wrap.style.borderRadius = "12px"
+        wrap.style.background = "rgba(255,255,255,.65)"
+
+        const cb = document.createElement("input")
+        cb.type = "checkbox"
+        cb.id = id
+        cb.checked = !!getMeta(key)
+        cb.addEventListener("change", () => setMeta(key, cb.checked))
+
+        const span = makeEl("span", null, label)
+        span.style.fontSize = "13px"
+
+        wrap.appendChild(cb)
+        wrap.appendChild(span)
+        return { wrap, cb }
+      }
+
+      const c1 = makeCb("meta_preg", "Ciąża", "pregnancy")
+      const c2 = makeCb("meta_lact", "Laktacja", "lactation")
+      const c3 = makeCb("meta_all", "Alergie", "allergy")
+
+      row.appendChild(c1.wrap)
+      row.appendChild(c2.wrap)
+      row.appendChild(c3.wrap)
+
+      const allergyBox = makeEl("div", null, "")
+      allergyBox.style.marginTop = "10px"
+
+      const lab = makeEl("label", null, "Jeśli alergie: jakie")
+      const inp = document.createElement("input")
+      inp.type = "text"
+      inp.placeholder = "Np. penicyliny, lateks, orzechy, reakcja: pokrzywka / anafilaksja"
+      inp.value = String(getMeta("allergyText") || "")
+      inp.addEventListener("input", () => setMeta("allergyText", inp.value))
+
+      const toggle = () => {
+        allergyBox.style.display = getMeta("allergy") ? "block" : "none"
+      }
+      c3.cb.addEventListener("change", toggle)
+      toggle()
+
+      allergyBox.appendChild(lab)
+      allergyBox.appendChild(inp)
+
+      box.appendChild(ttl)
+      box.appendChild(row)
+      box.appendChild(allergyBox)
+      host.appendChild(box)
+    }
+
+    const render = () => {
+      ensureState()
+      const root = document.getElementById("baseInterviewRoot")
+      if (!root) return
+      root.innerHTML = ""
+
+      const mode = getMode()
+
+      BASE.filter(s => (s.modes || []).includes(mode)).forEach(sec => {
+        const det = document.createElement("details")
+        det.className = "acc"
+        det.open = sec.key === "skarga_glowna" || sec.key === "otwarcie_kontrakt"
+
+        const sum = document.createElement("summary")
+        sum.className = "acc-head"
+
+        const t = makeEl("span", "acc-title", sec.title)
+        const sub = makeEl("span", "acc-sub", "pola per pytanie")
+
+        sum.appendChild(t)
+        sum.appendChild(sub)
+
+        const body = makeEl("div", "acc-body")
+
+        if (sec.meta) {
+          renderMetaSomatic(body)
+        }
+
+        const grid = makeEl("div", null)
+        grid.style.display = "grid"
+        grid.style.gridTemplateColumns = "1fr"
+        grid.style.gap = "10px"
+
+        sec.fields.forEach(f => {
+          const block = makeFieldBlock({
+            label: f.q,
+            placeholder: f.ph,
+            value: getField(sec.key, f.k),
+            onInput: (v) => setField(sec.key, f.k, v)
+          })
+          grid.appendChild(block)
+        })
+
+        body.appendChild(grid)
+
+        const hint = makeEl("div", "hint", "Wpisuj streszczenie odpowiedzi i cytaty. Szare placeholdery to pytania i podpowiedzi.")
+        body.appendChild(hint)
+
+        det.appendChild(sum)
+        det.appendChild(body)
+        root.appendChild(det)
+      })
+    }
+
+    window.collectBase = () => {
+      ensureState()
+      const out = {}
+      BASE.forEach(sec => {
+        out[sec.key] = { title: sec.title, value: window.STATE.base[sec.key] || {} }
+      })
+      out._meta = window.STATE.baseMeta || {}
+      return out
+    }
+
+    window.renderBaseSections = render
+
+    document.addEventListener("DOMContentLoaded", render)
+    document.addEventListener("peon2:modeChanged", render)
+  })()
+</script>

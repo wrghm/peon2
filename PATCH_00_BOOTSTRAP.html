@@ -1,0 +1,115 @@
+<script>
+/**
+ * PATCH_00_BOOTSTRAP (v1)
+ * - spina tryb: body[data-mode] + select + labelki
+ * - dodaje toggle sidebar (z zapamiętywaniem)
+ * - ctrl/cmd+s -> zapis Drive
+ * - porządkuje podstawowe statusy UI
+ */
+(function(){
+  "use strict";
+  if (!window.PEON2_PATCHER) return;
+
+  window.PEON2_PATCHER.once("PATCH_00_BOOTSTRAP_v1", function(PEON2){
+
+    const KEY_MODE = "peon2.mode";
+    const KEY_SIDEBAR = "peon2.sidebarCollapsed";
+
+    function syncModeLabels(mode){
+      const map = {
+        Poradnia: "Poradnia",
+        IzbaPrzyjec: "Izba przyjęć",
+        OddzialDzienny: "Oddział dzienny",
+        OddzialZamkniety: "Oddział zamknięty",
+        Obserwacja: "Obserwacja",
+        Wypis: "Wypis",
+        Wiedza: "Wiedza"
+      };
+      const label = map[mode] || mode;
+
+      const top = document.getElementById("modeLabelTop");
+      const main = document.getElementById("modeLabel");
+
+      if (top) top.textContent = "Tryb: " + label;
+      if (main) main.textContent = label;
+
+      // tytuł sekcji i meta (delikatnie, bez ruszania layoutu)
+      const title = document.getElementById("mainTitle");
+      const meta  = document.getElementById("mainMeta");
+      if (title && (mode === "Obserwacja")) title.textContent = "Obserwacja";
+      else if (title) title.textContent = "Wywiad i dokumentacja";
+
+      if (meta && (mode === "Obserwacja")) meta.textContent = "Generator wpisu i checklisty";
+      else if (meta) meta.textContent = "Sekcje zwijane, jasny kontrast";
+    }
+
+    function initMode(){
+      const select = document.getElementById("modeSelect");
+      const saved = PEON2.storage.get(KEY_MODE, null);
+
+      // priorytet: localStorage -> aktualny body[data-mode] -> select.value
+      const current = PEON2.getMode();
+      const mode = saved || current || (select ? select.value : "OddzialDzienny");
+
+      PEON2.setMode(mode);
+      syncModeLabels(mode);
+
+      if (select) {
+        select.value = mode;
+        PEON2.on(select, "change", () => {
+          const m = select.value;
+          PEON2.storage.set(KEY_MODE, m);
+          PEON2.setMode(m);
+          syncModeLabels(m);
+          PEON2.toast("Zmieniono tryb", m);
+        });
+      }
+    }
+
+    function initSidebar(){
+      const btn = document.getElementById("btnToggleSidebar");
+      const collapsed = PEON2.storage.get(KEY_SIDEBAR, "0") === "1";
+
+      if (collapsed) document.body.classList.add("sidebar-collapsed");
+      if (btn) btn.setAttribute("aria-expanded", collapsed ? "false" : "true");
+
+      PEON2.on(btn, "click", () => {
+        const now = document.body.classList.toggle("sidebar-collapsed");
+        PEON2.storage.set(KEY_SIDEBAR, now ? "1" : "0");
+        btn.setAttribute("aria-expanded", now ? "false" : "true");
+      });
+    }
+
+    function initSaveShortcut(){
+      function doSave(){
+        const top = document.getElementById("btnSaveDriveTop");
+        const side = document.getElementById("btnSaveDrive");
+        // preferuj top, bo jest zawsze widoczny
+        if (top) top.click();
+        else if (side) side.click();
+        else PEON2.toast("Brak przycisku zapisu", "Nie znaleziono btnSaveDrive/Top");
+      }
+
+      PEON2.on(window, "keydown", (e) => {
+        const isSave = (e.key === "s" || e.key === "S") && (e.ctrlKey || e.metaKey);
+        if (!isSave) return;
+        e.preventDefault();
+        doSave();
+      });
+    }
+
+    function initAutosaveIndicatorDefaults(){
+      const dot = document.getElementById("autosaveDot");
+      const txt = document.getElementById("autosaveText");
+      if (dot) dot.style.background = "var(--ok)";
+      if (txt) txt.textContent = "Autosave: włączony";
+    }
+
+    // start
+    initMode();
+    initSidebar();
+    initSaveShortcut();
+    initAutosaveIndicatorDefaults();
+  });
+})();
+</script>

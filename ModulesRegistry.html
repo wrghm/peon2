@@ -1,0 +1,371 @@
+<!-- ModulesRegistry.html -->
+<script>
+(() => {
+  const APP_NS = "PEON2_PSY_FORM_V2";
+  const KEY_LAST = `${APP_NS}__MODULES__LAST`;
+  const KEY_PID = (pid) => `${APP_NS}__MODULES__PID__${String(pid || "NN").trim() || "NN"}`;
+
+  const REGISTRY = {
+    module_sud: {
+      id: "module_sud",
+      title: "Uzależnienia (SUD)",
+      templateId: "tpl-module_sud",
+      autoOpen: true
+    },
+    module_scales: {
+      id: "module_scales",
+      title: "Skale i przesiewy",
+      templateId: "tpl-module-scales"
+    },
+    module_calculators: { id: "module_calculators", title: "Kalkulatory (BZD, neuroleptyki)", templateId: "tpl-module_calculators" },
+    module_psychosis: { id: "module_psychosis", title: "Psychoza i schizofrenia", templateId: "tpl-module_psychosis" },
+    module_chad: { id: "module_chad", title: "CHAD", templateId: "tpl-module_chad" },
+    module_ocd: { id: "module_ocd", title: "OCD", templateId: "tpl-module_ocd" },
+    module_adhd: { id: "module_adhd", title: "ADHD", templateId: "tpl-module_adhd" },
+    module_asd: { id: "module_asd", title: "ASD", templateId: "tpl-module_asd" },
+    module_ptsd: { id: "module_ptsd", title: "Trauma i PTSD", templateId: "tpl-module_ptsd" },
+    module_dementia: { id: "module_dementia", title: "Otępienie i organiczne", templateId: "tpl-module_dementia" }
+  };
+
+  const cssEscape = (s) => {
+    const v = String(s ?? "");
+    if (window.CSS && typeof window.CSS.escape === "function") return window.CSS.escape(v);
+    return v.replace(/["\\]/g, "\\$&");
+  };
+
+  const qs = (s, r = document) => r.querySelector(s);
+  const qsa = (s, r = document) => Array.from(r.querySelectorAll(s));
+
+  const toast = (msg, sub) => {
+    const box = document.getElementById("toast");
+    if (!box) return alert(msg);
+    box.innerHTML = sub ? `<div>${msg}</div><small>${sub}</small>` : `<div>${msg}</div>`;
+    box.classList.add("show");
+    clearTimeout(window.__toastT);
+    window.__toastT = setTimeout(() => box.classList.remove("show"), 2200);
+  };
+
+  const readPid = () => {
+    const x = document.getElementById("patientId");
+    const v = x ? String(x.value || "").trim() : "";
+    return v || "NN";
+  };
+
+  const uniq = (arr) => {
+    const out = [];
+    const seen = new Set();
+    (arr || []).forEach((x) => {
+      const k = String(x || "").trim();
+      if (!k) return;
+      if (seen.has(k)) return;
+      seen.add(k);
+      out.push(k);
+    });
+    return out;
+  };
+
+  const normalizeList = (list) => uniq(list).filter((k) => !!REGISTRY[k]);
+
+  const loadList = (pid) => {
+    const p = String(pid || readPid()).trim() || "NN";
+    try {
+      const raw = localStorage.getItem(KEY_PID(p)) || localStorage.getItem(KEY_LAST);
+      if (!raw) return [];
+      const parsed = JSON.parse(raw);
+      if (!Array.isArray(parsed)) return [];
+      return normalizeList(parsed);
+    } catch (e) {
+      return [];
+    }
+  };
+
+  const saveList = (list, pid) => {
+    const p = String(pid || readPid()).trim() || "NN";
+    const v = normalizeList(list);
+    try {
+      localStorage.setItem(KEY_LAST, JSON.stringify(v));
+      localStorage.setItem(KEY_PID(p), JSON.stringify(v));
+    } catch (e) {}
+  };
+
+  const ensureStyles = () => {
+    if (document.getElementById("modulesRegistryCss")) return;
+    const css = document.createElement("style");
+    css.id = "modulesRegistryCss";
+    css.textContent = `
+      .modCard{
+        border: 1px solid rgba(232,238,252,.14);
+        background: rgba(11,18,32,.20);
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 10px 26px rgba(0,0,0,.20);
+      }
+      .modHead{
+        display:flex;
+        align-items:center;
+        justify-content: space-between;
+        gap: 10px;
+        padding: 12px 12px;
+        background: linear-gradient(135deg, rgba(91,188,255,.14), rgba(39,214,155,.10));
+        border-bottom: 1px solid rgba(232,238,252,.10);
+      }
+      .modTitle{
+        font-weight: 800;
+        font-size: 13px;
+        letter-spacing: .2px;
+        color: rgba(232,238,252,.92);
+      }
+      .modTools{
+        display:flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+      .modBtn{
+        appearance:none;
+        border: 1px solid rgba(232,238,252,.16);
+        background: rgba(11,18,32,.35);
+        color: rgba(232,238,252,.90);
+        padding: 8px 10px;
+        border-radius: 12px;
+        cursor:pointer;
+        font-size: 12px;
+        display:inline-flex;
+        align-items:center;
+        gap: 8px;
+      }
+      .modBtn:hover{
+        background: rgba(11,18,32,.55);
+        border-color: rgba(91,188,255,.30);
+      }
+      .modBody{ padding: 12px }
+      .modEmpty{
+        font-size: 12px;
+        color: rgba(232,238,252,.70);
+        border: 1px dashed rgba(232,238,252,.18);
+        background: rgba(11,18,32,.18);
+        border-radius: 14px;
+        padding: 10px;
+        line-height: 1.35;
+      }
+    `;
+    document.head.appendChild(css);
+  };
+
+  const mountRoot = () => document.getElementById("modulesMount");
+
+  const getTemplateById = (templateId) => {
+    if (!templateId) return null;
+    const t = document.getElementById(templateId);
+    if (t && (t.tagName || "").toLowerCase() === "template") return t;
+    return null;
+  };
+
+  const templateFor = (key) => {
+    const info = REGISTRY[key];
+    if (!info) return null;
+
+    const byId = getTemplateById(info.templateId);
+    if (byId) return byId;
+
+    const byData = document.querySelector(`template[data-module="${cssEscape(key)}"]`);
+    if (byData) return byData;
+
+    return null;
+  };
+
+  const removeOneFromDOM = (key) => {
+    const root = mountRoot();
+    if (!root) return;
+    const card = root.querySelector(`[data-module-key="${cssEscape(key)}"]`);
+    if (card) card.remove();
+  };
+
+  const emitMounted = (moduleId, hostEl) => {
+    document.dispatchEvent(new CustomEvent("peon2:moduleMounted", { detail: { moduleId, hostEl } }));
+  };
+
+  const renderOne = (key) => {
+    const root = mountRoot();
+    if (!root) return;
+
+    const info = REGISTRY[key];
+    if (!info) return;
+
+    const existing = root.querySelector(`[data-module-key="${cssEscape(key)}"]`);
+    if (existing) {
+      existing.scrollIntoView({ behavior: "smooth", block: "start" });
+      return;
+    }
+
+    const card = document.createElement("section");
+    card.className = "modCard";
+    card.setAttribute("data-module-key", key);
+
+    const head = document.createElement("div");
+    head.className = "modHead";
+
+    const title = document.createElement("div");
+    title.className = "modTitle";
+    title.textContent = info.title;
+
+    const tools = document.createElement("div");
+    tools.className = "modTools";
+
+    const btnTop = document.createElement("button");
+    btnTop.type = "button";
+    btnTop.className = "modBtn";
+    btnTop.textContent = "Do góry";
+    btnTop.addEventListener("click", () => card.scrollIntoView({ behavior: "smooth", block: "start" }));
+
+    const btnRemove = document.createElement("button");
+    btnRemove.type = "button";
+    btnRemove.className = "modBtn";
+    btnRemove.textContent = "Usuń";
+    btnRemove.addEventListener("click", () => Modules.remove(key));
+
+    tools.appendChild(btnTop);
+    tools.appendChild(btnRemove);
+
+    head.appendChild(title);
+    head.appendChild(tools);
+
+    const body = document.createElement("div");
+    body.className = "modBody";
+
+    const tpl = templateFor(key);
+    if (tpl) {
+      body.appendChild(tpl.content.cloneNode(true));
+    } else {
+      const empty = document.createElement("div");
+      empty.className = "modEmpty";
+      empty.innerHTML =
+        `Brak szablonu modułu <b>${info.title}</b> w DOM.<br>` +
+        `Dodaj w index.html include(...) pliku modułu i template <code>&lt;template id="${info.templateId}"&gt;</code>.`;
+      body.appendChild(empty);
+    }
+
+    card.appendChild(head);
+    card.appendChild(body);
+    root.appendChild(card);
+
+    card.scrollIntoView({ behavior: "smooth", block: "start" });
+    emitMounted(info.id, card);
+  };
+
+  const renderAll = (list) => {
+    const root = mountRoot();
+    if (!root) return;
+    root.innerHTML = "";
+    (list || []).forEach(renderOne);
+  };
+
+  const hasModule = (key) => Modules.list().includes(key);
+
+  const parseTruthFromEl = (node) => {
+    if (!node) return false;
+    const tag = (node.tagName || "").toLowerCase();
+    const type = (node.getAttribute("type") || "").toLowerCase();
+    if (type === "checkbox" || type === "radio") return !!node.checked;
+    if (tag === "select") {
+      const v = String(node.value || "").trim();
+      if (!v) return false;
+      const neg = ["nie", "brak", "n/d", "nd", "0"];
+      return !neg.includes(v.toLowerCase());
+    }
+    const v = String(node.value || "").trim();
+    return v.length > 0;
+  };
+
+  const scanSUDTriggers = () => {
+    if (hasModule("module_sud")) return;
+
+    const candidates = [];
+    qsa(`[data-auto-module="module_sud"]`).forEach((x) => candidates.push(x));
+
+    const fallbackSelectors = [
+      "#use_alcohol_yes",
+      "#use_drugs_yes",
+      "#sud_problem",
+      "input[name='problem_alkohol'][value='Tak']",
+      "input[name='problem_narkotyki'][value='Tak']"
+    ];
+    fallbackSelectors.forEach((s) => {
+      const x = qs(s);
+      if (x) candidates.push(x);
+    });
+
+    const hit = candidates.some(parseTruthFromEl);
+    if (!hit) return;
+
+    Modules.add("module_sud", { silent: true });
+    toast("Auto-moduł", "Wykryto problem alkohol lub narkotyki i dodano SUD");
+  };
+
+  const attachAutoOpen = () => {
+    document.addEventListener("change", () => scanSUDTriggers());
+  };
+
+  const Modules = {
+    list() {
+      return normalizeList(loadList(readPid()));
+    },
+    add(key, opts = {}) {
+      if (!REGISTRY[key]) {
+        if (!opts.silent) toast("Nieznany moduł", key);
+        return;
+      }
+      const list = Modules.list();
+      if (list.includes(key)) {
+        renderOne(key);
+        if (!opts.silent) toast("Moduł już jest", REGISTRY[key].title);
+        return;
+      }
+      list.push(key);
+      saveList(list, readPid());
+      renderOne(key);
+      if (!opts.silent) toast("Dodano moduł", REGISTRY[key].title);
+    },
+    remove(key) {
+      const list = Modules.list().filter((x) => x !== key);
+      saveList(list, readPid());
+      removeOneFromDOM(key);
+      toast("Usunięto moduł", REGISTRY[key] ? REGISTRY[key].title : key);
+    },
+    clear() {
+      saveList([], readPid());
+      renderAll([]);
+    },
+    hydrate() {
+      ensureStyles();
+      const list = Modules.list();
+      renderAll(list);
+      scanSUDTriggers();
+    }
+  };
+
+  window.ModulesRegistry = {
+    getRegistry: () => REGISTRY,
+    toast,
+    Modules
+  };
+
+  window.Modules = Modules;
+
+  const attachPidWatcher = () => {
+    const pid = document.getElementById("patientId");
+    if (!pid) return;
+    const cb = () => Modules.hydrate();
+    pid.addEventListener("change", cb);
+    pid.addEventListener("blur", cb);
+  };
+
+  const init = () => {
+    if (!mountRoot()) return;
+    Modules.hydrate();
+    attachPidWatcher();
+    attachAutoOpen();
+  };
+
+  document.addEventListener("DOMContentLoaded", init);
+})();
+</script>

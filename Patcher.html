@@ -1,0 +1,61 @@
+<!-- Patcher.html -->
+<script>
+(function () {
+  const NS = "peon2";
+  const KEY = NS + ".patches.applied";
+
+  function _loadApplied() {
+    try { return JSON.parse(localStorage.getItem(KEY) || "{}"); }
+    catch (_) { return {}; }
+  }
+  function _saveApplied(obj) {
+    localStorage.setItem(KEY, JSON.stringify(obj || {}));
+  }
+  function isApplied(patchId) {
+    const a = _loadApplied();
+    return !!a[patchId];
+  }
+  function markApplied(patchId) {
+    const a = _loadApplied();
+    a[patchId] = new Date().toISOString();
+    _saveApplied(a);
+  }
+
+  function log() { console.log.apply(console, ["[PEON2][PATCHER]"].concat([].slice.call(arguments))); }
+  function warn() { console.warn.apply(console, ["[PEON2][PATCHER]"].concat([].slice.call(arguments))); }
+
+  window.PEON2_PATCHER = {
+    patches: [],
+    register(patch) {
+      if (!patch || !patch.id || typeof patch.apply !== "function") {
+        throw new Error("Patch must have {id, apply()}");
+      }
+      this.patches.push(patch);
+    },
+    applyAll() {
+      for (const p of this.patches) {
+        try {
+          if (isApplied(p.id)) { log("skip " + p.id); continue; }
+          const res = p.apply();
+          if (res && typeof res.then === "function") {
+            res.then(() => { markApplied(p.id); log("applied async " + p.id); })
+               .catch(err => { warn("failed async " + p.id, err); });
+          } else {
+            markApplied(p.id);
+            log("applied " + p.id);
+          }
+        } catch (err) {
+          warn("failed " + p.id, err);
+        }
+      }
+    }
+  };
+
+  document.addEventListener("DOMContentLoaded", () => {
+    setTimeout(() => {
+      if (window.PEON2_PATCHER) window.PEON2_PATCHER.applyAll();
+    }, 0);
+  });
+})();
+</script>
+<!-- PEON2_PATCHER_V1_GUARD -->
