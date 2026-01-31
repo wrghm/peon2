@@ -1,0 +1,606 @@
+<!-- Engine.html -->
+<script>
+/*
+  Engine v3
+  - autosave/restore/export/print/drive
+  - robust field capture: id/name + data-key (for dynamic forms)
+  - mode change event peon2:modeChanged
+  - hooks: window.markEdited(), window.emitModeChanged()
+*/
+
+(() => {
+  const el = (id) => document.getElementById(id);
+  const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
+  const $ = (sel, root = document) => root.querySelector(sel);
+
+  const APP_NS = "PEON2_PSY_FORM_V3";
+  const KEY_LAST = `${APP_NS}__LAST`;
+  const KEY_BY_PATIENT = (pid) => `${APP_NS}__PID__${String(pid || "NN").trim() || "NN"}`;
+  const KEY_UI = `${APP_NS}__UI`;
+
+  const MODE_LABELS = {
+    Poradnia: "Poradnia",
+    IzbaPrzyjec: "Izba przyjęć",
+    OddzialDzienny: "Oddział dzienny",
+    OddzialZamkniety: "Oddział zamknięty",
+    Obserwacja: "Obserwacja",
+    Wypis: "Wypis",
+    Wiedza: "Wiedza"
+  };
+
+  const state = {
+    version: 3,
+    meta: { mode: "OddzialDzienny", patientId: "NN", risk: "Brak" },
+    fields: {},
+    updatedAt: ""
+  };
+
+  const cssEscape = (s) => {
+    const v = String(s ?? "");
+    if (window.CSS && typeof window.CSS.escape === "function") return window.CSS.escape(v);
+    return v.replace(/["\\]/g, "\\$&");
+  };
+
+  const nowISO = () => {
+    const d = new Date();
+    const pad = (n) => String(n).padStart(2, "0");
+    return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+  };
+
+  const safeText = (x) => (x == null ? "" : String(x));
+
+  const toast = (msg, sub) => {
+    const box = el("toast");
+    if (!box) return alert(msg);
+    box.innerHTML = sub ? `<div>${msg}</div><small>${sub}</small>` : `<div>${msg}</div>`;
+    box.classList.add("show");
+    clearTimeout(window.__toastT);
+    window.__toastT = setTimeout(() => box.classList.remove("show"), 2200);
+  };
+
+  const setAutosaveIndicator = (mode, text) => {
+    const dot = el("autosaveDot");
+    const label = el("autosaveText");
+    if (dot) {
+      dot.style.background = mode === "ok" ? "#27d69b" : mode === "warn" ? "#ffcc66" : "#ff6b6b";
+    }
+    if (label) label.textContent = text || "Autosave";
+  };
+
+  const setLastSavedLabel = (ts) => {
+    const input = el("lastSaved");
+    if (input) input.value = ts || "";
+  };
+
+  const emitModeChanged = (mode) => {
+    document.dispatchEvent(new CustomEvent("peon2:modeChanged", { detail: { mode } }));
+  };
+
+  const readMetaFromUI = () => {
+    const mode = (el("modeSelect") && el("modeSelect").value) || state.meta.mode;
+    const patientId = (el("patientId") && el("patientId").value) || state.meta.patientId;
+    const risk = (el("riskSelect") && el("riskSelect").value) || state.meta.risk;
+
+    state.meta.mode = mode || "OddzialDzienny";
+    state.meta.patientId = (patientId || "NN").trim() || "NN";
+    state.meta.risk = risk || "Brak";
+  };
+
+  const writeMetaToUI = () => {
+    if (el("modeSelect")) el("modeSelect").value = state.meta.mode;
+    if (el("patientId")) el("patientId").value = state.meta.patientId;
+    if (el("riskSelect")) el("riskSelect").value = state.meta.risk;
+
+    const label = MODE_LABELS[state.meta.mode] || state.meta.mode;
+    if (el("modeLabelTop")) el("modeLabelTop").textContent = `Tryb: ${label}`;
+    if (el("modeLabel")) el("modeLabel").textContent = label;
+
+    document.body.setAttribute("data-mode", state.meta.mode);
+  };
+
+  const shouldCapture = (node) => {
+    if (!node || node.disabled) return false;
+    const tag = (node.tagName || "").toLowerCase();
+    if (!(tag === "input" || tag === "textarea" || tag === "select")) return false;
+    const type = (node.getAttribute("type") || "").toLowerCase();
+    if (type === "password" || type === "file") return false;
+    return true;
+  };
+
+  // NEW: supports data-key for dynamic fields
+  const fieldKey = (node) => {
+    if (!node) return null;
+
+    const dk = node.dataset && node.dataset.key ? String(node.dataset.key).trim() : "";
+    if (dk) return `dk:${dk}`;
+
+    if (node.id) return `id:${node.id}`;
+    const name = node.getAttribute("name");
+    const type = (node.getAttribute("type") || "").toLowerCase();
+
+    if (name && (type === "checkbox" || type === "radio")) {
+      const v = node.value != null ? node.value : "";
+      return `nv:${name}:${v}`;
+    }
+    if (name) return `name:${name}`;
+    return null;
+  };
+
+  const captureAllFields = () => {
+    const nodes = $$("#mainRoot input, #mainRoot textarea, #mainRoot select");
+    const out = {};
+    nodes.forEach((n) => {
+      if (!shouldCapture(n)) return;
+      const key = fieldKey(n);
+      if (!key) return;
+
+      const type = (n.getAttribute("type") || "").toLowerCase();
+      if (type === "checkbox" || type === "radio") out[key] = !!n.checked;
+      else out[key] = safeText(n.value);
+    });
+    state.fields = out;
+    state.updatedAt = nowISO();
+  };
+
+  const applyAllFields = (fieldsMap) => {
+    const keys = Object.keys(fieldsMap || {});
+    keys.forEach((k) => {
+      const v = fieldsMap[k];
+
+      if (k.startsWith("dk:")) {
+        const dk = k.slice(3);
+        const node = document.querySelector(`[data-key="${cssEscape(dk)}"]`);
+        if (!node) return;
+        const type = (node.getAttribute("type") || "").toLowerCase();
+        if (type === "checkbox" || type === "radio") node.checked = !!v;
+        else node.value = safeText(v);
+        return;
+      }
+
+      if (k.startsWith("id:")) {
+        const id = k.slice(3);
+        const node = document.getElementById(id);
+        if (!node) return;
+        const type = (node.getAttribute("type") || "").toLowerCase();
+        if (type === "checkbox" || type === "radio") node.checked = !!v;
+        else node.value = safeText(v);
+        return;
+      }
+
+      if (k.startsWith("nv:")) {
+        const parts = k.split(":");
+        const name = parts[1];
+        const val = parts.slice(2).join(":");
+        const node = document.querySelector(
+          `input[name="${cssEscape(name)}"][value="${cssEscape(val)}"]`
+        );
+        if (!node) return;
+        node.checked = !!v;
+        return;
+      }
+
+      if (k.startsWith("name:")) {
+        const name = k.slice(5);
+        const node = document.querySelector(`[name="${cssEscape(name)}"]`);
+        if (!node) return;
+        const type = (node.getAttribute("type") || "").toLowerCase();
+        if (type === "checkbox" || type === "radio") node.checked = !!v;
+        else node.value = safeText(v);
+        return;
+      }
+    });
+  };
+
+  const debounce = (fn, wait) => {
+    let t = null;
+    return (...args) => {
+      clearTimeout(t);
+      t = setTimeout(() => fn(...args), wait);
+    };
+  };
+
+  const storeLocal = () => {
+    try {
+      readMetaFromUI();
+      captureAllFields();
+
+      const payload = {
+        version: state.version,
+        meta: state.meta,
+        fields: state.fields,
+        updatedAt: state.updatedAt
+      };
+
+      localStorage.setItem(KEY_LAST, JSON.stringify(payload));
+      localStorage.setItem(KEY_BY_PATIENT(state.meta.patientId), JSON.stringify(payload));
+
+      setLastSavedLabel(state.updatedAt);
+      setAutosaveIndicator("ok", "Autosave: zapisano");
+      clearTimeout(window.__autoBadgeT);
+      window.__autoBadgeT = setTimeout(() => setAutosaveIndicator("ok", "Autosave: włączony"), 1200);
+    } catch (e) {
+      setAutosaveIndicator("bad", "Autosave: błąd");
+    }
+  };
+
+  const scheduleAutosave = debounce(storeLocal, 650);
+
+  const loadLocal = (preferPid) => {
+    const pid = String(preferPid || state.meta.patientId || "NN").trim() || "NN";
+    try {
+      const raw = localStorage.getItem(KEY_BY_PATIENT(pid)) || localStorage.getItem(KEY_LAST);
+      if (!raw) return null;
+      return JSON.parse(raw);
+    } catch (e) {
+      return null;
+    }
+  };
+
+  const restore = () => {
+    readMetaFromUI();
+    const payload = loadLocal(state.meta.patientId);
+    if (!payload) return toast("Brak zapisanego stanu", "Nie znaleziono danych w pamięci lokalnej");
+
+    state.meta = payload.meta || state.meta;
+    state.fields = payload.fields || {};
+    state.updatedAt = payload.updatedAt || nowISO();
+
+    writeMetaToUI();
+    applyAllFields(state.fields);
+    setLastSavedLabel(state.updatedAt);
+
+    if (window.Modules && window.Modules.hydrate) window.Modules.hydrate();
+    emitModeChanged(state.meta.mode);
+
+    toast("Przywrócono dane", state.updatedAt);
+  };
+
+  const clearAll = () => {
+    if (!confirm("Wyczyścić pola w bieżącym widoku? Dane lokalne dla tego ID zostaną usunięte.")) return;
+
+    readMetaFromUI();
+    try {
+      localStorage.removeItem(KEY_BY_PATIENT(state.meta.patientId));
+      localStorage.removeItem(KEY_LAST);
+    } catch (e) {}
+
+    const nodes = $$("#mainRoot input, #mainRoot textarea, #mainRoot select");
+    nodes.forEach((n) => {
+      if (!shouldCapture(n)) return;
+      const type = (n.getAttribute("type") || "").toLowerCase();
+      if (type === "checkbox" || type === "radio") n.checked = false;
+      else n.value = "";
+    });
+
+    setLastSavedLabel("");
+    scheduleAutosave();
+    toast("Wyczyszczono", "Możesz zacząć od nowa");
+  };
+
+  const labelForNode = (node) => {
+    if (!node) return null;
+
+    const dk = node.dataset && node.dataset.label ? String(node.dataset.label).trim() : "";
+    if (dk) return dk;
+
+    if (node.id) {
+      const byFor = document.querySelector(`label[for="${cssEscape(node.id)}"]`);
+      if (byFor) return byFor.textContent.trim();
+    }
+    let p = node.previousElementSibling;
+    if (p && (p.tagName || "").toLowerCase() === "label") return p.textContent.trim();
+    const parentLabel = node.closest("label");
+    if (parentLabel) return parentLabel.textContent.trim();
+    return node.id || node.name || "Pole";
+  };
+
+  const exportFieldsWithin = (root) => {
+    const nodes = $$("input, textarea, select", root).filter(shouldCapture);
+    let out = "";
+
+    const radioGroupsDone = new Set();
+
+    nodes.forEach((n) => {
+      const type = (n.getAttribute("type") || "").toLowerCase();
+      const tag = (n.tagName || "").toLowerCase();
+      const label = labelForNode(n);
+      if (!label) return;
+
+      if (type === "radio") {
+        const name = n.getAttribute("name");
+        if (!name) return;
+        if (radioGroupsDone.has(name)) return;
+        radioGroupsDone.add(name);
+
+        const checked = root.querySelector(`input[type="radio"][name="${cssEscape(name)}"]:checked`);
+        if (!checked) return;
+        out += `${label}: ${safeText(checked.value)}\n`;
+        return;
+      }
+
+      if (type === "checkbox") {
+        out += `${label}: ${n.checked ? "Tak" : "Nie"}\n`;
+        return;
+      }
+
+      const val = safeText(n.value).trim();
+      if (!val) return;
+
+      if (tag === "select") out += `${label}: ${val}\n`;
+      else out += `${label}:\n${val}\n\n`;
+    });
+
+    return out.trim() ? out : "(brak danych)\n";
+  };
+
+  const buildReportText = () => {
+    readMetaFromUI();
+    captureAllFields();
+
+    const modeLabel = MODE_LABELS[state.meta.mode] || state.meta.mode;
+    const pid = state.meta.patientId || "NN";
+    const risk = state.meta.risk || "Brak";
+    const ts = nowISO();
+
+    let out = "";
+    out += `DOKUMENTACJA PSYCHIATRYCZNA\n`;
+    out += `DATA: ${ts}\n`;
+    out += `TRYB: ${modeLabel}\n`;
+    out += `PACJENT: ${pid}\n`;
+    out += `RYZYKO S i H: ${risk}\n`;
+    out += `\n========================================\n\n`;
+
+    const main = el("mainRoot") || document.body;
+    const accs = $$("details.acc", main);
+
+    if (!accs.length) return out + exportFieldsWithin(main);
+
+    accs.forEach((acc) => {
+      const title =
+        ($(".acc-title", acc) && $(".acc-title", acc).textContent.trim()) ||
+        ($("summary", acc) && $("summary", acc).textContent.trim()) ||
+        "Sekcja";
+      out += `## ${title}\n\n`;
+      out += exportFieldsWithin(acc);
+      out += `\n`;
+    });
+
+    return out;
+  };
+
+  const downloadTxt = () => {
+    const pid = (el("patientId") && el("patientId").value) || "NN";
+    const mode = (el("modeSelect") && el("modeSelect").value) || "Tryb";
+    const ts = new Date().toISOString().slice(0, 19).replace(/[:T]/g, "-");
+    const filename = `Wywiad_${pid}_${mode}_${ts}.txt`;
+    const text = buildReportText();
+
+    const blob = new Blob([text], { type: "text/plain;charset=utf-8" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(() => {
+      URL.revokeObjectURL(a.href);
+      a.remove();
+    }, 0);
+
+    toast("Pobrano TXT", filename);
+  };
+
+  const escapeHtml = (s) =>
+    String(s)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+
+  const printReport = () => {
+    const text = buildReportText();
+    const modeLabel = MODE_LABELS[state.meta.mode] || state.meta.mode;
+
+    const w = window.open("", "_blank");
+    if (!w) return toast("Nie udało się otworzyć okna druku", "Sprawdź blokadę popupów");
+
+    const html = `
+      <html lang="pl">
+        <head>
+          <meta charset="utf-8" />
+          <meta name="viewport" content="width=device-width, initial-scale=1" />
+          <title>Druk - ${escapeHtml(modeLabel)}</title>
+          <style>
+            body{ font-family: Arial, sans-serif; margin: 24px; color:#111 }
+            h1{ font-size: 16px; margin: 0 0 12px }
+            pre{
+              white-space: pre-wrap;
+              font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+              font-size: 12px;
+              line-height: 1.35;
+              border: 1px solid #ddd;
+              padding: 12px;
+            }
+            @media print{
+              body{ margin: 0 }
+              pre{ border: none }
+            }
+          </style>
+        </head>
+        <body>
+          <h1>${escapeHtml(modeLabel)} | ${escapeHtml(state.meta.patientId || "NN")}</h1>
+          <pre>${escapeHtml(text)}</pre>
+          <script>window.onload = () => { window.print() }<\/script>
+        </body>
+      </html>
+    `;
+    w.document.open();
+    w.document.write(html);
+    w.document.close();
+  };
+
+  const saveToDrive = () => {
+    const pid = (el("patientId") && el("patientId").value) || "NN";
+    const content = buildReportText();
+
+    if (!window.google || !google.script || !google.script.run) {
+      return toast("Brak google.script.run", "To działa tylko jako Web App GAS");
+    }
+
+    toast("Zapis na Drive", "Trwa wysyłanie");
+    google.script.run
+      .withSuccessHandler((msg) => {
+        toast("Zapisano na Drive", safeText(msg || "OK"));
+        storeLocal();
+      })
+      .withFailureHandler((err) => {
+        toast("Błąd zapisu na Drive", safeText(err && err.message ? err.message : err));
+      })
+      .saveInterview({ id: pid, content });
+  };
+
+  const coJeszcze = () => {
+    const root = el("mainRoot") || document.body;
+    const nodes = $$("textarea, input[type='text']", root).filter(shouldCapture);
+
+    const empty = nodes
+      .filter((n) => !safeText(n.value).trim())
+      .slice(0, 12)
+      .map((n) => labelForNode(n))
+      .filter(Boolean);
+
+    if (!empty.length) return toast("Wygląda kompletnie", "Nie wykryto oczywistych braków");
+    toast("Co jeszcze uzupełnić", empty.join(" • "));
+  };
+
+  const setMode = (mode) => {
+    state.meta.mode = mode || state.meta.mode;
+    writeMetaToUI();
+    scheduleAutosave();
+    emitModeChanged(state.meta.mode);
+  };
+
+  const persistMeta = () => {
+    readMetaFromUI();
+    writeMetaToUI();
+    scheduleAutosave();
+  };
+
+  const attachAutosaveListeners = () => {
+    document.addEventListener("input", (e) => {
+      const t = e.target;
+      if (!t) return;
+      if (t.id === "patientId") return scheduleAutosave();
+      if (!shouldCapture(t)) return;
+      scheduleAutosave();
+    });
+
+    document.addEventListener("change", (e) => {
+      const t = e.target;
+      if (!t) return;
+
+      if (t.id === "modeSelect") setMode(t.value);
+      if (t.id === "patientId" && window.Modules && window.Modules.hydrate) window.Modules.hydrate();
+
+      if (t.id === "modeSelect" || t.id === "riskSelect" || t.id === "patientId" || shouldCapture(t)) {
+        scheduleAutosave();
+      }
+    });
+  };
+
+  const bindUI = () => {
+    el("btnRestore")?.addEventListener("click", restore);
+    el("btnClear")?.addEventListener("click", clearAll);
+    el("btnDownloadTxt")?.addEventListener("click", downloadTxt);
+    el("btnPrint")?.addEventListener("click", printReport);
+    el("btnSaveDrive")?.addEventListener("click", saveToDrive);
+    el("btnSaveDriveTop")?.addEventListener("click", saveToDrive);
+    el("btnCoJeszcze")?.addEventListener("click", coJeszcze);
+
+    // Sidebar buttons (if present) map into Obserwacja generator
+    el("btnObsRandomImprove")?.addEventListener("click", () => window.Obs?.generate?.({ trend: "improve", detail: window.Obs?.getDetail?.() || "short" }));
+    el("btnObsRandomSame")?.addEventListener("click", () => window.Obs?.generate?.({ trend: "same", detail: window.Obs?.getDetail?.() || "short" }));
+    el("btnObsRandomWorse")?.addEventListener("click", () => window.Obs?.generate?.({ trend: "worse", detail: window.Obs?.getDetail?.() || "short" }));
+
+    document.addEventListener("keydown", (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "s") {
+        e.preventDefault();
+        saveToDrive();
+      }
+    });
+  };
+
+  const restoreUIState = () => {
+    try {
+      const raw = localStorage.getItem(KEY_UI);
+      if (!raw) return;
+      const ui = JSON.parse(raw);
+      if (ui && ui.sidebarCollapsed) document.body.classList.add("sidebar-collapsed");
+    } catch (e) {}
+  };
+
+  const persistUIState = () => {
+    try {
+      localStorage.setItem(KEY_UI, JSON.stringify({ sidebarCollapsed: document.body.classList.contains("sidebar-collapsed") }));
+    } catch (e) {}
+  };
+
+  const attachSidebarToggle = () => {
+    const btn = el("btnToggleSidebar");
+    if (!btn) return;
+    btn.addEventListener("click", () => {
+      document.body.classList.toggle("sidebar-collapsed");
+      persistUIState();
+      toast(document.body.classList.contains("sidebar-collapsed") ? "Panel zwinięty" : "Panel rozwinięty");
+    });
+  };
+
+  const init = () => {
+    setAutosaveIndicator("ok", "Autosave: włączony");
+    restoreUIState();
+    attachSidebarToggle();
+    attachAutosaveListeners();
+    bindUI();
+
+    readMetaFromUI();
+    const payload = loadLocal(state.meta.patientId);
+
+    if (payload && payload.fields) {
+      state.meta = payload.meta || state.meta;
+      state.fields = payload.fields || {};
+      state.updatedAt = payload.updatedAt || "";
+
+      writeMetaToUI();
+      applyAllFields(state.fields);
+      setLastSavedLabel(state.updatedAt || "");
+
+      if (window.Modules && window.Modules.hydrate) window.Modules.hydrate();
+      emitModeChanged(state.meta.mode);
+
+      toast("Przywrócono ostatnią sesję", state.updatedAt || "brak daty");
+    } else {
+      writeMetaToUI();
+      if (window.Modules && window.Modules.hydrate) window.Modules.hydrate();
+      emitModeChanged(state.meta.mode);
+    }
+  };
+
+  // Hooks for modules
+  window.markEdited = () => scheduleAutosave();
+  window.emitModeChanged = (mode) => emitModeChanged(mode);
+
+  window.App = {
+    setMode,
+    persistMeta,
+    restore,
+    clearAll,
+    downloadTxt,
+    print: printReport,
+    saveToDrive,
+    coJeszcze,
+    buildReportText
+  };
+
+  document.addEventListener("DOMContentLoaded", init);
+})();
+</script>

@@ -1,0 +1,466 @@
+<!-- index.html (JASNY – czytelny kontrast, bez duplikacji, spójne include) -->
+<!DOCTYPE html>
+<html lang="pl">
+  <head>
+    <base target="_top" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Wywiad psychiatryczny</title>
+
+    <style>
+      :root{
+        --bg: #f6f8fc;
+        --panel: #ffffff;
+        --card: #f0f4ff;
+        --card2: #ffffff;
+
+        --text: #0b1220;
+        --muted: rgba(11,18,32,.72);
+        --muted2: rgba(11,18,32,.55);
+
+        --line: rgba(15,23,42,.14);
+        --line2: rgba(15,23,42,.10);
+
+        --accent: #2563eb;
+        --accent2: #14b8a6;
+
+        --ok: #059669;
+        --warn: #b45309;
+        --bad: #dc2626;
+
+        --shadow: 0 18px 55px rgba(2,6,23,.10);
+        --radius: 16px;
+        --max: 1180px;
+        --font: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      }
+
+      *{ box-sizing:border-box }
+      html, body{ height:100% }
+      body{
+        margin:0;
+        font-family: var(--font);
+        color: var(--text);
+        background:
+          radial-gradient(900px 520px at 15% 0%, rgba(37,99,235,.10) 0%, rgba(37,99,235,0) 60%),
+          radial-gradient(760px 520px at 100% 10%, rgba(20,184,166,.10) 0%, rgba(20,184,166,0) 60%),
+          var(--bg);
+      }
+
+      .wrap{ min-height:100%; display:flex; flex-direction:column }
+
+      .topbar{
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        background: rgba(255,255,255,.82);
+        backdrop-filter: blur(10px);
+        border-bottom: 1px solid var(--line);
+      }
+      .topbar-inner{
+        max-width: var(--max);
+        margin: 0 auto;
+        padding: 12px 14px;
+        display:flex;
+        align-items:center;
+        gap: 10px;
+      }
+      .brand{
+        display:flex;
+        align-items:flex-start;
+        gap: 10px;
+        min-width: 240px;
+      }
+      .brand .logo{
+        width: 34px;
+        height: 34px;
+        border-radius: 10px;
+        background: linear-gradient(135deg, rgba(37,99,235,.95), rgba(20,184,166,.92));
+        box-shadow: 0 10px 26px rgba(37,99,235,.18);
+      }
+      .brand h1{ margin:0; font-size: 15px; letter-spacing:.2px; line-height:1.15 }
+      .brand .sub{ margin-top: 2px; font-size: 12px; color: var(--muted2) }
+
+      .pill{
+        display:inline-flex;
+        align-items:center;
+        gap:8px;
+        padding: 6px 10px;
+        border-radius: 999px;
+        border: 1px solid var(--line);
+        background: rgba(255,255,255,.75);
+        color: var(--muted);
+        font-size: 12px;
+        white-space: nowrap;
+      }
+      .dot{ width:8px;height:8px;border-radius:999px; background: var(--ok); box-shadow: 0 0 0 4px rgba(5,150,105,.10) }
+      .spacer{ flex:1 }
+
+      .btn{
+        appearance:none;
+        border: 1px solid var(--line);
+        background: rgba(255,255,255,.85);
+        color: var(--text);
+        padding: 9px 10px;
+        border-radius: 12px;
+        cursor:pointer;
+        font-size: 13px;
+        display:inline-flex;
+        align-items:center;
+        justify-content:center;
+        gap: 8px;
+        transition: transform .08s ease, background .12s ease, border-color .12s ease, box-shadow .12s ease;
+        user-select:none;
+      }
+      .btn:hover{
+        background: #fff;
+        border-color: rgba(37,99,235,.28);
+        box-shadow: 0 10px 24px rgba(2,6,23,.06);
+      }
+      .btn:active{ transform: translateY(1px) }
+      .btn.primary{
+        border-color: rgba(37,99,235,.35);
+        background: linear-gradient(135deg, rgba(37,99,235,.14), rgba(20,184,166,.10));
+      }
+      .btn.ghost{ background: transparent }
+
+      .layout{
+        width: 100%;
+        max-width: var(--max);
+        margin: 0 auto;
+        padding: 16px 14px 26px;
+        display:grid;
+        grid-template-columns: 330px 1fr;
+        gap: 14px;
+      }
+
+      .sidebar{
+        position: sticky;
+        top: 72px;
+        align-self:start;
+        height: calc(100vh - 92px);
+        overflow:auto;
+        border-radius: var(--radius);
+        border: 1px solid var(--line);
+        background: rgba(255,255,255,.75);
+        box-shadow: var(--shadow);
+      }
+      .side-inner{ padding: 12px }
+
+      .section-title{
+        font-size: 12px;
+        color: var(--muted2);
+        letter-spacing: .12em;
+        text-transform: uppercase;
+        margin: 10px 0 8px;
+      }
+
+      .card{
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        background: var(--card2);
+        box-shadow: 0 10px 26px rgba(2,6,23,.06);
+      }
+      .card.pad{ padding: 12px }
+
+      .grid2{ display:grid; grid-template-columns: 1fr 1fr; gap: 10px }
+      label{ font-size: 12px; color: var(--muted2); display:block; margin-bottom:6px }
+
+      select, input[type="text"], textarea{
+        width: 100%;
+        border: 1px solid rgba(15,23,42,.16);
+        background: #fff;
+        color: var(--text);
+        border-radius: 12px;
+        padding: 10px 10px;
+        font-size: 13px;
+        outline: none;
+      }
+      select:focus, input[type="text"]:focus, textarea:focus{
+        border-color: rgba(37,99,235,.42);
+        box-shadow: 0 0 0 4px rgba(37,99,235,.10);
+      }
+      textarea{ min-height: 110px; resize: vertical; line-height: 1.35 }
+      textarea::placeholder, input::placeholder{ color: rgba(11,18,32,.38) }
+
+      .side-actions{ display:grid; grid-template-columns: 1fr 1fr; gap: 10px }
+      .side-actions .btn{ width:100% }
+      .hint{ margin-top: 8px; font-size: 12px; color: var(--muted); line-height: 1.35 }
+
+      .main{
+        border-radius: var(--radius);
+        border: 1px solid var(--line);
+        background: rgba(255,255,255,.72);
+        box-shadow: var(--shadow);
+        overflow:hidden;
+      }
+      .main-head{
+        padding: 14px 14px 12px;
+        border-bottom: 1px solid var(--line);
+        display:flex;
+        align-items:center;
+        gap: 10px;
+        background: rgba(255,255,255,.82);
+      }
+      .main-head h2{ margin:0; font-size: 14px; letter-spacing:.2px }
+      .main-head .meta{ color: var(--muted2); font-size: 12px }
+      .main-body{ padding: 14px }
+
+      details.acc{
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        background: rgba(255,255,255,.90);
+        margin-bottom: 12px;
+        overflow:hidden;
+        box-shadow: 0 8px 18px rgba(2,6,23,.05);
+      }
+      details.acc[open]{ background: #fff }
+      summary.acc-head{
+        cursor:pointer;
+        padding: 12px 12px;
+        list-style:none;
+        display:flex;
+        align-items:center;
+        gap: 10px;
+        user-select:none;
+      }
+      summary.acc-head::-webkit-details-marker{ display:none }
+      .acc-title{ font-weight: 700; font-size: 13px; letter-spacing: .2px }
+      .acc-sub{ margin-left:auto; color: var(--muted2); font-size: 12px }
+      .acc-body{ padding: 12px }
+
+      .info{
+        border: 1px dashed rgba(15,23,42,.18);
+        border-radius: 12px;
+        padding: 10px;
+        color: var(--muted);
+        font-size: 12px;
+        line-height:1.35;
+        background: rgba(37,99,235,.04);
+      }
+
+      .toast{
+        position: fixed;
+        right: 14px;
+        bottom: 14px;
+        z-index: 60;
+        max-width: 420px;
+        display:none;
+        padding: 10px 12px;
+        border-radius: 14px;
+        border: 1px solid var(--line);
+        background: rgba(255,255,255,.92);
+        box-shadow: 0 18px 55px rgba(2,6,23,.12);
+        color: var(--text);
+        font-size: 13px;
+      }
+      .toast.show{ display:block }
+      .toast small{ color: var(--muted2) }
+
+      body.sidebar-collapsed .layout{ grid-template-columns: 1fr }
+      body.sidebar-collapsed .sidebar{ display:none }
+
+      [data-show-modes] { display:none }
+      body[data-mode="Poradnia"] [data-show-modes~="Poradnia"],
+      body[data-mode="IzbaPrzyjec"] [data-show-modes~="IzbaPrzyjec"],
+      body[data-mode="OddzialDzienny"] [data-show-modes~="OddzialDzienny"],
+      body[data-mode="OddzialZamkniety"] [data-show-modes~="OddzialZamkniety"],
+      body[data-mode="Obserwacja"] [data-show-modes~="Obserwacja"],
+      body[data-mode="Wypis"] [data-show-modes~="Wypis"],
+      body[data-mode="Wiedza"] [data-show-modes~="Wiedza"]{
+        display:block;
+      }
+
+      @media (max-width: 980px){
+        .layout{ grid-template-columns: 1fr }
+        .sidebar{ position: relative; top: 0; height: auto }
+      }
+    </style>
+  </head>
+
+  <body data-mode="OddzialDzienny">
+    <div class="wrap">
+      <header class="topbar">
+        <div class="topbar-inner">
+          <div class="brand">
+            <div class="logo" aria-hidden="true"></div>
+            <div>
+              <h1>Wywiad psychiatryczny</h1>
+              <div class="sub" id="modeLabelTop">Tryb: Oddział dzienny</div>
+            </div>
+          </div>
+
+          <div class="pill" title="Stan autosave i sesji">
+            <span class="dot" id="autosaveDot"></span>
+            <span id="autosaveText">Autosave: włączony</span>
+          </div>
+
+          <div class="spacer"></div>
+
+          <button class="btn ghost" id="btnToggleSidebar" type="button" title="Zwiń lub rozwiń panel">☰ Panel</button>
+          <button class="btn primary" id="btnSaveDriveTop" type="button" title="Zapis do Drive">Zapisz na Drive</button>
+        </div>
+      </header>
+
+      <div class="layout">
+        <aside class="sidebar" id="sidebarRoot" aria-label="Panel sterowania">
+          <div class="side-inner">
+            <div class="card pad">
+              <div class="grid2">
+                <div>
+                  <label for="modeSelect">Tryb pracy</label>
+                  <select id="modeSelect">
+                    <option value="Poradnia">Poradnia</option>
+                    <option value="IzbaPrzyjec">Izba przyjęć</option>
+                    <option value="OddzialDzienny" selected>Oddział dzienny</option>
+                    <option value="OddzialZamkniety">Oddział zamknięty</option>
+                    <option value="Obserwacja">Obserwacja</option>
+                    <option value="Wypis">Wypis</option>
+                    <option value="Wiedza">Wiedza</option>
+                  </select>
+                </div>
+                <div>
+                  <label for="patientId">ID pacjenta lub inicjały</label>
+                  <input id="patientId" type="text" placeholder="Np. AB, 12345, NN" />
+                </div>
+              </div>
+
+              <div style="height:10px"></div>
+
+              <div class="grid2">
+                <div>
+                  <label for="riskSelect">Ryzyko S i H</label>
+                  <select id="riskSelect">
+                    <option value="Brak">Brak myśli S i H</option>
+                    <option value="Mysli">Myśli bez planu</option>
+                    <option value="Plan">Plan lub zamiar</option>
+                    <option value="Wysokie">Wysokie ryzyko</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label for="lastSaved">Ostatnia zmiana</label>
+                  <input id="lastSaved" type="text" placeholder="brak" disabled />
+                </div>
+              </div>
+
+              <div class="hint">
+                Placeholdery są szare i znikają po rozpoczęciu pisania.
+              </div>
+            </div>
+
+            <div class="section-title">Akcje</div>
+            <div class="card pad">
+              <div class="side-actions">
+                <button class="btn" id="btnRestore" type="button">Przywróć</button>
+                <button class="btn" id="btnClear" type="button">Wyczyść</button>
+                <button class="btn" id="btnDownloadTxt" type="button">Pobierz TXT</button>
+                <button class="btn" id="btnPrint" type="button">Druk</button>
+                <button class="btn" id="btnCoJeszcze" type="button">Co jeszcze</button>
+                <button class="btn primary" id="btnSaveDrive" type="button">Zapisz na Drive</button>
+              </div>
+              <div class="hint">Skrót: Ctrl/Cmd + S zapis do Drive</div>
+            </div>
+
+            <div class="section-title">Moduły</div>
+            <div class="card pad" id="modulesCard" data-show-modes="Poradnia IzbaPrzyjec OddzialDzienny OddzialZamkniety">
+              <div class="info">
+                Moduły dodajesz bez utraty danych. Po wykryciu alkoholu lub narkotyków system może dodać SUD automatycznie.
+              </div>
+              <div style="height:10px"></div>
+              <?!= include('ModulesHost'); ?>
+            </div>
+
+            <div class="card pad" id="observationToolsCard" data-show-modes="Obserwacja">
+              <div class="info">Tryb Obserwacja ma własne narzędzia. Tekst trafia do edytowalnych pól.</div>
+              <div style="height:10px"></div>
+              <button class="btn" id="btnObsRandomImprove" type="button">Losowa obserwacja: poprawa</button>
+              <div style="height:8px"></div>
+              <button class="btn" id="btnObsRandomSame" type="button">Losowa obserwacja: bez zmian</button>
+              <div style="height:8px"></div>
+              <button class="btn" id="btnObsRandomWorse" type="button">Losowa obserwacja: pogorszenie</button>
+            </div>
+          </div>
+        </aside>
+
+        <main class="main" id="mainRoot" aria-label="Treść formularza">
+          <div class="main-head">
+            <h2 id="mainTitle">Wywiad i dokumentacja</h2>
+            <div class="meta" id="mainMeta">Sekcje zwijane, jasny kontrast</div>
+            <div class="spacer"></div>
+            <div class="pill"><span class="dot"></span><span id="modeLabel">Oddział dzienny</span></div>
+          </div>
+
+          <div class="main-body">
+            <div data-show-modes="Poradnia IzbaPrzyjec OddzialDzienny OddzialZamkniety">
+              <details class="acc" open>
+                <summary class="acc-head">
+                  <span class="acc-title">Wywiad podstawowy</span>
+                  <span class="acc-sub">pytania jako placeholdery</span>
+                </summary>
+                <div class="acc-body">
+                  <?!= include('BaseInterview'); ?>
+                </div>
+              </details>
+
+              <details class="acc">
+                <summary class="acc-head">
+                  <span class="acc-title">Status mentalis</span>
+                  <span class="acc-sub">definicje w polach</span>
+                </summary>
+                <div class="acc-body">
+                  <?!= include('MSE'); ?>
+                </div>
+              </details>
+
+              <details class="acc">
+                <summary class="acc-head">
+                  <span class="acc-title">Moduły dodatkowe</span>
+                  <span class="acc-sub">wpinane bez utraty danych</span>
+                </summary>
+                <div class="acc-body">
+                  <div id="modulesMount"></div>
+                </div>
+              </details>
+            </div>
+
+            <div data-show-modes="Obserwacja">
+              <?!= include('module_observation'); ?>
+            </div>
+
+            <div data-show-modes="Wypis">
+              <div class="info">Tryb Wypis: plik mode_discharge.html nie jest jeszcze wdrożony.</div>
+            </div>
+
+            <div data-show-modes="Wiedza">
+              <div class="info">Tryb Wiedza: plik mode_knowledge.html nie jest jeszcze wdrożony.</div>
+            </div>
+          </div>
+        </main>
+      </div>
+
+      <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+      <!-- CORE JS/REGISTRY -->
+      <?!= include('ModulesRegistry'); ?>
+      <?!= include('Module_SUD'); ?>
+      <?!= include('Module_MSE'); ?>
+      <?!= include('Module_Scales'); ?>
+      <?!= include('Engine'); ?>
+    </div>
+
+    <!-- PATCHES (dołączamy na końcu body) -->
+    <?!= includeOptional('Patcher'); ?>
+    <?!= includeOptional('PATCH_01_MSE'); ?>
+    <?!= includeOptional('Module_MSE'); ?>
+  
+    <!-- PEON2 PATCHES -->
+    <?!= includeOptional('Patcher'); ?>
+    <?!= includeOptional('PATCH_01_MSE'); ?>
+    <?!= includeOptional('PATCH_02_THEME'); ?> 
+    <?!= include('Patcher'); ?>
+    <?!= include('PATCH_01_MSE'); ?>
+    <?!= include('PATCH_02_UI'); ?>
+
+    
+</body>
+</html>
