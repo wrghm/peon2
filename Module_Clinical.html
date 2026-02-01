@@ -1,0 +1,1447 @@
+<!-- Module_Clinical.html -->
+<style id="clinicalStyles">
+  .clinWrap{
+    border: 1px solid var(--bd);
+    background: var(--panel);
+    border-radius: 16px;
+    padding: 14px;
+  }
+  .clinHead{
+    display:flex;
+    align-items:flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  .clinTitle{ font-weight: 800; font-size: 14px; color: var(--text) }
+  .clinSub{ font-size: 12px; color: var(--muted); margin-top: 4px }
+  .clinGrid{
+    display:grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+  .clinBox{
+    border: 1px solid var(--bd);
+    background: var(--bg);
+    border-radius: 14px;
+    padding: 12px;
+  }
+  .clinBoxTitle{
+    font-weight: 700;
+    font-size: 12.5px;
+    color: var(--text);
+    margin-bottom: 10px;
+  }
+  .clinChecks{ display:flex; flex-direction:column; gap: 8px }
+  .clinCheck{
+    display:flex; gap:8px; align-items:flex-start;
+    border: 1px solid var(--bd);
+    background: var(--panel);
+    padding: 8px 10px;
+    border-radius: 12px;
+    cursor:pointer;
+    user-select:none;
+    font-size: 12.5px;
+    color: var(--text);
+  }
+  .clinCheck input{ margin-top: 2px }
+  .clinInput, .clinText{
+    width: 100%;
+    border: 1px solid var(--bd);
+    background: var(--panel);
+    color: var(--text);
+    border-radius: 12px;
+    padding: 10px 10px;
+    font-size: 13px;
+    outline: none;
+    box-sizing: border-box;
+  }
+  .clinText{ min-height: 84px; resize: vertical }
+  .clinActions{
+    display:flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .clinBtn{
+    appearance:none;
+    border: 1px solid var(--bd);
+    background: var(--panel);
+    color: var(--text);
+    padding: 8px 10px;
+    border-radius: 12px;
+    cursor:pointer;
+    font-size: 12px;
+  }
+  .clinBtn:hover{ border-color: var(--accent) }
+  .clinFull{ grid-column: 1 / -1 }
+  .clinNoteLabel{ font-size: 12px; color: var(--muted); margin-bottom: 6px }
+  .clinMuted{ font-size: 12px; color: var(--muted) }
+  @media (max-width: 980px){
+    .clinGrid{ grid-template-columns: 1fr }
+  }
+</style>
+
+<template id="tpl-module_psychosis" data-module="module_psychosis">
+  <div class="clinWrap" data-clinical="module_psychosis"></div>
+</template>
+<template id="tpl-module_chad" data-module="module_chad">
+  <div class="clinWrap" data-clinical="module_chad"></div>
+</template>
+<template id="tpl-module_ocd" data-module="module_ocd">
+  <div class="clinWrap" data-clinical="module_ocd"></div>
+</template>
+<template id="tpl-module_adhd" data-module="module_adhd">
+  <div class="clinWrap" data-clinical="module_adhd"></div>
+</template>
+<template id="tpl-module_asd" data-module="module_asd">
+  <div class="clinWrap" data-clinical="module_asd"></div>
+</template>
+<template id="tpl-module_ptsd" data-module="module_ptsd">
+  <div class="clinWrap" data-clinical="module_ptsd"></div>
+</template>
+<template id="tpl-module_dementia" data-module="module_dementia">
+  <div class="clinWrap" data-clinical="module_dementia"></div>
+</template>
+<template id="tpl-module_calculators" data-module="module_calculators">
+  <div class="clinWrap" data-clinical="module_calculators"></div>
+</template>
+
+<script>
+(() => {
+  const MODULES = {
+    module_psychosis: {
+      title: "Psychoza i schizofrenia",
+      desc: "Objawy wytworcze, negatywne, wglad i funkcjonowanie.",
+      groups: [
+        {
+          key: "wytw",
+          label: "Objawy wytworcze",
+          items: [
+            "omamy sluchowe",
+            "omamy wzrokowe",
+            "urojenia przesladowcze",
+            "urojenia odniesienia",
+            "dezorganizacja zachowania",
+            "dezorganizacja myslenia"
+          ]
+        },
+        {
+          key: "neg",
+          label: "Objawy negatywne",
+          items: [
+            "splaszczenie afektu",
+            "wycofanie",
+            "abulia",
+            "anhedonia",
+            "alogia"
+          ]
+        },
+        {
+          key: "wglad",
+          label: "Wglad i krytycyzm",
+          items: [
+            "wglad zachowany",
+            "wglad ograniczony",
+            "brak wgladu",
+            "akceptuje leczenie",
+            "opor wobec leczenia"
+          ]
+        },
+        {
+          key: "funkc",
+          label: "Funkcjonowanie",
+          items: [
+            "izoluje sie",
+            "wspolpracuje",
+            "konfliktowy",
+            "wymaga zachet",
+            "uczestniczy w terapii"
+          ]
+        }
+      ],
+      rand: {
+        order: ["intro", "wytw", "neg", "wglad", "funkc"],
+        lines: {
+          intro: {
+            improve: [
+              ["mniejsze nasilenie objawow psychotycznych", "objawy slabna", "lepsza stabilizacja", "mniej wytworczosci"],
+              ["kontakt bardziej adekwatny", "wspolpraca lepsza", "mniej napiecia", "zachowanie spokojniejsze"],
+              ["wiekszy dystans do doswiadczen", "lepszy krytycyzm", "mniej zaabsorbowania", "wieksza kontrola objawow"]
+            ],
+            same: [
+              ["obraz psychotyczny bez zmian", "objawy utrzymuja sie", "brak istotnej dynamiki", "stan stabilny"],
+              ["kontakt podobny", "wspolpraca bez zmian", "bez nowych incydentow", "funkcjonowanie bez zmian"],
+              ["krytycyzm bez zmian", "dystans niezmienny", "bez nowych tresci", "stale zaabsorbowanie"]
+            ],
+            worse: [
+              ["nasilenie objawow psychotycznych", "pogorszenie obrazu", "wzrost dezorganizacji", "wieksza intensywnosc objawow"],
+              ["kontakt trudniejszy", "wspolpraca gorsza", "wiecej napiecia", "zachowanie mniej przewidywalne"],
+              ["mniejszy dystans", "spadek krytycyzmu", "wiecej reakcji na objawy", "wieksze zaabsorbowanie"]
+            ]
+          },
+          wytw: {
+            improve: [
+              ["mniej omamow", "rzadsze glosy", "brak nowych omamow", "mniejsze nasilenie"],
+              ["wiekszy dystans do urojen", "mniejsza pewnosc przekonan", "lepsza korekta", "mniej konfliktow"],
+              ["brak reakcji na glosy", "mniej zachowan sugerujacych halucynowanie", "lepsza kontrola tresci", "mniej nasluchiwania"]
+            ],
+            same: [
+              ["omamy utrzymuja sie", "urojenia bez zmian", "wytworczosc bez zmian", "obraz stabilny"],
+              ["krytycyzm ograniczony", "dystans niezmienny", "brak korekty przekonan", "bez nowych tresci"],
+              ["okresowe nasluchiwanie", "utrzymane reakcje na glosy", "brak poprawy kontroli", "bez dynamiki"]
+            ],
+            worse: [
+              ["wzrost omamow", "nasilenie urojen", "wieksza wytworczosc", "silniejsza absorpcja"],
+              ["mniejszy krytycyzm", "trudniejsza korekta", "wieksza pewnosc przekonan", "wiecej konfliktow"],
+              ["czestsze reakcje na glosy", "wiecej zachowan sugerujacych halucynowanie", "gorsza kontrola tresci", "wiecej nasluchiwania"]
+            ]
+          },
+          neg: {
+            improve: [
+              ["mniej wycofania", "wieksza aktywnosc", "lepsza inicjatywa", "mniej apatii"],
+              ["wieksza ekspresja afektu", "lepszy kontakt", "wiecej reaktywnosci", "mniej splaszczenia"],
+              ["mniej zobojetnienia", "wieksza spontanicznosc", "lepsza motywacja", "wieksza gotowosc"]
+            ],
+            same: [
+              ["objawy negatywne bez zmian", "wycofanie bez zmian", "apatia utrzymana", "brak poprawy aktywnosci"],
+              ["afekt splaszczony", "kontakt ograniczony", "mala spontanicznosc", "stan stabilny"],
+              ["mala inicjatywa", "brak dynamiki", "bez nowych zmian", "obraz podobny"]
+            ],
+            worse: [
+              ["nasilenie wycofania", "wieksza apatia", "mniejsza aktywnosc", "spadek inicjatywy"],
+              ["bardziej splaszczony afekt", "mniejsza spontanicznosc", "gorszy kontakt", "wieksze zahamowanie"],
+              ["wzrost zobojetnienia", "mniej motywacji", "mniej reaktywnosci", "wieksze wycofanie"]
+            ]
+          },
+          wglad: {
+            improve: [
+              ["wglad lepszy", "wiekszy krytycyzm", "lepsza akceptacja leczenia", "wieksza gotowosc"],
+              ["mniejszy opor", "wieksza otwartosc", "lepsza wspolpraca", "bardziej realistyczna ocena"],
+              ["lepsza korekta przekonan", "wieksza refleksja", "mniej negacji problemu", "lepsza zgoda na leczenie"]
+            ],
+            same: [
+              ["wglad bez zmian", "krytycyzm stabilny", "akceptacja leczenia bez zmian", "brak dynamiki"],
+              ["opor bez zmian", "wspolpraca stabilna", "obraz bez zmian", "stan stabilny"],
+              ["mala refleksja", "utrzymana negacja", "bez poprawy wgladu", "bez nowych decyzji"]
+            ],
+            worse: [
+              ["wglad oslabil sie", "krytycyzm gorszy", "wiekszy opor wobec leczenia", "mniejsza gotowosc"],
+              ["wieksza negacja", "trudniejsza wspolpraca", "mniej refleksji", "gorsza akceptacja"],
+              ["mniejsza korekta", "wieksza pewnosc przekonan", "spadek krytycyzmu", "wiekszy dystans do leczenia"]
+            ]
+          },
+          funkc: {
+            improve: [
+              ["lepsze funkcjonowanie na oddziale", "wieksza aktywnosc", "mniej izolacji", "lepsza adaptacja"],
+              ["mniej konfliktow", "lepsze relacje", "wieksza wspolpraca z zespolami", "stabilniejszy dzien"],
+              ["wieksza samodzielnosc", "lepsza organizacja dnia", "wiecej udzialu w terapii", "mniej wycofania"]
+            ],
+            same: [
+              ["funkcjonowanie bez zmian", "aktywnosc bez zmian", "poziom uczestnictwa podobny", "obraz stabilny"],
+              ["brak nowych konfliktow", "bez istotnej dynamiki", "stan podobny", "brak nowych problemow"],
+              ["izolowanie bez zmian", "wymaga zachet bez zmian", "brak poprawy", "bez nowych trudnosci"]
+            ],
+            worse: [
+              ["gorsze funkcjonowanie", "wieksza izolacja", "spadek aktywnosci", "gorsza adaptacja"],
+              ["wiecej konfliktow", "mniejsza wspolpraca z otoczeniem", "wieksze wycofanie", "trudniejszy dzien"],
+              ["mniejszy udzial w terapii", "wieksze trudnosci w oddziale", "wiecej opozu", "mniej samodzielnosci"]
+            ]
+          }
+        },
+        plan: {
+          improve: [
+            "Kontynuowac leczenie i obserwacje. Utrzymac codzienna ocene objawow.",
+            "Utrzymac dotychczasowe postepowanie, monitorowac wglad i wspolprace."
+          ],
+          same: [
+            "Kontynuowac leczenie. Monitorowac dynamike objawow wytworczych.",
+            "Utrzymac obserwacje i dokumentowac objawy oraz wspolprace."
+          ],
+          worse: [
+            "Rozwazyc modyfikacje leczenia. Zwiekszyc czestotliwosc obserwacji.",
+            "Zwiekszyc nadzor. Ponownie ocenic ryzyko i wglad."
+          ]
+        }
+      }
+    },
+    module_chad: {
+      title: "CHAD",
+      desc: "Naped, sen, objawy manii/depresji, ryzyko.",
+      groups: [
+        {
+          key: "mania",
+          label: "Objawy manii/hipomanii",
+          items: [
+            "pobudzenie",
+            "gonitwa mysli",
+            "wielomownosc",
+            "zmniejszona potrzeba snu",
+            "wzrost aktywnosci",
+            "zachowania ryzykowne"
+          ]
+        },
+        {
+          key: "depr",
+          label: "Objawy depresyjne",
+          items: [
+            "obnizony nastroj",
+            "anhedonia",
+            "spowolnienie",
+            "poczucie winy",
+            "mysli rezygnacyjne"
+          ]
+        },
+        {
+          key: "sen",
+          label: "Sen i rytm dobowy",
+          items: [
+            "bezsennosc",
+            "sen krotki",
+            "sen przerywany",
+            "odwrocony rytm",
+            "sen wydluzony"
+          ]
+        },
+        {
+          key: "ryzyko",
+          label: "Ryzyko i impulsywnosc",
+          items: [
+            "ryzyko autoagresji",
+            "ryzyko heteroagresji",
+            "impulsywnosc",
+            "wydatki/ryzyko finansowe",
+            "konflikty interpersonalne"
+          ]
+        }
+      ],
+      rand: {
+        order: ["intro", "mania", "depr", "sen", "ryzyko"],
+        lines: {
+          intro: {
+            improve: [
+              ["naped bardziej wyrownany", "mniej cech manii", "stabilizacja nastroju", "wieksza rownowaga"],
+              ["lepsza regulacja emocji", "spokojniejsze zachowanie", "lepsza wspolpraca", "mniej impulsywnosci"],
+              ["mniej chwiejnosci", "mniej konfliktow", "lepsza przewidywalnosc", "wieksza kontrola"]
+            ],
+            same: [
+              ["obraz CHAD bez zmian", "nastroj bez istotnej dynamiki", "stan stabilny", "brak istotnych zmian"],
+              ["naped bez zmian", "wspolpraca bez zmian", "brak nowych incydentow", "obraz podobny"],
+              ["rytm dobowy bez zmian", "bez nowych skarg", "brak poprawy", "stan bez zmian"]
+            ],
+            worse: [
+              ["nasilenie cech manii lub depresji", "pogorszenie nastroju", "wzrost napedu", "wieksza chwiejnosc"],
+              ["wiecej impulsywnosci", "gorsza wspolpraca", "wiecej konfliktow", "wieksze napiecie"],
+              ["gorszy rytm dobowy", "mniejsza kontrola", "trudniejsze funkcjonowanie", "wiecej trudnosci"]
+            ]
+          },
+          mania: {
+            improve: [
+              ["mniej pobudzenia", "slabsza gonitwa mysli", "mniej wielomownosci", "mniej ryzykownych zachowan"],
+              ["wieksza kontrola", "lepsza organizacja", "mniej impulsywnosci", "bardziej stabilny rytm"],
+              ["mniejsza drazliwosc", "mniej rozpraszania", "lepsza samokontrola", "mniej konfliktow"]
+            ],
+            same: [
+              ["pobudzenie bez zmian", "gonitwa mysli utrzymana", "obraz manii bez zmian", "naped podobny"],
+              ["impulsywnosc bez zmian", "brak poprawy kontroli", "obraz stabilny", "stan bez dynamiki"],
+              ["drazliwosc bez zmian", "wielomownosc bez zmian", "bez poprawy", "stan bez zmian"]
+            ],
+            worse: [
+              ["wzrost pobudzenia", "nasilenie gonitwy mysli", "wieksza wielomownosc", "wiecej ryzykownych zachowan"],
+              ["mniejsza kontrola", "wiecej konfliktow", "trudniejsza regulacja", "spadek hamowania"],
+              ["wieksza drazliwosc", "nasilenie pobudzenia", "gorsza organizacja", "mniejsza samokontrola"]
+            ]
+          },
+          depr: {
+            improve: [
+              ["mniejsza depresyjnosc", "mniej anhedonii", "mniej spowolnienia", "lepszy nastroj"],
+              ["wieksza aktywnosc", "lepsza motywacja", "wieksza inicjatywa", "mniej rezygnacji"],
+              ["mniej poczucia winy", "mniej ruminacji", "lepsza perspektywa", "mniej bezradnosci"]
+            ],
+            same: [
+              ["objawy depresyjne bez zmian", "anhedonia utrzymana", "spowolnienie bez zmian", "nastroj stabilny"],
+              ["motywacja bez zmian", "brak dynamiki", "obraz stabilny", "stan bez zmian"],
+              ["poczucie winy bez zmian", "bez poprawy", "stan podobny", "brak nowych zmian"]
+            ],
+            worse: [
+              ["nasilenie depresyjnosci", "wieksza anhedonia", "wieksze spowolnienie", "spadek nastroju"],
+              ["mniejsza motywacja", "wieksze wycofanie", "spadek aktywnosci", "wiecej rezygnacji"],
+              ["wzrost poczucia winy", "wiecej ruminacji", "mniej nadziei", "gorsza perspektywa"]
+            ]
+          },
+          sen: {
+            improve: [
+              ["sen bardziej regularny", "mniej wybudzen", "lepsza regeneracja", "stabilniejszy rytm"],
+              ["mniej pobudzenia nocnego", "lepsze wyciszenie", "mniej bezsennosci", "lepsza struktura doby"],
+              ["mniej trudnosci z zasypianiem", "sen bardziej ciagly", "mniej pobudek", "lepszy odpoczynek"]
+            ],
+            same: [
+              ["sen bez zmian", "utrzymuja sie trudnosci snu", "rytm bez zmian", "brak poprawy"],
+              ["stan stabilny", "bez nowych zmian", "obraz podobny", "bez dynamiki"],
+              ["bezsennosc bez zmian", "sen przerywany bez zmian", "stan bez zmian", "brak poprawy"]
+            ],
+            worse: [
+              ["pogorszenie snu", "skrocenie snu", "wiecej wybudzen", "gorszy rytm dobowy"],
+              ["wiecej pobudzenia nocnego", "mniej wyciszenia", "gorsza regeneracja", "wzrost napiecia nocnego"],
+              ["trudnosci z zasypianiem", "sen przerywany", "wiecej pobudek", "gorszy odpoczynek"]
+            ]
+          },
+          ryzyko: {
+            improve: [
+              ["ryzyko mniejsze", "mniej impulsywnosci", "lepsza kontrola", "mniej konfliktow"],
+              ["brak nowych incydentow", "stabilne zachowanie", "lepsza wspolpraca", "wieksza przewidywalnosc"],
+              ["mniej zachowan ryzykownych", "wieksza ostroznosc", "mniej eskalacji", "lepsza kontrola"]
+            ],
+            same: [
+              ["ryzyko bez zmian", "impulsywnosc bez zmian", "obraz stabilny", "brak nowych incydentow"],
+              ["stan bez zmian", "bez istotnej dynamiki", "utrzymane ryzyko", "brak nowych trudnosci"],
+              ["zachowania ryzykowne bez zmian", "brak poprawy", "stan podobny", "bez nowych zdarzen"]
+            ],
+            worse: [
+              ["wzrost ryzyka", "wieksza impulsywnosc", "mniejsza kontrola", "wiecej konfliktow"],
+              ["incydenty ryzykowne", "wymaga wzmozonej obserwacji", "potrzeba interwencji", "mniej przewidywalne zachowanie"],
+              ["wiecej zachowan ryzykownych", "wzrost eskalacji", "wieksza konfliktowosc", "mniej kontroli"]
+            ]
+          }
+        },
+        plan: {
+          improve: [
+            "Kontynuowac leczenie, monitorowac nastroj i sen.",
+            "Utrzymac dotychczasowe postepowanie i ocene ryzyka."
+          ],
+          same: [
+            "Kontynuowac leczenie, monitorowac naped i rytm dobowy.",
+            "Utrzymac obserwacje, dokumentowac dynamike objawow."
+          ],
+          worse: [
+            "Rozwazyc modyfikacje leczenia. Zwiekszyc nadzor i ocene ryzyka.",
+            "Zwiekszyc czestotliwosc obserwacji, ocenic potrzebe konsultacji."
+          ]
+        }
+      }
+    },
+    module_ocd: {
+      title: "OCD",
+      desc: "Natretnosci, kompulsje, unikanie, wglad.",
+      groups: [
+        {
+          key: "natrety",
+          label: "Natretnosci",
+          items: [
+            "mysli kontaminacyjne",
+            "mysli agresywne",
+            "mysli religijne",
+            "mysli o symetrii",
+            "mysli somatyczne"
+          ]
+        },
+        {
+          key: "komp",
+          label: "Kompulsje",
+          items: [
+            "mycie",
+            "sprawdzanie",
+            "liczenie",
+            "porzadkowanie",
+            "powtarzanie"
+          ]
+        },
+        {
+          key: "unikanie",
+          label: "Unikanie i rytualy",
+          items: [
+            "unikanie wyzwalaczy",
+            "nasilone rytualy",
+            "wysokie napiecie",
+            "pochlania duzo czasu",
+            "utrudnia funkcjonowanie"
+          ]
+        },
+        {
+          key: "wglad",
+          label: "Wglad i wspolpraca",
+          items: [
+            "wglad dobry",
+            "wglad ograniczony",
+            "akceptuje leczenie",
+            "opor wobec ekspozycji",
+            "wspolpraca dobra"
+          ]
+        }
+      ],
+      rand: {
+        order: ["intro", "natrety", "komp", "unikanie", "wglad"],
+        lines: {
+          intro: {
+            improve: [
+              ["nasilenie OCD mniejsze", "spadek napiecia", "lepsza kontrola natretnosci", "objawy OCD slabna"],
+              ["wieksza gotowosc do pracy", "lepsza wspolpraca", "wieksza tolerancja niepokoju", "mniej unikania"],
+              ["lepsza elastycznosc", "mniej rytualow", "wieksza skutecznosc strategii", "mniejsza potrzeba zabezpieczen"]
+            ],
+            same: [
+              ["objawy OCD bez zmian", "natretnosci utrzymuja sie", "brak istotnej dynamiki", "obraz stabilny"],
+              ["wspolpraca bez zmian", "bez nowych decyzji", "stan podobny", "brak poprawy"],
+              ["utrzymane napiecie", "bez istotnych zmian", "brak poprawy kontroli", "stan bez zmian"]
+            ],
+            worse: [
+              ["nasilenie OCD", "wzrost natretnosci", "wieksze napiecie", "gorsza kontrola"],
+              ["wieksze unikanie", "mniej wspolpracy", "wiecej rytualow", "trudniejsza ekspozycja"],
+              ["spadek tolerancji niepokoju", "wieksza presja wykonania", "wiecej zabezpieczen", "trudniejsze funkcjonowanie"]
+            ]
+          },
+          natrety: {
+            improve: [
+              ["mniej mysli natretnych", "mniejsza czestosc natretnosci", "slabsze natrectwa", "mniej zaabsorbowania"],
+              ["wiekszy dystans do mysli", "lepsza kontrola", "mniejsze napiecie", "wieksza elastycznosc"],
+              ["mniej zalewania tresciami", "latwiejsza zmiana tematu", "mniejsza uporczywosc", "mniej natretnosci"]
+            ],
+            same: [
+              ["natretnosci bez zmian", "mysli natretne utrzymane", "obraz stabilny", "brak poprawy"],
+              ["dystans ograniczony", "napiecie bez zmian", "stan bez dynamiki", "bez nowych zmian"],
+              ["utrzymana uporczywosc", "brak poprawy kontroli", "bez zmian", "stan podobny"]
+            ],
+            worse: [
+              ["nasilenie natretnosci", "wiecej mysli natretnych", "wieksza absorpcja", "mniejsza kontrola"],
+              ["mniejszy dystans", "wieksze napiecie", "trudniejsze hamowanie", "wiekszy dyskomfort"],
+              ["wieksza uporczywosc", "trudniejsze odrywanie sie", "wzrost zalewania", "mniejsza elastycznosc"]
+            ]
+          },
+          komp: {
+            improve: [
+              ["mniej kompulsji", "skrocenie rytualow", "mniejsza potrzeba sprawdzania", "mniej powtarzania"],
+              ["wieksza tolerancja", "lepsze hamowanie", "mniejsza presja wykonania", "lepsza kontrola zachowan"],
+              ["latwiejsze odkladanie rytualow", "wieksza swiadomosc", "mniej wymuszen", "mniej zabezpieczen"]
+            ],
+            same: [
+              ["kompulsje bez zmian", "rytualy utrzymane", "obraz stabilny", "brak poprawy"],
+              ["presja podobna", "brak zmian w zachowaniu", "stan bez zmian", "brak dynamiki"],
+              ["utrzymana potrzeba rytualow", "bez zmian", "brak poprawy", "stan podobny"]
+            ],
+            worse: [
+              ["nasilenie kompulsji", "wydluzenie rytualow", "wiecej sprawdzania", "wiecej powtarzania"],
+              ["wieksza presja wykonania", "gorsza kontrola", "mniejsza tolerancja niepokoju", "wzrost zachowan"],
+              ["trudniejsze hamowanie", "wieksza potrzeba rytualow", "wzrost zabezpieczen", "wiekszy przymus"]
+            ]
+          },
+          unikanie: {
+            improve: [
+              ["mniej unikania", "wieksza ekspozycja", "latwiejsze podejmowanie sytuacji", "mniej zabezpieczen"],
+              ["wieksza gotowosc do terapii", "lepsza wspolpraca", "wieksza aktywnosc", "mniejsza rezygnacja"],
+              ["mniej unikania wyzwalaczy", "wieksza tolerancja", "mniej wycofania", "lepsze funkcjonowanie"]
+            ],
+            same: [
+              ["unikanie bez zmian", "rytualy bez zmian", "obraz stabilny", "brak poprawy"],
+              ["wspolpraca bez zmian", "bez nowych prob", "stan bez zmian", "brak dynamiki"],
+              ["utrzymane wycofanie", "bez poprawy", "stan podobny", "brak zmian"]
+            ],
+            worse: [
+              ["wzrost unikania", "mniejsza ekspozycja", "wieksze rytualy", "wieksza rezygnacja"],
+              ["mniejsza motywacja", "gorsza wspolpraca", "wiecej zabezpieczen", "mniej aktywnosci"],
+              ["wycofanie z ekspozycji", "wiekszy opor", "mniejsza tolerancja", "trudniejsza terapia"]
+            ]
+          },
+          wglad: {
+            improve: [
+              ["wglad lepszy", "wieksza krytycznosc", "lepsza akceptacja leczenia", "wieksza otwartosc"],
+              ["mniej oporu", "lepsza wspolpraca", "wieksza gotowosc do ERP", "bardziej realistyczna ocena"],
+              ["wieksza refleksja", "mniej negacji", "lepsze zrozumienie objawow", "wieksza motywacja"]
+            ],
+            same: [
+              ["wglad bez zmian", "krytycyzm bez zmian", "wspolpraca stabilna", "brak dynamiki"],
+              ["opor podobny", "brak nowych decyzji", "stan stabilny", "obraz bez zmian"],
+              ["bez poprawy wgladu", "utrzymana ambiwalencja", "brak zmian", "stan podobny"]
+            ],
+            worse: [
+              ["wglad gorszy", "wiekszy opor", "mniejsza gotowosc", "trudniejsza wspolpraca"],
+              ["mniejsza akceptacja leczenia", "wieksza negacja", "mniej refleksji", "gorsza motywacja"],
+              ["spadek krytycyzmu", "wieksza ambiwalencja", "trudniejsze rozmowy", "mniej zgody na ERP"]
+            ]
+          }
+        },
+        plan: {
+          improve: [
+            "Kontynuowac leczenie i prace nad ekspozycja.",
+            "Utrzymac dotychczasowe postepowanie i obserwacje."
+          ],
+          same: [
+            "Kontynuowac leczenie, wzmacniac psychoedukacje i ERP.",
+            "Utrzymac obserwacje oraz prace nad ograniczaniem rytualow."
+          ],
+          worse: [
+            "Rozwazyc modyfikacje leczenia i intensyfikacje terapii.",
+            "Zwiekszyc wsparcie i monitorowac nasilenie objawow."
+          ]
+        }
+      }
+    },
+    module_adhd: {
+      title: "ADHD",
+      desc: "Uwaga, nadruchliwosc, impulsywnosc, funkcjonowanie.",
+      groups: [
+        {
+          key: "uwaga",
+          label: "Uwaga i organizacja",
+          items: [
+            "latwe rozpraszanie",
+            "trudnosci z organizacja",
+            "zapominanie",
+            "trudnosc w utrzymaniu uwagi",
+            "odkladanie zadan"
+          ]
+        },
+        {
+          key: "nad",
+          label: "Nadruchliwosc",
+          items: [
+            "niepokoj ruchowy",
+            "wiercenie sie",
+            "trudnosc w pozostaniu w miejscu",
+            "nadruchliwe gesty",
+            "pobudzenie"
+          ]
+        },
+        {
+          key: "imp",
+          label: "Impulsywnosc",
+          items: [
+            "przerywa innym",
+            "dziala bez namyslu",
+            "niecierpliwosc",
+            "trudnosc w oczekiwaniu",
+            "szybkie decyzje"
+          ]
+        },
+        {
+          key: "funkc",
+          label: "Funkcjonowanie",
+          items: [
+            "trudnosci w pracy/szkole",
+            "konflikty interpersonalne",
+            "brak planowania",
+            "chaotycznosc",
+            "problemy z terminami"
+          ]
+        }
+      ],
+      rand: {
+        order: ["intro", "uwaga", "nad", "imp", "funkc"],
+        lines: {
+          intro: {
+            improve: [
+              ["objawy ADHD mniej nasilone", "lepsza organizacja", "wieksza kontrola uwagi", "lepsza samoregulacja"],
+              ["mniej impulsywnosci", "lepsza koncentracja", "mniej rozproszen", "lepsza przewidywalnosc"],
+              ["lepsza struktura dnia", "mniej chaosu", "wieksza konsekwencja", "lepsze planowanie"]
+            ],
+            same: [
+              ["objawy ADHD bez zmian", "obraz stabilny", "brak istotnej dynamiki", "stan bez zmian"],
+              ["uwaga bez zmian", "impulsywnosc bez zmian", "brak poprawy", "obraz podobny"],
+              ["funkcjonowanie podobne", "brak nowych trudnosci", "stan stabilny", "bez zmian"]
+            ],
+            worse: [
+              ["nasilenie objawow ADHD", "wieksza rozpraszalnosc", "gorsza organizacja", "wzrost impulsywnosci"],
+              ["mniej kontroli", "wiecej chaosu", "trudniejsze funkcjonowanie", "wiecej konfliktow"],
+              ["spadek samoregulacji", "wieksze trudnosci w planowaniu", "gorsza koncentracja", "wiecej problemow"]
+            ]
+          },
+          uwaga: {
+            improve: [
+              ["lepsze skupienie", "mniej rozproszen", "lepsza organizacja zadan", "wieksza konsekwencja"],
+              ["mniej zapominania", "lepsze planowanie", "wieksza uporzadkowanosc", "lepsza kontrola uwagi"],
+              ["wieksza koncentracja", "mniej przechodzenia miedzy zadaniami", "lepsza struktura pracy", "mniej rozproszen"]
+            ],
+            same: [
+              ["uwaga bez zmian", "rozpraszalnosc utrzymana", "obraz stabilny", "brak poprawy"],
+              ["organizacja bez zmian", "planowanie bez zmian", "stan podobny", "bez dynamiki"],
+              ["zapominanie bez zmian", "brak poprawy kontroli uwagi", "stan bez zmian", "obraz podobny"]
+            ],
+            worse: [
+              ["gorsze skupienie", "wiecej rozproszen", "wieksze trudnosci z organizacja", "spadek kontroli uwagi"],
+              ["wiecej zapominania", "chaotycznosc", "mniejsza konsekwencja", "gorsze planowanie"],
+              ["trudniejsze utrzymanie uwagi", "wiecej bledow", "mniej organizacji", "gorsza koncentracja"]
+            ]
+          },
+          nad: {
+            improve: [
+              ["mniej niepokoju ruchowego", "mniej wiercenia", "lepsza kontrola ruchowa", "mniejsze pobudzenie"],
+              ["wieksza spokojnosc", "lepsza tolerancja siedzenia", "mniej napiecia", "lepsza regulacja"],
+              ["mniej pobudzenia", "lepsze wyciszenie", "mniej gestykulacji", "wieksza kontrola"]
+            ],
+            same: [
+              ["nadruchliwosc bez zmian", "pobudzenie bez zmian", "stan stabilny", "brak poprawy"],
+              ["niepokoj ruchowy utrzymany", "brak dynamiki", "obraz bez zmian", "stan podobny"],
+              ["trudnosc w wyciszeniu bez zmian", "bez poprawy", "stan bez zmian", "obraz podobny"]
+            ],
+            worse: [
+              ["wzrost pobudzenia", "wiekszy niepokoj ruchowy", "wiecej wiercenia", "mniejsza kontrola"],
+              ["trudnosc w wyciszeniu", "mniejsza tolerancja siedzenia", "wieksze napiecie", "gorsza regulacja"],
+              ["wieksza nadruchliwosc", "trudniejsze opanowanie", "wiecej ruchu", "gorsza kontrola"]
+            ]
+          },
+          imp: {
+            improve: [
+              ["mniej impulsywnosci", "lepsze hamowanie", "mniej przerywania", "wieksza cierpliwosc"],
+              ["bardziej przemyslane decyzje", "lepsza samokontrola", "mniej pochopnosci", "wieksza przewidywalnosc"],
+              ["mniej reagowania bez namyslu", "wieksza refleksja", "mniej impulsywnych decyzji", "lepsza kontrola"]
+            ],
+            same: [
+              ["impulsywnosc bez zmian", "hamowanie bez zmian", "obraz stabilny", "brak poprawy"],
+              ["trudnosci z cierpliwoscia", "bez dynamiki", "stan podobny", "brak zmian"],
+              ["mniej kontroli bez zmian", "bez poprawy", "stan bez zmian", "obraz podobny"]
+            ],
+            worse: [
+              ["wzrost impulsywnosci", "gorsze hamowanie", "wiecej pochopnych decyzji", "mniej cierpliwosci"],
+              ["wiecej przerywania", "mniejsza samokontrola", "wieksza pochopnosc", "trudniejsza regulacja"],
+              ["wieksza impulsywnosc", "mniej refleksji", "wiecej zachowan bez namyslu", "gorsza kontrola"]
+            ]
+          },
+          funkc: {
+            improve: [
+              ["lepsze funkcjonowanie", "wieksza skutecznosc", "lepsze wywiazywanie sie z zadan", "mniej konfliktow"],
+              ["lepsza organizacja dnia", "wieksza stabilnosc", "lepsza przewidywalnosc", "lepsza wspolpraca"],
+              ["lepsza terminowosc", "mniej chaosu w pracy", "lepsza efektywnosc", "wieksza systematycznosc"]
+            ],
+            same: [
+              ["funkcjonowanie bez zmian", "trudnosci bez zmian", "obraz stabilny", "brak poprawy"],
+              ["problemy organizacyjne utrzymane", "stan podobny", "bez dynamiki", "brak nowych zmian"],
+              ["terminowosc bez zmian", "brak poprawy", "stan bez zmian", "obraz podobny"]
+            ],
+            worse: [
+              ["gorsze funkcjonowanie", "wiecej konfliktow", "spadek skutecznosci", "wieksze trudnosci w pracy"],
+              ["wiecej chaosu", "mniejsza przewidywalnosc", "gorsza organizacja dnia", "wiecej problemow z terminami"],
+              ["mniej systematycznosci", "gorsza efektywnosc", "wiecej bledow", "wieksza dezorganizacja"]
+            ]
+          }
+        },
+        plan: {
+          improve: [
+            "Kontynuowac leczenie i strategie organizacyjne.",
+            "Utrzymac dotychczasowe postepowanie, monitorowac funkcjonowanie."
+          ],
+          same: [
+            "Kontynuowac leczenie i monitorowac dynamike objawow.",
+            "Utrzymac obserwacje i psychoedukacje."
+          ],
+          worse: [
+            "Rozwazyc modyfikacje leczenia i intensyfikacje wsparcia.",
+            "Zwiekszyc wsparcie i monitorowac funkcjonowanie."
+          ]
+        }
+      }
+    },
+    module_asd: {
+      title: "ASD",
+      desc: "Relacje, komunikacja, sensoryka, rutyny, regulacja emocji.",
+      groups: [
+        {
+          key: "rel",
+          label: "Relacje i komunikacja",
+          items: [
+            "ograniczony kontakt wzrokowy",
+            "trudnosci w rozmowie",
+            "doslowna interpretacja",
+            "ograniczona empatia",
+            "trudnosc w odczycie emocji"
+          ]
+        },
+        {
+          key: "rut",
+          label: "Rutyny i schematy",
+          items: [
+            "potrzeba niezmiennosci",
+            "rytualy",
+            "trudnosc z zmiana",
+            "sztywne zainteresowania",
+            "opor wobec nowosci"
+          ]
+        },
+        {
+          key: "sens",
+          label: "Bodzce sensoryczne",
+          items: [
+            "nadwrazliwosc na dzwiek",
+            "nadwrazliwosc na dotyk",
+            "nadwrazliwosc na swiatlo",
+            "podwrazliwosc",
+            "przeciazenie bodzcami"
+          ]
+        },
+        {
+          key: "reg",
+          label: "Regulacja emocji",
+          items: [
+            "wybuchy emocji",
+            "trudnosc w samoregulacji",
+            "szybkie przeciazenie",
+            "wycofanie",
+            "potrzeba wyciszenia"
+          ]
+        }
+      ],
+      rand: {
+        order: ["intro", "rel", "rut", "sens", "reg"],
+        lines: {
+          intro: {
+            improve: [
+              ["lepsza regulacja w ASD", "mniejsze przeciazenie", "lepsza adaptacja", "wieksza stabilnosc"],
+              ["lepsza tolerancja bodzcow", "lepsza wspolpraca", "mniej napiecia", "spokojniejsze zachowanie"],
+              ["wieksza przewidywalnosc", "mniej kryzysow", "lepsza struktura dnia", "wieksza samoregulacja"]
+            ],
+            same: [
+              ["obraz ASD bez zmian", "brak istotnej dynamiki", "stan stabilny", "objawy utrzymane"],
+              ["funkcjonowanie podobne", "brak poprawy", "wspolpraca bez zmian", "obraz bez zmian"],
+              ["rutyny bez zmian", "sensoryka bez zmian", "stan bez zmian", "brak poprawy"]
+            ],
+            worse: [
+              ["nasilenie trudnosci ASD", "wieksze przeciazenie", "gorsza adaptacja", "wiecej trudnosci"],
+              ["gorsza tolerancja bodzcow", "wiecej wybuchow", "mniejsza regulacja", "trudniejsze funkcjonowanie"],
+              ["wieksza sztywnosc", "wiecej kryzysow", "mniej samoregulacji", "gorsza organizacja dnia"]
+            ]
+          },
+          rel: {
+            improve: [
+              ["lepszy kontakt", "wieksza otwartosc", "mniej trudnosci w komunikacji", "lepsze odczytywanie sygnalow"],
+              ["wieksza elastycznosc rozmowy", "lepsza reakcja na rozmowe", "mniej doslownosci", "wieksza responsywnosc"],
+              ["mniej wycofania", "wieksza gotowosc do kontaktu", "lepsza interakcja", "mniejszy dystans"]
+            ],
+            same: [
+              ["kontakt bez zmian", "trudnosci komunikacyjne bez zmian", "obraz stabilny", "brak poprawy"],
+              ["doslownosc utrzymana", "brak dynamiki", "stan podobny", "bez nowych zmian"],
+              ["wycofanie bez zmian", "brak poprawy", "stan bez zmian", "obraz podobny"]
+            ],
+            worse: [
+              ["gorszy kontakt", "wieksze trudnosci w komunikacji", "mniej responsywnosci", "wieksza doslownosc"],
+              ["mniejsza elastycznosc", "wieksze wycofanie", "trudniejsza rozmowa", "mniej wspolpracy"],
+              ["wiekszy dystans", "mniejsza gotowosc do kontaktu", "trudniejsza interakcja", "gorsze odczytywanie sygnalow"]
+            ]
+          },
+          rut: {
+            improve: [
+              ["wieksza tolerancja zmian", "mniej sztywnosci", "lepsza elastycznosc", "mniej oporu wobec nowosci"],
+              ["mniej rytualow", "mniejsza potrzeba kontroli", "wieksza adaptacja", "bardziej elastyczne reakcje"],
+              ["lepsze dostosowanie do zmian", "wieksza akceptacja nowych sytuacji", "mniej frustracji", "lepsza regulacja"]
+            ],
+            same: [
+              ["rutyny bez zmian", "sztywnosc bez zmian", "obraz stabilny", "brak poprawy"],
+              ["opor wobec zmian utrzymany", "brak dynamiki", "stan bez zmian", "bez nowych decyzji"],
+              ["potrzeba niezmiennosci bez zmian", "brak poprawy", "stan podobny", "obraz bez zmian"]
+            ],
+            worse: [
+              ["wzrost sztywnosci", "wiekszy opor wobec zmian", "wiecej rytualow", "mniejsza elastycznosc"],
+              ["wieksza potrzeba kontroli", "gorsza adaptacja", "mniejsza tolerancja zmian", "wiecej trudnosci"],
+              ["wieksza frustracja przy zmianach", "mniejsza akceptacja nowosci", "trudniejsze przystosowanie", "wieksze napiecie"]
+            ]
+          },
+          sens: {
+            improve: [
+              ["mniejsza nadwrazliwosc", "lepsza tolerancja bodzcow", "mniej przeciazenia", "mniej reaktywnosci"],
+              ["lepsza regulacja sensoryczna", "mniej dyskomfortu", "mniej unikania bodzcow", "mniejsza reaktywnosc"],
+              ["mniej objawow przeciazenia", "lepsze znoszenie bodzcow", "mniej wycofania", "wiekszy komfort"]
+            ],
+            same: [
+              ["sensoryka bez zmian", "przeciazenie bez zmian", "obraz stabilny", "brak poprawy"],
+              ["nadwrazliwosc utrzymana", "brak dynamiki", "stan bez zmian", "bez nowych zmian"],
+              ["podwrazliwosc bez zmian", "brak poprawy", "stan podobny", "bez zmian"]
+            ],
+            worse: [
+              ["wzrost nadwrazliwosci", "wieksze przeciazenie", "mniejsza tolerancja bodzcow", "wiecej reakcji"],
+              ["silniejsze reakcje na bodzce", "wiecej unikania", "gorsza regulacja sensoryczna", "wiekszy dyskomfort"],
+              ["wieksze przeciazenie", "wiecej objawow sensorycznych", "mniej tolerancji", "gorszy komfort"]
+            ]
+          },
+          reg: {
+            improve: [
+              ["lepsza regulacja emocji", "mniej wybuchow", "spokojniejsze zachowanie", "wieksza samokontrola"],
+              ["wieksza zdolnosc do wyciszenia", "lepsza tolerancja frustracji", "mniej kryzysow", "mniej wycofania"],
+              ["mniej impulsywnych reakcji", "wieksza przewidywalnosc", "lepsza stabilnosc", "mniej eskalacji"]
+            ],
+            same: [
+              ["regulacja emocji bez zmian", "wybuchy bez zmian", "obraz stabilny", "brak poprawy"],
+              ["wycofanie bez zmian", "brak dynamiki", "stan podobny", "bez nowych zmian"],
+              ["trudnosc w samoregulacji bez zmian", "brak poprawy", "stan bez zmian", "obraz podobny"]
+            ],
+            worse: [
+              ["gorsza regulacja emocji", "wiecej wybuchow", "mniejsza tolerancja frustracji", "wiecej kryzysow"],
+              ["wiecej wycofania", "trudniejsze wyciszenie", "wieksze przeciazenie", "mniejsza kontrola"],
+              ["wieksza chwiejnosc", "wiecej eskalacji", "gorsza samokontrola", "wiecej trudnosci"]
+            ]
+          }
+        },
+        plan: {
+          improve: [
+            "Kontynuowac wsparcie i strategie regulacyjne.",
+            "Utrzymac dotychczasowe postepowanie, monitorowac adaptacje."
+          ],
+          same: [
+            "Kontynuowac wsparcie i monitorowac tolerancje bodzcow.",
+            "Utrzymac obserwacje i strategie struktury dnia."
+          ],
+          worse: [
+            "Zwiekszyc wsparcie i zmniejszyc przeciazenia.",
+            "Rozwazyc modyfikacje planu i dodatkowe interwencje."
+          ]
+        }
+      }
+    },
+    module_ptsd: {
+      title: "Trauma i PTSD",
+      desc: "Intruzje, unikanie, pobudzenie, nastroj.",
+      groups: [
+        {
+          key: "intru",
+          label: "Objawy intruzywne",
+          items: [
+            "flashbacki",
+            "koszmary",
+            "natretne wspomnienia",
+            "reakcje na bodzce",
+            "silne obrazy"
+          ]
+        },
+        {
+          key: "unik",
+          label: "Unikanie i odretwienie",
+          items: [
+            "unikanie bodzcow",
+            "odretwienie emocjonalne",
+            "wycofanie",
+            "trudnosc w kontakcie",
+            "ograniczenie aktywnosci"
+          ]
+        },
+        {
+          key: "pob",
+          label: "Pobudzenie i czujnosc",
+          items: [
+            "nadmierna czujnosc",
+            "drazliwosc",
+            "wybuchy zlosci",
+            "zaburzenia snu",
+            "napiecie"
+          ]
+        },
+        {
+          key: "nastroj",
+          label: "Nastroj i przekonania",
+          items: [
+            "poczucie winy",
+            "negatywne przekonania",
+            "bezradnosc",
+            "poczucie zagrozenia",
+            "lek"
+          ]
+        }
+      ],
+      rand: {
+        order: ["intro", "intru", "unik", "pob", "nastroj"],
+        lines: {
+          intro: {
+            improve: [
+              ["objawy PTSD slabna", "mniejsze nasilenie intruzji", "lepsza regulacja", "mniejsza reaktywnosc"],
+              ["lepsza stabilnosc", "mniejszy lek", "lepsza wspolpraca", "spokojniejsze zachowanie"],
+              ["mniej wybudzen", "lepsza tolerancja bodzcow", "mniej unikania", "lepsza regulacja"]
+            ],
+            same: [
+              ["objawy PTSD bez zmian", "brak istotnej dynamiki", "obraz stabilny", "stan bez zmian"],
+              ["reaktywnosc bez zmian", "bez nowych incydentow", "brak poprawy", "obraz podobny"],
+              ["sen bez zmian", "utrzymane unikanie", "stan podobny", "bez poprawy"]
+            ],
+            worse: [
+              ["nasilenie objawow PTSD", "wzrost reaktywnosci", "wieksze napiecie", "gorsza regulacja"],
+              ["wiecej intruzji", "gorszy sen", "wiecej leku", "trudniejsze funkcjonowanie"],
+              ["wieksze unikanie", "wiecej wybuchow", "gorsza tolerancja bodzcow", "wieksze przeciazenie"]
+            ]
+          },
+          intru: {
+            improve: [
+              ["mniej intruzji", "rzadsze flashbacki", "mniej koszmarow", "slabsze wspomnienia"],
+              ["lepsza kontrola objawow", "wiekszy dystans", "mniejszy dyskomfort", "mniej zalewania"],
+              ["mniej reakcji na bodzce", "wieksza stabilnosc", "mniej objawow nocnych", "lepsza tolerancja"]
+            ],
+            same: [
+              ["intruzje bez zmian", "koszmary bez zmian", "obraz stabilny", "brak poprawy"],
+              ["reaktywnosc bez zmian", "brak dynamiki", "stan podobny", "bez nowych zmian"],
+              ["nocne objawy bez zmian", "brak poprawy", "stan bez zmian", "obraz podobny"]
+            ],
+            worse: [
+              ["nasilenie intruzji", "wiecej flashbackow", "wiecej koszmarow", "silniejsze wspomnienia"],
+              ["wiekszy dyskomfort", "mniejsza kontrola", "wieksza reaktywnosc", "mniej dystansu"],
+              ["wiecej reakcji na bodzce", "trudniejsze wyciszenie", "gorsza tolerancja", "wiecej objawow nocnych"]
+            ]
+          },
+          unik: {
+            improve: [
+              ["mniej unikania", "wieksza gotowosc do kontaktu", "mniejsze odretwienie", "wieksza aktywnosc"],
+              ["lepsza tolerancja bodzcow", "wieksza otwartosc", "mniej wycofania", "lepsza wspolpraca"],
+              ["wieksza gotowosc do ekspozycji", "mniej izolacji", "lepsza aktywnosc", "mniej rezygnacji"]
+            ],
+            same: [
+              ["unikanie bez zmian", "odretwienie bez zmian", "obraz stabilny", "brak poprawy"],
+              ["wycofanie utrzymane", "bez dynamiki", "stan podobny", "bez nowych zmian"],
+              ["izolacja bez zmian", "brak poprawy", "stan bez zmian", "obraz podobny"]
+            ],
+            worse: [
+              ["wzrost unikania", "wieksze odretwienie", "mniejsze kontakty", "wiecej wycofania"],
+              ["mniejsza tolerancja bodzcow", "trudniejsza rozmowa", "wieksza izolacja", "mniej aktywnosci"],
+              ["wiecej izolacji", "mniej gotowosci do kontaktu", "spadek aktywnosci", "wieksze wycofanie"]
+            ]
+          },
+          pob: {
+            improve: [
+              ["mniejsze pobudzenie", "lepszy sen", "mniej czujnosci", "mniejsze napiecie"],
+              ["mniej wybuchow", "lepsza regulacja", "spokojniejsze zachowanie", "mniej drazliwosci"],
+              ["wieksza tolerancja frustracji", "mniej reakcji impulsywnych", "lepsze wyciszenie", "mniej napiecia"]
+            ],
+            same: [
+              ["pobudzenie bez zmian", "czujnosc bez zmian", "obraz stabilny", "brak poprawy"],
+              ["drazliwosc bez zmian", "bez dynamiki", "stan bez zmian", "bez nowych zmian"],
+              ["napiecie bez zmian", "brak poprawy", "stan podobny", "obraz podobny"]
+            ],
+            worse: [
+              ["nasilenie pobudzenia", "wiecej czujnosci", "gorszy sen", "wieksze napiecie"],
+              ["wiecej wybuchow", "wieksza drazliwosc", "mniejsza regulacja", "trudniejsze funkcjonowanie"],
+              ["mniej wyciszenia", "wiecej reakcji na bodzce", "gorsza tolerancja", "wieksze napiecie"]
+            ]
+          },
+          nastroj: {
+            improve: [
+              ["mniejszy lek", "lepszy nastroj", "mniej poczucia winy", "wieksza nadzieja"],
+              ["mniej negatywnych przekonan", "wieksza stabilnosc", "lepsza perspektywa", "mniej bezradnosci"],
+              ["mniej poczucia zagrozenia", "wieksza pewnosc", "mniejsze obciazenie", "lepsza adaptacja"]
+            ],
+            same: [
+              ["nastroj bez zmian", "lek bez zmian", "obraz stabilny", "brak poprawy"],
+              ["negatywne przekonania bez zmian", "brak dynamiki", "stan podobny", "bez nowych zmian"],
+              ["poczucie zagrozenia bez zmian", "brak poprawy", "stan bez zmian", "obraz podobny"]
+            ],
+            worse: [
+              ["nasilenie leku", "gorszy nastroj", "wieksze poczucie winy", "wiecej bezradnosci"],
+              ["wieksza negatywna ocena", "mniej nadziei", "gorsza perspektywa", "wiecej obciazenia"],
+              ["wzrost poczucia zagrozenia", "wiecej obaw", "gorsze samopoczucie", "wieksze obciazenie"]
+            ]
+          }
+        },
+        plan: {
+          improve: [
+            "Kontynuowac leczenie i wsparcie terapeutyczne.",
+            "Utrzymac obserwacje i prace nad regulacja objawow."
+          ],
+          same: [
+            "Kontynuowac postepowanie, monitorowac sen i lek.",
+            "Utrzymac wsparcie i psychoedukacje."
+          ],
+          worse: [
+            "Rozwazyc modyfikacje leczenia i intensyfikacje wsparcia.",
+            "Zwiekszyc obserwacje i ocenic potrzebe interwencji."
+          ]
+        }
+      }
+    },
+    module_dementia: {
+      title: "Otepienie i organiczne",
+      desc: "Orientacja, pamiec, zachowanie, funkcjonowanie.",
+      groups: [
+        {
+          key: "orient",
+          label: "Orientacja i pamiec",
+          items: [
+            "dezorientacja co do czasu",
+            "dezorientacja co do miejsca",
+            "zaburzenia pamieci swiezej",
+            "konfabulacje",
+            "trudnosc w rozpoznawaniu osob"
+          ]
+        },
+        {
+          key: "zach",
+          label: "Zachowanie",
+          items: [
+            "pobudzenie",
+            "bledzenie",
+            "agresja",
+            "apatia",
+            "labilnosc"
+          ]
+        },
+        {
+          key: "funkc",
+          label: "Funkcjonowanie",
+          items: [
+            "wymaga pomocy w ADL",
+            "ryzyko upadku",
+            "inkontynencja",
+            "zaburzenia snu",
+            "potrzeba stalego nadzoru"
+          ]
+        },
+        {
+          key: "psy",
+          label: "Objawy psychotyczne",
+          items: [
+            "urojenia",
+            "omamy",
+            "podejrzliwosc",
+            "lek",
+            "dezorganizacja"
+          ]
+        }
+      ],
+      rand: {
+        order: ["intro", "orient", "zach", "funkc", "psy"],
+        lines: {
+          intro: {
+            improve: [
+              ["obraz otepienny stabilniejszy", "mniej dezorientacji", "lepsza stabilnosc", "lepszy kontakt"],
+              ["mniej pobudzenia", "spokojniejsze zachowanie", "wieksza przewidywalnosc", "lepsza regulacja"],
+              ["mniej epizodow splatania", "lepsza odpowiedz na wskazowki", "mniej labilnosci", "lepsze funkcjonowanie"]
+            ],
+            same: [
+              ["obraz otepienny bez zmian", "brak istotnej dynamiki", "stan stabilny", "objawy utrzymane"],
+              ["kontakt bez zmian", "bez nowych incydentow", "brak poprawy", "obraz podobny"],
+              ["zachowanie bez zmian", "bez poprawy", "stan podobny", "brak nowych zmian"]
+            ],
+            worse: [
+              ["pogorszenie obrazu otepiennego", "wiecej dezorientacji", "gorszy kontakt", "wiecej trudnosci"],
+              ["wiecej pobudzenia", "trudniejsze zachowanie", "wzrost ryzyka", "wieksza potrzeba nadzoru"],
+              ["wiecej epizodow splatania", "gorsza reakcja na wskazowki", "wieksza labilnosc", "trudniejsze funkcjonowanie"]
+            ]
+          },
+          orient: {
+            improve: [
+              ["mniej dezorientacji", "lepsza orientacja", "mniej konfabulacji", "lepsze rozpoznawanie"],
+              ["wieksza stabilnosc pamieci", "mniej pomylek", "lepsza reakcja na wskazowki", "mniejsza labilnosc"],
+              ["mniej splatania", "lepsze rozeznanie w miejscu", "lepsza orientacja w czasie", "mniej bledow"]
+            ],
+            same: [
+              ["dezorientacja bez zmian", "pamiec bez zmian", "obraz stabilny", "brak poprawy"],
+              ["konfabulacje bez zmian", "brak dynamiki", "stan podobny", "bez nowych zmian"],
+              ["orientacja bez zmian", "brak poprawy", "stan bez zmian", "obraz podobny"]
+            ],
+            worse: [
+              ["wzrost dezorientacji", "gorsza pamiec", "wiecej konfabulacji", "spadek rozpoznawania"],
+              ["mniejsza stabilnosc", "gorsza reakcja na wskazowki", "wiecej pomylek", "wieksza labilnosc"],
+              ["wiecej splatania", "gorsza orientacja w czasie", "wiecej bledow", "mniej rozpoznawania"]
+            ]
+          },
+          zach: {
+            improve: [
+              ["mniej pobudzenia", "spokojniejsze zachowanie", "mniej bledzenia", "mniej konfliktow"],
+              ["lepsza regulacja", "mniej agresji", "lepszy sen", "mniej napiecia"],
+              ["mniej epizodow niepokoju", "mniej krzykow", "lepsza przewidywalnosc", "mniej trudnych zachowan"]
+            ],
+            same: [
+              ["zachowanie bez zmian", "pobudzenie bez zmian", "obraz stabilny", "brak poprawy"],
+              ["bledzenie bez zmian", "brak dynamiki", "stan podobny", "bez nowych zmian"],
+              ["labilnosc bez zmian", "brak poprawy", "stan bez zmian", "obraz podobny"]
+            ],
+            worse: [
+              ["wzrost pobudzenia", "wiecej bledzenia", "wiecej agresji", "trudniejsze zachowanie"],
+              ["gorszy sen", "wiecej konfliktow", "mniejsza regulacja", "wiecej napiecia"],
+              ["wiecej niepokoju", "wiecej epizodow trudnych zachowan", "gorsza przewidywalnosc", "wiecej eskalacji"]
+            ]
+          },
+          funkc: {
+            improve: [
+              ["lepsze funkcjonowanie", "mniejsza zaleznosc", "wieksza samodzielnosc", "mniej nadzoru"],
+              ["mniej ryzyka upadku", "lepsza organizacja opieki", "stabilniejszy dzien", "wieksza przewidywalnosc"],
+              ["lepsza wspolpraca w ADL", "mniej trudnosci opiekunczych", "bardziej stabilny rytm", "lepsza organizacja"]
+            ],
+            same: [
+              ["funkcjonowanie bez zmian", "zaleznosc bez zmian", "obraz stabilny", "brak poprawy"],
+              ["nadzor bez zmian", "brak dynamiki", "stan podobny", "bez nowych zmian"],
+              ["potrzeba pomocy bez zmian", "brak poprawy", "stan bez zmian", "obraz podobny"]
+            ],
+            worse: [
+              ["gorsze funkcjonowanie", "wieksza zaleznosc", "wiecej nadzoru", "wzrost ryzyka upadku"],
+              ["trudniejsza opieka", "mniej samodzielnosci", "wieksza potrzeba pomocy", "gorsza organizacja dnia"],
+              ["wieksze trudnosci ADL", "wiecej problemow w opiece", "mniejsza samodzielnosc", "gorsza stabilnosc"]
+            ]
+          },
+          psy: {
+            improve: [
+              ["mniej objawow psychotycznych", "mniej podejrzliwosci", "mniej leku", "wiekszy spokoj"],
+              ["mniej omamow", "mniejsza dezorganizacja", "lepsza stabilnosc", "mniej niepokoju"],
+              ["mniej urojen", "lepszy dystans do tresci", "mniej reakcji na objawy", "wieksza kontrola"]
+            ],
+            same: [
+              ["objawy psychotyczne bez zmian", "podejrzliwosc bez zmian", "obraz stabilny", "brak poprawy"],
+              ["omamy bez zmian", "brak dynamiki", "stan podobny", "bez nowych zmian"],
+              ["urojenia bez zmian", "brak poprawy", "stan bez zmian", "obraz podobny"]
+            ],
+            worse: [
+              ["nasilenie objawow psychotycznych", "wiecej omamow", "wzrost podejrzliwosci", "wiecej leku"],
+              ["wiecej dezorganizacji", "mniejszy dystans", "gorsza stabilnosc", "trudniejsze funkcjonowanie"],
+              ["wzrost urojen", "wieksza absorpcja", "wiecej reakcji na objawy", "gorsza kontrola"]
+            ]
+          }
+        },
+        plan: {
+          improve: [
+            "Kontynuowac leczenie i opieke, monitorowac orientacje.",
+            "Utrzymac dotychczasowe postepowanie i obserwacje."
+          ],
+          same: [
+            "Kontynuowac opieke, monitorowac zachowanie i ryzyko upadku.",
+            "Utrzymac obserwacje i dokumentowac dynamike objawow."
+          ],
+          worse: [
+            "Zwiekszyc nadzor i rozwazyc modyfikacje leczenia.",
+            "Zwiekszyc opieke i ocenic potrzebe konsultacji."
+          ]
+        }
+      }
+    },
+    module_calculators: {
+      title: "Kalkulatory (BZD, neuroleptyki)",
+      desc: "Miejsce na notatki i przeliczenia robocze.",
+      groups: [],
+      rand: {
+        order: ["intro"],
+        lines: {
+          intro: {
+            improve: [
+              ["zanotowano przeliczenie dawek", "uzupelniono przeliczenia", "spisano dawki rownowazne", "dodano kalkulacje dawek"],
+              ["bez uwag", "do weryfikacji", "wstepne zestawienie", "robocza notatka"],
+              ["zestawienie dawki BZD", "notatka rownowaznikow", "doprecyzowano dawki", "uzgodniono przeliczenia"]
+            ],
+            same: [
+              ["notatka kalkulacyjna", "zestawienie dawek", "robocza notatka", "przeliczenia dawek"],
+              ["do weryfikacji", "bez zmian", "wstepne dane", "roboczy zapis"],
+              ["w trakcie uzupelniania", "robocze zestawienie", "brak zmian", "wstepny zapis"]
+            ],
+            worse: [
+              ["wymaga doprecyzowania", "brak danych do przeliczen", "potrzeba uzupelnienia", "konieczna weryfikacja"],
+              ["do uzupelnienia", "brak informacji", "brak potwierdzen", "niekompletne dane"],
+              ["brak danych wejscowych", "konieczne uzupelnienie", "niepelne informacje", "wymaga weryfikacji"]
+            ]
+          }
+        },
+        plan: {
+          improve: [
+            "Zweryfikowac przeliczenia i potwierdzic dawki.",
+            "Utrzymac notatki robocze i uzupelniac dane."
+          ],
+          same: [
+            "Utrzymac robocze przeliczenia i uzupelniac dane.",
+            "Zweryfikowac dawki w dokumentacji."
+          ],
+          worse: [
+            "Uzupelnic dane i zweryfikowac przeliczenia.",
+            "Pozyskac brakujace informacje przed uzyciem."
+          ]
+        }
+      }
+    },
+    /* MODULES_END */
+  };
+
+  const esc = (s) =>
+    String(s)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/\"/g, "&quot;");
+
+  const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
+  const combo = (def) => {
+    if (!def) return "";
+    if (!Array.isArray(def)) return String(def);
+    if (def.length && Array.isArray(def[0])) return def.map(pick).filter(Boolean).join(", ");
+    return pick(def);
+  };
+  const sentence = (x) => {
+    const t = String(x || "").trim();
+    if (!t) return "";
+    return t.endsWith(".") ? t : t + ".";
+  };
+
+  const readText = (root, key) => {
+    const node = root.querySelector(`[data-key="${key}"]`);
+    if (!node) return "";
+    return String(node.value || "").trim();
+  };
+  const readGroup = (root, group) => {
+    return Array.from(root.querySelectorAll(`[data-clin-group="${group}"]`))
+      .filter((el) => el.checked)
+      .map((el) => String(el.getAttribute("data-clin-value") || "").trim())
+      .filter(Boolean);
+  };
+  const setText = (root, key, value) => {
+    const node = root.querySelector(`[data-key="${key}"]`);
+    if (node) node.value = value || "";
+  };
+
+  const planFallback = (trend) => {
+    const plans = {
+      improve: "Kontynuowac leczenie i obserwacje. Monitorowac dynamike objawow.",
+      same: "Kontynuowac leczenie. Monitorowac stan i wspolprace.",
+      worse: "Rozwazyc modyfikacje leczenia. Zwiekszyc nadzor i ocene ryzyka."
+    };
+    return plans[trend] || plans.same;
+  };
+
+  const randLine = (id, key, trend) => {
+    const def = MODULES[id]?.rand?.lines?.[key];
+    if (!def) return "";
+    const t = def[trend] || def.same || def.any;
+    return combo(t);
+  };
+
+  const buildFromData = (root, id) => {
+    const def = MODULES[id];
+    if (!def) return { note: "", plan: "" };
+    const lines = [];
+    lines.push(def.title + ".");
+
+    def.groups.forEach((g) => {
+      const vals = readGroup(root, g.key);
+      if (vals.length) lines.push(`${g.label}: ${vals.join(", ")}.`);
+    });
+
+    const noteTxt = readText(root, `mod.${id}.txt.note`);
+    if (noteTxt) lines.push(`Uwagi: ${sentence(noteTxt)}`);
+    const interwTxt = readText(root, `mod.${id}.txt.interw`);
+    if (interwTxt) lines.push(`Interwencje: ${sentence(interwTxt)}`);
+
+    const planTxt = readText(root, `mod.${id}.txt.plan`);
+    return {
+      note: lines.filter(Boolean).join(" "),
+      plan: planTxt || ""
+    };
+  };
+
+  const buildRandom = (id, trend) => {
+    const def = MODULES[id];
+    if (!def || !def.rand) return buildFromData(document.body, id);
+    const t = trend || "same";
+    const lines = [];
+    def.rand.order.forEach((key) => {
+      const line = randLine(id, key, t);
+      if (line) lines.push(sentence(line));
+    });
+    const plan = pick(def.rand.plan?.[t] || []) || planFallback(t);
+    return { note: lines.join(" "), plan };
+  };
+
+  const updateOut = (root, id, payload) => {
+    setText(root, `mod.${id}.out.note`, payload.note || "");
+    setText(root, `mod.${id}.out.plan`, payload.plan || "");
+    if (window.markEdited) window.markEdited();
+  };
+
+  const buildGroupsHtml = (id, groups) => {
+    return groups
+      .map((g) => {
+        const items = g.items
+          .map((item, idx) => {
+            const key = `mod.${id}.chk.${g.key}.${idx}`;
+            return `
+              <label class="clinCheck">
+                <input type="checkbox" data-key="${esc(key)}" data-clin-group="${esc(g.key)}" data-clin-value="${esc(item)}" />
+                <span>${esc(item)}</span>
+              </label>
+            `;
+          })
+          .join("");
+        return `
+          <div class="clinBox">
+            <div class="clinBoxTitle">${esc(g.label)}</div>
+            <div class="clinChecks">${items}</div>
+          </div>
+        `;
+      })
+      .join("");
+  };
+
+  const buildHtml = (id, def) => {
+    const groupsHtml = buildGroupsHtml(id, def.groups || []);
+    return `
+      <div class="clinHead">
+        <div>
+          <div class="clinTitle">${esc(def.title)}</div>
+          <div class="clinSub">${esc(def.desc || "")}</div>
+        </div>
+        <div class="clinMuted">Generator notatki</div>
+      </div>
+      <div class="clinGrid">
+        ${groupsHtml}
+
+        <div class="clinBox clinFull">
+          <div class="clinBoxTitle">Uwagi kliniczne</div>
+          <div class="clinNoteLabel">Opis / kontekst</div>
+          <textarea class="clinText" data-key="mod.${esc(id)}.txt.note" placeholder="krotki opis stanu, dynamika, szczegoly"></textarea>
+          <div class="clinNoteLabel" style="margin-top:10px">Interwencje / reakcja</div>
+          <textarea class="clinText" data-key="mod.${esc(id)}.txt.interw" placeholder="interwencje, reakcja pacjenta"></textarea>
+          <div class="clinNoteLabel" style="margin-top:10px">Plan (opcjonalnie)</div>
+          <textarea class="clinText" data-key="mod.${esc(id)}.txt.plan" placeholder="zalecenia, plan dalszego postepowania"></textarea>
+        </div>
+
+        <div class="clinBox clinFull">
+          <div class="clinBoxTitle">Generator</div>
+          <div class="clinActions">
+            <button type="button" class="clinBtn" data-act="gen-data">Generuj z danych</button>
+            <button type="button" class="clinBtn" data-act="gen-improve">Poprawa</button>
+            <button type="button" class="clinBtn" data-act="gen-same">Bez zmian</button>
+            <button type="button" class="clinBtn" data-act="gen-worse">Pogorszenie</button>
+          </div>
+          <div class="clinNoteLabel" style="margin-top:10px">Wynik (edytowalny)</div>
+          <textarea class="clinText" data-key="mod.${esc(id)}.out.note" placeholder="wygenerowana notatka"></textarea>
+          <div class="clinNoteLabel" style="margin-top:10px">Plan (edytowalny)</div>
+          <textarea class="clinText" data-key="mod.${esc(id)}.out.plan" placeholder="wygenerowany plan"></textarea>
+        </div>
+      </div>
+    `;
+  };
+
+  const restoreFromLocal = (root) => {
+    try {
+      const pid = (document.getElementById("patientId")?.value || "NN").trim() || "NN";
+      const keyPid = `PEON2_PSY_FORM_V3__PID__${pid}`;
+      const raw = localStorage.getItem(keyPid) || localStorage.getItem("PEON2_PSY_FORM_V3__LAST");
+      if (!raw) return;
+      const payload = JSON.parse(raw);
+      const fields = payload && payload.fields ? payload.fields : {};
+      root.querySelectorAll("[data-key]").forEach((el) => {
+        const dk = el.getAttribute("data-key");
+        if (!dk) return;
+        const key = `dk:${dk}`;
+        if (!(key in fields)) return;
+        const type = (el.getAttribute("type") || "").toLowerCase();
+        if (type === "checkbox" || type === "radio") el.checked = !!fields[key];
+        else el.value = String(fields[key] ?? "");
+      });
+    } catch (e) {}
+  };
+
+  const renderModule = (mount, id) => {
+    const def = MODULES[id];
+    if (!def) return;
+    if (mount.dataset.rendered === "1") return;
+    mount.innerHTML = buildHtml(id, def);
+    mount.dataset.rendered = "1";
+    restoreFromLocal(mount);
+
+    mount.querySelector('[data-act="gen-data"]')?.addEventListener("click", () =>
+      updateOut(mount, id, buildFromData(mount, id))
+    );
+    mount.querySelector('[data-act="gen-improve"]')?.addEventListener("click", () =>
+      updateOut(mount, id, buildRandom(id, "improve"))
+    );
+    mount.querySelector('[data-act="gen-same"]')?.addEventListener("click", () =>
+      updateOut(mount, id, buildRandom(id, "same"))
+    );
+    mount.querySelector('[data-act="gen-worse"]')?.addEventListener("click", () =>
+      updateOut(mount, id, buildRandom(id, "worse"))
+    );
+  };
+
+  document.addEventListener("peon2:moduleMounted", (e) => {
+    const detail = e && e.detail ? e.detail : {};
+    const id = detail.moduleId;
+    if (!MODULES[id]) return;
+    const host = detail.hostEl;
+    if (!host) return;
+    const mount = host.querySelector(`[data-clinical="${id}"]`);
+    if (!mount) return;
+    renderModule(mount, id);
+  });
+})();
+</script>

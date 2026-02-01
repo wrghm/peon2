@@ -297,6 +297,7 @@
           <div class="spacer"></div>
 
           <button class="btn ghost" id="btnToggleSidebar" type="button" title="Zwiń lub rozwiń panel">☰ Panel</button>
+          <button type="button" id="btnTheme" class="btn">Kolor</button>
           <button class="btn primary" id="btnSaveDriveTop" type="button" title="Zapis do Drive">Zapisz na Drive</button>
         </div>
       </header>
@@ -404,16 +405,6 @@
 
               <details class="acc">
                 <summary class="acc-head">
-                  <span class="acc-title">Status mentalis</span>
-                  <span class="acc-sub">definicje w polach</span>
-                </summary>
-                <div class="acc-body">
-                  <?!= include('MSE'); ?>
-                </div>
-              </details>
-
-              <details class="acc">
-                <summary class="acc-head">
                   <span class="acc-title">Moduły dodatkowe</span>
                   <span class="acc-sub">wpinane bez utraty danych</span>
                 </summary>
@@ -428,11 +419,11 @@
             </div>
 
             <div data-show-modes="Wypis">
-              <div class="info">Tryb Wypis: plik mode_discharge.html nie jest jeszcze wdrożony.</div>
+              <?!= include('mode_discharge'); ?>
             </div>
 
             <div data-show-modes="Wiedza">
-              <div class="info">Tryb Wiedza: plik mode_knowledge.html nie jest jeszcze wdrożony.</div>
+              <?!= include('mode_knowledge'); ?>
             </div>
           </div>
         </main>
@@ -445,21 +436,32 @@
       <?!= include('Module_SUD'); ?>
       <?!= include('Module_MSE'); ?>
       <?!= include('Module_Scales'); ?>
+      <?!= include('Module_Clinical'); ?>
       <?!= include('Engine'); ?>
+      <script>
+        function setTheme(t) {
+          document.documentElement.setAttribute("data-theme", t)
+          localStorage.setItem("PEON2_THEME", t)
+        }
+
+        function toggleTheme() {
+          const cur = document.documentElement.getAttribute("data-theme") || "dark"
+          setTheme(cur === "dark" ? "light" : "dark")
+        }
+
+        ;(() => {
+          const saved = localStorage.getItem("PEON2_THEME")
+          setTheme(saved || "dark")
+
+          const btn = document.getElementById("btnTheme")
+          if (btn) btn.addEventListener("click", toggleTheme)
+        })()
+      </script>
     </div>
 
-    <!-- PATCHES (dołączamy na końcu body) -->
-    <?!= includeOptional('Patcher'); ?>
-    <?!= includeOptional('PATCH_01_MSE'); ?>
-    <?!= includeOptional('Module_MSE'); ?>
-  
-    <!-- PEON2 PATCHES -->
-    <?!= includeOptional('Patcher'); ?>
-    <?!= includeOptional('PATCH_01_MSE'); ?>
-    <?!= includeOptional('PATCH_02_THEME'); ?> 
+    <!-- PATCHES (single include block at end of body) -->
     <?!= include('Patcher'); ?>
-    <?!= include('PATCH_01_MSE'); ?>
-    <?!= include('PATCH_02_UI'); ?>
+    <?!= includeOptional('PATCH_02_THEME'); ?>
 
     
 </body>

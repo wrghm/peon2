@@ -6,6 +6,12 @@
   const KEY_PID = (pid) => `${APP_NS}__MODULES__PID__${String(pid || "NN").trim() || "NN"}`;
 
   const REGISTRY = {
+    mse: {
+      id: "mse",
+      title: "Status mentalis",
+      file: "Module_MSE.html",
+      templateId: "tpl-module-mse"
+    },
     module_sud: {
       id: "module_sud",
       title: "Uzależnienia (SUD)",
@@ -51,6 +57,10 @@
     return v || "NN";
   };
 
+  const LEGACY_MSE_KEYS = ["mse_legacy", "mse2", "status_mentalis", "mse_old"];
+
+  const mapLegacyKey = (k) => (LEGACY_MSE_KEYS.includes(k) ? "mse" : k);
+
   const uniq = (arr) => {
     const out = [];
     const seen = new Set();
@@ -64,7 +74,17 @@
     return out;
   };
 
-  const normalizeList = (list) => uniq(list).filter((k) => !!REGISTRY[k]);
+  const ensureMse = (list) => {
+    if (!REGISTRY.mse) return list || [];
+    const out = Array.isArray(list) ? list.slice() : [];
+    if (!out.includes("mse")) out.unshift("mse");
+    return out;
+  };
+
+  const normalizeList = (list) => {
+    const mapped = (list || []).map(mapLegacyKey);
+    return uniq(mapped).filter((k) => !!REGISTRY[k]);
+  };
 
   const loadList = (pid) => {
     const p = String(pid || readPid()).trim() || "NN";
@@ -72,16 +92,16 @@
       const raw = localStorage.getItem(KEY_PID(p)) || localStorage.getItem(KEY_LAST);
       if (!raw) return [];
       const parsed = JSON.parse(raw);
-      if (!Array.isArray(parsed)) return [];
-      return normalizeList(parsed);
+      if (!Array.isArray(parsed)) return ensureMse([]);
+      return ensureMse(normalizeList(parsed));
     } catch (e) {
-      return [];
+      return ensureMse([]);
     }
   };
 
   const saveList = (list, pid) => {
     const p = String(pid || readPid()).trim() || "NN";
-    const v = normalizeList(list);
+    const v = ensureMse(normalizeList(list));
     try {
       localStorage.setItem(KEY_LAST, JSON.stringify(v));
       localStorage.setItem(KEY_PID(p), JSON.stringify(v));

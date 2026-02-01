@@ -2,6 +2,7 @@
 <script>
 (function () {
   const MOD_ID = "mse"
+  const TEMPLATE_ID = "tpl-module-mse"
 
   function $(sel, root) {
     return (root || document).querySelector(sel)
@@ -187,6 +188,15 @@
     `
   }
 
+  function ensureTemplate() {
+    if (document.getElementById(TEMPLATE_ID)) return
+    const t = document.createElement("template")
+    t.id = TEMPLATE_ID
+    t.setAttribute("data-module", MOD_ID)
+    t.innerHTML = tpl()
+    document.body.appendChild(t)
+  }
+
   function cb(key, label) {
     return `
       <label class="row">
@@ -205,20 +215,26 @@
     `
   }
 
-  function render() {
-    const host = mountHost()
-    let root = document.getElementById("mseCard")
+  function render(host) {
+    const mount = host || mountHost()
+    let root = mount && mount.querySelector ? mount.querySelector("#mseCard") : null
     if (root) return root
-    root = document.createElement("div")
-    root.innerHTML = tpl()
-    host.prepend(root.firstElementChild)
-    return document.getElementById("mseCard")
+    root = document.getElementById("mseCard")
+    if (root) return root
+    const wrap = document.createElement("div")
+    wrap.innerHTML = tpl()
+    mount.prepend(wrap.firstElementChild)
+    return mount.querySelector ? mount.querySelector("#mseCard") : document.getElementById("mseCard")
   }
 
   function bind(root) {
     const st = ensureStore()
+    const host = root && root.querySelector
+      ? (root.id === "mseCard" ? root : root.querySelector("#mseCard"))
+      : document.getElementById("mseCard")
+    if (!host) return
 
-    $all("[data-key]", root).forEach(el => {
+    $all("[data-key]", host).forEach(el => {
       const k = el.getAttribute("data-key")
       if (el.type === "checkbox") el.checked = !!deepGet(st, k, false)
       else el.value = String(deepGet(st, k, "") || "")
@@ -233,25 +249,36 @@
       })
     })
 
-    $all("button[data-act]", root).forEach(btn => {
+    $all("button[data-act]", host).forEach(btn => {
       btn.addEventListener("click", async () => {
         const act = btn.getAttribute("data-act")
-        if (act === "short") $("#mseOut", root).innerText = buildText("short")
-        if (act === "long") $("#mseOut", root).innerText = buildText("long")
+        if (act === "short") $("#mseOut", host).innerText = buildText("short")
+        if (act === "long") $("#mseOut", host).innerText = buildText("long")
         if (act === "copy") {
-          const t = $("#mseOut", root).innerText || ""
+          const t = $("#mseOut", host).innerText || ""
           try { await navigator.clipboard.writeText(t) } catch (e) {}
         }
         if (act === "clear") {
           window.PEON2_STORE[MOD_ID] = {}
-          $all("[data-key]", root).forEach(el => {
+          $all("[data-key]", host).forEach(el => {
             if (el.type === "checkbox") el.checked = false
             else el.value = ""
           })
-          $("#mseOut", root).innerText = ""
+          $("#mseOut", host).innerText = ""
         }
       })
     })
+
+    const syncFromDom = () => {
+      $all("[data-key]", host).forEach(el => {
+        const k = el.getAttribute("data-key")
+        if (el.type === "checkbox") deepSet(st, k, !!el.checked)
+        else deepSet(st, k, String(el.value || ""))
+      })
+    }
+
+    syncFromDom()
+    setTimeout(syncFromDom, 0)
   }
 
   function buildText(mode) {
@@ -411,13 +438,26 @@
       : parts.join("\n")
   }
 
-  function boot() {
-    const root = render()
-    bind(root)
+  function shouldAutoRender() {
+    if (window.Modules && typeof window.Modules.list === "function") {
+      const list = window.Modules.list()
+      if (Array.isArray(list) && list.includes(MOD_ID)) return false
+    }
+    return true
   }
 
+  document.addEventListener("peon2:moduleMounted", (e) => {
+    const detail = e && e.detail ? e.detail : {}
+    if (detail.moduleId !== MOD_ID) return
+    bind(detail.hostEl)
+  })
+
+  ensureTemplate()
+
   document.addEventListener("DOMContentLoaded", () => {
-    setTimeout(boot, 0)
+    if (!shouldAutoRender()) return
+    const root = render()
+    bind(root)
   })
 
 })()

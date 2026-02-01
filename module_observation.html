@@ -1,164 +1,390 @@
-<!-- module_observation.html -->
+﻿<!-- module_observation.html -->
 <div id="obsRoot"></div>
 
 <template id="tplObs">
-  <details class="acc" open>
-    <summary class="acc-head">
-      <span class="acc-title">Obserwacja – baza</span>
-      <span class="acc-sub">wpis zaczyna się od „W dniu dzisiejszym”</span>
-    </summary>
+  <style>
+    .obs-title{ font-size:15px; font-weight:800; margin:0 0 4px }
+    .obs-sub{ font-size:12px; color: var(--muted) }
+    .obs-row{ display:flex; gap:10px; flex-wrap:wrap; align-items:center }
+    .obs-checks{ display:flex; flex-wrap:wrap; gap:8px }
+    .obs-chip{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      border:1px solid var(--bd);
+      background: var(--panel);
+      color: var(--text);
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 12px;
+      cursor: pointer;
+      user-select: none;
+    }
+    .obs-chip input{ margin:0 }
+    .obs-chip small{ color: var(--muted) }
+    .obs-grid2{ display:grid; grid-template-columns: 1fr 1fr; gap: 10px }
+    .obs-grid3{ display:grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px }
+    @media (max-width: 980px){
+      .obs-grid2, .obs-grid3{ grid-template-columns: 1fr }
+    }
+    .obs-card{ margin-bottom:12px }
+    .obs-actions{ display:flex; flex-wrap:wrap; gap:10px }
+  </style>
 
-    <div class="acc-body">
-      <div class="card pad" style="margin-bottom:12px">
-        <div class="grid2">
-          <div>
-            <label>Jednostka wiodąca (do modułów)</label>
-            <select data-key="obs.meta.unit" id="obs_unit">
-              <option value="">— wybierz —</option>
-              <option value="Schizofrenia">Schizofrenia/psychoza</option>
-              <option value="CHAD">CHAD</option>
-              <option value="Depresja">Depresja</option>
-              <option value="SUD">Uzależnienia</option>
-              <option value="OCD">OCD</option>
-              <option value="ASD_ADHD">ASD/ADHD</option>
-              <option value="Otępienie">Otępienie/organiczne</option>
-              <option value="PTSD">PTSD/trauma</option>
-            </select>
-          </div>
+  <div class="card pad obs-card">
+    <div class="obs-title">Tryb Obserwacja</div>
+    <div class="obs-sub">Wpis rozpoczyna sie od „W dniu dzisiejszym…” z automatyczna data</div>
+  </div>
 
-          <div>
-            <label>Szczegółowość generatora</label>
-            <select data-key="obs.meta.detail" id="obs_detail">
-              <option value="short">Mniej szczegółowa</option>
-              <option value="long">Bardziej szczegółowa</option>
-            </select>
-          </div>
-        </div>
+  <div class="card pad obs-card">
+    <div class="section-title" style="margin-top:0">Rodzaj wpisu i kontekst</div>
 
-        <div style="height:10px"></div>
-
-        <div class="grid2">
-          <button class="btn" type="button" id="btnObsAddUnit">Dodaj moduł jednostki</button>
-          <button class="btn ghost" type="button" id="btnObsClearUnit">Usuń moduły jednostki</button>
-        </div>
-        <div class="hint" style="margin-top:8px">
-          Moduł jednostki dodaje tylko pytania celowane. Wszystko zapisuje się lokalnie.
-        </div>
-      </div>
-
-      <div class="card pad" style="margin-bottom:12px">
-        <div class="section-title" style="margin-top:0">Bazowe pytania do obserwacji</div>
-
-        <div class="field">
-          <label>Kontakt i współpraca</label>
-          <textarea class="big" rows="2" data-key="obs.base.kontakt" data-label="Kontakt i współpraca"
-            placeholder="Kontakt logiczny/ograniczony. Współpraca pełna/częściowa. Nastawienie do personelu."></textarea>
-        </div>
-
-        <div class="field">
-          <label>Zachowanie i psychomotoryka</label>
-          <textarea class="big" rows="2" data-key="obs.base.motoryka" data-label="Zachowanie i psychomotoryka"
-            placeholder="Spokój/pobudzenie/niepokój. Agresja. Wycofanie. Spowolnienie."></textarea>
-        </div>
-
-        <div class="field">
-          <label>Nastrój i afekt</label>
-          <textarea class="big" rows="2" data-key="obs.base.nastroj" data-label="Nastrój i afekt"
-            placeholder="Nastrój obniżony/lękowy/drażliwy/podwyższony. Afekt adekwatny/spłycony/labilny."></textarea>
-        </div>
-
-        <div class="field">
-          <label>Objawy wytwórcze</label>
-          <textarea class="big" rows="2" data-key="obs.base.wytworcze" data-label="Objawy wytwórcze"
-            placeholder="Omamy/urojenia? Nasilenie. Krytycyzm. Zachowanie sugerujące halucynowanie."></textarea>
-        </div>
-
-        <div class="field">
-          <label>Sen i łaknienie</label>
-          <textarea class="big" rows="2" data-key="obs.base.sen" data-label="Sen i łaknienie"
-            placeholder="Sen: ilość/jakość. Łaknienie: spadek/wzrost."></textarea>
-        </div>
-
-        <div class="field">
-          <label>Ryzyko S i H oraz autoagresja</label>
-          <textarea class="big" rows="2" data-key="obs.base.ryzyko" data-label="Ryzyko S i H oraz autoagresja"
-            placeholder="Myśli S? Plan? Zamiar? Zachowania autoagresywne. Myśli agresywne."></textarea>
-        </div>
-
-        <div class="field">
-          <label>Adherencja i tolerancja leczenia</label>
-          <textarea class="big" rows="2" data-key="obs.base.leczenie" data-label="Adherencja i tolerancja leczenia"
-            placeholder="Czy przyjmuje leki. Działania niepożądane."></textarea>
-        </div>
-
-        <div class="field">
-          <label>Incydenty w oddziale / sytuacje trudne</label>
-          <textarea class="big" rows="2" data-key="obs.base.incydenty" data-label="Incydenty w oddziale"
-            placeholder="Konflikty, ucieczki, odmowy, agresja, samouszkodzenia, interwencje."></textarea>
-        </div>
-
-        <div class="field">
-          <label>Udział w terapii i aktywnościach</label>
-          <textarea class="big" rows="2" data-key="obs.base.terapia" data-label="Udział w terapii"
-            placeholder="Uczestnictwo w zajęciach, rozmowy, postawa wobec zaleceń."></textarea>
+    <div class="obs-grid2">
+      <div>
+        <label>Rodzaj wpisu</label>
+        <div class="obs-checks">
+          <label class="obs-chip">
+            <input type="checkbox" data-key="obs.flags.daily" data-default-checked="true" />
+            Wpis dzienny
+          </label>
+          <label class="obs-chip">
+            <input type="checkbox" data-key="obs.flags.incident" />
+            Wpis po incydencie
+          </label>
         </div>
       </div>
 
-      <div class="card pad" style="margin-bottom:12px">
-        <div class="section-title" style="margin-top:0">Moduły jednostki (pytania celowane)</div>
-        <div id="obsUnitMount"></div>
-      </div>
-
-      <div class="card pad">
-        <div class="section-title" style="margin-top:0">Generator obserwacji (wpisuje do pól)</div>
-
-        <div class="grid2">
-          <button class="btn" type="button" id="btnObsGenImprove">Poprawa</button>
-          <button class="btn" type="button" id="btnObsGenSame">Bez zmian</button>
-        </div>
-        <div style="height:10px"></div>
-        <button class="btn" type="button" id="btnObsGenWorse" style="width:100%">Pogorszenie</button>
-
-        <div style="height:12px"></div>
-
-        <div class="field">
-          <label>Wpis roboczy (edytowalny)</label>
-          <textarea class="big" rows="6" data-key="obs.out.note" data-label="Wpis roboczy"
-            placeholder="Generator uzupełni, ale możesz dopisać niuanse kliniczne."></textarea>
-        </div>
-
-        <div class="field">
-          <label>Plan na 24–72 h / zalecenia obserwacyjne (edytowalne)</label>
-          <textarea class="big" rows="3" data-key="obs.out.plan" data-label="Plan 24–72h"
-            placeholder="Nadzór, modyfikacja leczenia, konsultacje, działania środowiskowe, praca terapeutyczna."></textarea>
-        </div>
-
-        <div class="hint">
-          Generator korzysta z Twoich uzupełnionych pól. Przy „bardziej szczegółowej” wersji dopisze więcej elementów i dopasuje do jednostki.
-        </div>
+      <div>
+        <label>Kontekst obserwacji</label>
+        <select data-key="obs.meta.context" id="obs_context">
+          <option value="">— wybierz —</option>
+          <option value="po obchodzie">po obchodzie</option>
+          <option value="po nocy">po nocy</option>
+          <option value="w trakcie dyzuru">w trakcie dyzuru</option>
+          <option value="po interwencji">po interwencji</option>
+          <option value="po rozmowie">po rozmowie</option>
+        </select>
       </div>
     </div>
-  </details>
+
+    <div style="height:10px"></div>
+
+    <div class="obs-grid3">
+      <div>
+        <label>Data wpisu (opcjonalnie)</label>
+        <input type="text" data-key="obs.meta.date" placeholder="dd.mm.rrrr" />
+      </div>
+      <div>
+        <label>Godzina (dla incydentu)</label>
+        <input type="text" data-key="obs.incident.time" placeholder="np. 02:30" />
+      </div>
+      <div>
+        <label>Szczególowosc generatora</label>
+        <select data-key="obs.meta.detail" id="obs_detail">
+          <option value="short">Mniej szczególowa</option>
+          <option value="long">Bardziej szczególowa</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="card pad obs-card">
+    <div class="section-title" style="margin-top:0">Szybkie przelaczniki (checklisty)</div>
+
+    <div class="field">
+      <label>Kontakt i wspólpraca</label>
+      <div class="obs-checks">
+        <label class="obs-chip"><input type="checkbox" data-key="obs.chk.kontakt.logic" data-obs-group="kontakt" data-obs-value="kontakt logiczny" />kontakt logiczny</label>
+        <label class="obs-chip"><input type="checkbox" data-key="obs.chk.kontakt.utrud" data-obs-group="kontakt" data-obs-value="kontakt utrudniony" />kontakt utrudniony</label>
+        <label class="obs-chip"><input type="checkbox" data-key="obs.chk.kontakt.wsp" data-obs-group="kontakt" data-obs-value="wspólpraca zachowana" />wspólpraca zachowana</label>
+        <label class="obs-chip"><input type="checkbox" data-key="obs.chk.kontakt.ogran" data-obs-group="kontakt" data-obs-value="wspólpraca ograniczona" />wspólpraca ograniczona</label>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Zachowanie</label>
+      <div class="obs-checks">
+        <label class="obs-chip"><input type="checkbox" data-key="obs.chk.zach.spo" data-obs-group="zachowanie" data-obs-value="spokojny" />spokojny</label>
+        <label class="obs-chip"><input type="checkbox" data-key="obs.chk.zach.pob" data-obs-group="zachowanie" data-obs-value="pobudzony" />pobudzony</label>
+        <label class="obs-chip"><input type="checkbox" data-key="obs.chk.zach.wro" data-obs-group="zachowanie" data-obs-value="wrogi" />wrogi</label>
+        <label class="obs-chip"><input type="checkbox" data-key="obs.chk.zach.wyc" data-obs-group="zachowanie" data-obs-value="wycofany" />wycofany</label>
+        <label class="obs-chip"><input type="checkbox" data-key="obs.chk.zach.pla" data-obs-group="zachowanie" data-obs-value="placzliwy" />placzliwy</label>
+        <label class="obs-chip"><input type="checkbox" data-key="obs.chk.zach.ros" data-obs-group="zachowanie" data-obs-value="roszczeniowy" />roszczeniowy</label>
+        <label class="obs-chip"><input type="checkbox" data-key="obs.chk.zach.man" data-obs-group="zachowanie" data-obs-value="manipulacyjny" />manipulacyjny</label>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Nastrój, lek i naped</label>
+      <div class="obs-checks">
+        <label class="obs-chip"><input type="checkbox" data-key="obs.chk.nastroj.obn" data-obs-group="nastroj" data-obs-value="nastrój obnizony" />nastrój obnizony</label>
+        <label class="obs-chip"><input type="checkbox" data-key="obs.chk.nastroj.lek" data-obs-group="nastroj" data-obs-value="lek" />lek</label>
+        <label class="obs-chip"><input type="checkbox" data-key="obs.chk.nastroj.draz" data-obs-group="nastroj" data-obs-value="drazliwosc" />drazliwosc</label>
+        <label class="obs-chip"><input type="checkbox" data-key="obs.chk.nastroj.podw" data-obs-group="nastroj" data-obs-value="nastrój podwyzszony" />nastrój podwyzszony</label>
+        <label class="obs-chip"><input type="checkbox" data-key="obs.chk.nastroj.chw" data-obs-group="nastroj" data-obs-value="chwiejnosc afektu" />chwiejnosc</label>
+        <label class="obs-chip"><input type="checkbox" data-key="obs.chk.naped.obn" data-obs-group="naped" data-obs-value="naped obnizony" />naped obnizony</label>
+        <label class="obs-chip"><input type="checkbox" data-key="obs.chk.naped.wzm" data-obs-group="naped" data-obs-value="naped wzmozony" />naped wzmozony</label>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Spostrzeganie / wytwórczosc</label>
+      <div class="obs-checks">
+        <label class="obs-chip"><input type="checkbox" data-key="obs.chk.wytw.brak" data-obs-group="spostrzeganie" data-obs-value="brak objawów wytwórczych" />brak objawów wytwórczych</label>
+        <label class="obs-chip"><input type="checkbox" data-key="obs.chk.wytw.omamy" data-obs-group="spostrzeganie" data-obs-value="omamy" />omamy</label>
+        <label class="obs-chip"><input type="checkbox" data-key="obs.chk.wytw.uroj" data-obs-group="spostrzeganie" data-obs-value="urojenia" />urojenia</label>
+        <label class="obs-chip"><input type="checkbox" data-key="obs.chk.wytw.dez" data-obs-group="spostrzeganie" data-obs-value="dezorganizacja" />dezorganizacja</label>
+      </div>
+    </div>
+    <div class="field">
+      <label>Sen i laknienie</label>
+      <div class="obs-checks">
+        <label class="obs-chip"><input type="checkbox" data-key="obs.chk.sen.ok" data-obs-group="sen" data-obs-value="sen prawidlowy" />sen prawidlowy</label>
+        <label class="obs-chip"><input type="checkbox" data-key="obs.chk.sen.krotki" data-obs-group="sen" data-obs-value="sen skrócony" />sen skrócony</label>
+        <label class="obs-chip"><input type="checkbox" data-key="obs.chk.sen.bez" data-obs-group="sen" data-obs-value="bezsennosc" />bezsennosc</label>
+        <label class="obs-chip"><input type="checkbox" data-key="obs.chk.apet.ok" data-obs-group="sen" data-obs-value="laknienie zachowane" />laknienie zachowane</label>
+        <label class="obs-chip"><input type="checkbox" data-key="obs.chk.apet.obn" data-obs-group="sen" data-obs-value="laknienie obnizone" />laknienie obnizone</label>
+        <label class="obs-chip"><input type="checkbox" data-key="obs.chk.apet.wzm" data-obs-group="sen" data-obs-value="laknienie wzmozone" />laknienie wzmozone</label>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Ryzyko i bezpieczenstwo (zawsze odnotuj)</label>
+      <div class="obs-checks">
+        <label class="obs-chip"><input type="checkbox" data-key="obs.chk.ryz.si" data-obs-group="ryzyko" data-obs-value="mysli samobójcze" />mysli S</label>
+        <label class="obs-chip"><input type="checkbox" data-key="obs.chk.ryz.auto" data-obs-group="ryzyko" data-obs-value="autoagresja" />autoagresja</label>
+        <label class="obs-chip"><input type="checkbox" data-key="obs.chk.ryz.hi" data-obs-group="ryzyko" data-obs-value="agresja" />agresja</label>
+        <label class="obs-chip"><input type="checkbox" data-key="obs.chk.ryz.uc" data-obs-group="ryzyko" data-obs-value="ryzyko ucieczki" />ucieczka</label>
+        <label class="obs-chip"><input type="checkbox" data-key="obs.chk.ryz.risk" data-obs-group="ryzyko" data-obs-value="zachowania ryzykowne" />zachowania ryzykowne</label>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Wspólpraca w leczeniu i interwencje</label>
+      <div class="obs-checks">
+        <label class="obs-chip"><input type="checkbox" data-key="obs.chk.lecz.przyj" data-obs-group="leczenie" data-obs-value="przyjmuje leki" />przyjmuje leki</label>
+        <label class="obs-chip"><input type="checkbox" data-key="obs.chk.lecz.odm" data-obs-group="leczenie" data-obs-value="odmawia leczenia" />odmowa leków</label>
+        <label class="obs-chip"><input type="checkbox" data-key="obs.chk.lecz.zach" data-obs-group="leczenie" data-obs-value="wymaga zachet" />wymaga zachet</label>
+        <label class="obs-chip"><input type="checkbox" data-key="obs.chk.int.rozm" data-obs-group="interwencje" data-obs-value="rozmowa wspierajaca" />rozmowa</label>
+        <label class="obs-chip"><input type="checkbox" data-key="obs.chk.int.dor" data-obs-group="interwencje" data-obs-value="dorazne leki" />dorazne leki</label>
+        <label class="obs-chip"><input type="checkbox" data-key="obs.chk.int.obs" data-obs-group="interwencje" data-obs-value="obserwacja wzmozona" />obserwacja wzmozona</label>
+        <label class="obs-chip"><input type="checkbox" data-key="obs.chk.int.kons" data-obs-group="interwencje" data-obs-value="konsultacja" />konsultacja</label>
+        <label class="obs-chip"><input type="checkbox" data-key="obs.chk.int.ogr" data-obs-group="interwencje" data-obs-value="ograniczenia/izolacja" />ograniczenia</label>
+      </div>
+    </div>
+  </div>
+
+  <div class="card pad obs-card">
+    <div class="section-title" style="margin-top:0">Pola opisowe (jesli potrzebujesz precyzji)</div>
+
+    <div class="field">
+      <label>Kontakt i wspólpraca</label>
+      <textarea class="big" rows="2" data-key="obs.base.kontakt" data-label="Kontakt i wspólpraca"
+        placeholder="Kontakt logiczny/ograniczony. Wspólpraca pelna/czesciowa. Nastawienie do personelu."></textarea>
+    </div>
+
+    <div class="field">
+      <label>Zachowanie i psychomotoryka</label>
+      <textarea class="big" rows="2" data-key="obs.base.zachowanie" data-label="Zachowanie i psychomotoryka"
+        placeholder="Spokój/pobudzenie/niepokój. Agresja. Wycofanie. Spowolnienie."></textarea>
+    </div>
+
+    <div class="field">
+      <label>Nastrój i afekt / naped</label>
+      <textarea class="big" rows="2" data-key="obs.base.nastroj" data-label="Nastrój i afekt"
+        placeholder="Nastrój obnizony/lekowy/drazliwy/podwyzszony. Afekt adekwatny/splycony/labilny."></textarea>
+    </div>
+
+    <div class="field">
+      <label>Myslenie</label>
+      <textarea class="big" rows="2" data-key="obs.base.myslenie" data-label="Myslenie"
+        placeholder="Spójnosc, tok, natlok, ruminacje, dezorganizacja."></textarea>
+    </div>
+
+    <div class="field">
+      <label>Spostrzeganie / wytwórczosc</label>
+      <textarea class="big" rows="2" data-key="obs.base.spostrzeganie" data-label="Spostrzeganie"
+        placeholder="Omamy/urojenia? Nasilenie. Krytycyzm. Zachowanie sugerujace halucynowanie."></textarea>
+    </div>
+    <div class="field">
+      <label>Sen i laknienie</label>
+      <textarea class="big" rows="2" data-key="obs.base.sen" data-label="Sen i laknienie"
+        placeholder="Sen: ilosc/jakosc. Laknienie: spadek/wzrost."></textarea>
+    </div>
+
+    <div class="field">
+      <label>Wglad i krytycyzm</label>
+      <textarea class="big" rows="2" data-key="obs.base.wglad" data-label="Wglad i krytycyzm"
+        placeholder="Wglad pelny/czesciowy/brak. Krytycyzm zachowany/obnizony."></textarea>
+    </div>
+
+    <div class="field">
+      <label>Ryzyko S i H oraz autoagresja</label>
+      <textarea class="big" rows="2" data-key="obs.base.ryzyko" data-label="Ryzyko"
+        placeholder="Mysli S? Plan? Zamiar? Zachowania autoagresywne. Mysli agresywne."></textarea>
+    </div>
+
+    <div class="field">
+      <label>Adherencja i tolerancja leczenia</label>
+      <textarea class="big" rows="2" data-key="obs.base.leczenie" data-label="Adherencja i tolerancja leczenia"
+        placeholder="Czy przyjmuje leki. Dzialania niepozadane."></textarea>
+    </div>
+
+    <div class="field">
+      <label>Funkcjonowanie na oddziale</label>
+      <textarea class="big" rows="2" data-key="obs.base.funkcjonowanie" data-label="Funkcjonowanie na oddziale"
+        placeholder="Udzial w terapii, izolowanie sie, konflikty, relacje z personelem."></textarea>
+    </div>
+
+    <div class="field">
+      <label>Interwencje / dzialania personelu</label>
+      <textarea class="big" rows="2" data-key="obs.base.interwencje" data-label="Interwencje"
+        placeholder="Dorazne leki, rozmowa wspierajaca, ograniczenia, konsultacje, obserwacja wzmozona."></textarea>
+    </div>
+
+    <div class="field">
+      <label>Dodatkowe zdarzenia (opcjonalnie)</label>
+      <textarea class="big" rows="2" data-key="obs.base.incydenty" data-label="Dodatkowe zdarzenia"
+        placeholder="Odmowa leków, wzrost leku noca, konflikty, inne zdarzenia w ciagu doby."></textarea>
+    </div>
+
+    <div class="field">
+      <label>Plan preferowany (opcjonalnie)</label>
+      <textarea class="big" rows="2" data-key="obs.base.plan" data-label="Plan preferowany"
+        placeholder="Jesli wpiszesz, generator uzyje tego planu zamiast szablonu."></textarea>
+    </div>
+  </div>
+
+  <div class="card pad obs-card" id="obsIncidentCard">
+    <div class="section-title" style="margin-top:0">Wpis po incydencie (medico-legal)</div>
+
+    <div class="field">
+      <label>Miejsce zdarzenia</label>
+      <input type="text" data-key="obs.incident.place" placeholder="np. sala, korytarz, izolatka" />
+    </div>
+    <div class="field">
+      <label>Opis zdarzenia (jezyk obserwowalny)</label>
+      <textarea class="big" rows="2" data-key="obs.incident.desc" data-label="Opis zdarzenia"
+        placeholder="Autoagresja, agresja, próba ucieczki, nagle pobudzenie, odmowa leczenia, itp."></textarea>
+    </div>
+    <div class="field">
+      <label>Czynniki wyzwalajace</label>
+      <textarea class="big" rows="2" data-key="obs.incident.triggers" data-label="Czynniki wyzwalajace"
+        placeholder="Konflikt, rozmowa telefoniczna, niezgoda na zalecenia, inne."></textarea>
+    </div>
+    <div class="field">
+      <label>Stan psychiczny w trakcie zdarzenia</label>
+      <textarea class="big" rows="2" data-key="obs.incident.state" data-label="Stan w trakcie"
+        placeholder="Pobudzenie, wrogosc, dezorganizacja, objawy wytwórcze, brak krytycyzmu."></textarea>
+    </div>
+    <div class="field">
+      <label>Ryzyko i zagrozenie</label>
+      <textarea class="big" rows="2" data-key="obs.incident.risk" data-label="Ryzyko incydentu"
+        placeholder="Ryzyko dla siebie / innych. Dostep do narzedzi."></textarea>
+    </div>
+    <div class="field">
+      <label>Interwencje</label>
+      <textarea class="big" rows="2" data-key="obs.incident.interventions" data-label="Interwencje incydentu"
+        placeholder="Personel, srodki, dorazne leki, izolacja, unieruchomienie, konsultacje."></textarea>
+    </div>
+    <div class="field">
+      <label>Skutek interwencji</label>
+      <textarea class="big" rows="2" data-key="obs.incident.outcome" data-label="Skutek interwencji"
+        placeholder="Uspokojenie, nadal pobudzony, odmawia wspólpracy, konieczna obserwacja wzmozona."></textarea>
+    </div>
+    <div class="field">
+      <label>Plan / zalecenia po incydencie</label>
+      <textarea class="big" rows="2" data-key="obs.incident.plan" data-label="Plan po incydencie"
+        placeholder="Obserwacja wzmozona, modyfikacja leczenia, rozmowa wyjasniajaca, konsultacje."></textarea>
+    </div>
+  </div>
+  <div class="card pad obs-card">
+    <div class="section-title" style="margin-top:0">Moduly jednostki (pytania celowane)</div>
+
+    <div class="obs-grid2">
+      <div>
+        <label>Jednostka wiodaca</label>
+        <select data-key="obs.meta.unit" id="obs_unit">
+          <option value="">— wybierz —</option>
+          <option value="Schizofrenia">Schizofrenia/psychoza</option>
+          <option value="CHAD">CHAD</option>
+          <option value="Depresja">Depresja</option>
+          <option value="OCD">OCD</option>
+          <option value="SUD">Uzaleznienia</option>
+          <option value="Otepienie">Otepienie/organiczne</option>
+          <option value="ASD_ADHD">ASD/ADHD</option>
+          <option value="PTSD">PTSD/trauma</option>
+        </select>
+      </div>
+      <div class="obs-actions">
+        <button class="btn" type="button" id="btnObsAddUnit">Dodaj modul jednostki</button>
+        <button class="btn ghost" type="button" id="btnObsClearUnit">Usun moduly jednostki</button>
+      </div>
+    </div>
+
+    <div style="height:8px"></div>
+    <div id="obsUnitMount"></div>
+  </div>
+
+  <div class="card pad obs-card">
+    <div class="section-title" style="margin-top:0">Generator wpisu</div>
+
+    <div class="obs-actions">
+      <button class="btn" type="button" id="btnObsGenFromData">Generuj z danych</button>
+      <button class="btn" type="button" id="btnObsGenImprove">Poprawa</button>
+      <button class="btn" type="button" id="btnObsGenSame">Bez zmian</button>
+      <button class="btn" type="button" id="btnObsGenWorse">Pogorszenie</button>
+    </div>
+
+    <div style="height:12px"></div>
+
+    <div class="field">
+      <label>Wpis roboczy (edytowalny)</label>
+      <textarea class="big" rows="8" data-key="obs.out.note" data-label="Wpis roboczy"
+        placeholder="Generator uzupelni, ale mozesz dopisac niuanse kliniczne."></textarea>
+    </div>
+
+    <div class="field">
+      <label>Plan na 24–72 h / zalecenia obserwacyjne</label>
+      <textarea class="big" rows="3" data-key="obs.out.plan" data-label="Plan 24–72h"
+        placeholder="Nadzór, modyfikacja leczenia, konsultacje, dzialania srodowiskowe."></textarea>
+    </div>
+
+    <div class="hint">
+      Generator korzysta z Twoich danych. Ryzyko jest wpisywane zawsze, nawet gdy „nie zglasza”.
+    </div>
+  </div>
+
+  <div class="card pad obs-card">
+    <div class="section-title" style="margin-top:0">Wpisy z doby (laczone)</div>
+    <div class="obs-actions">
+      <button class="btn" type="button" id="btnObsAppend">Dodaj biezacy wpis</button>
+      <button class="btn ghost" type="button" id="btnObsClearBundle">Wyczysc laczony</button>
+    </div>
+    <div style="height:8px"></div>
+    <textarea class="big" rows="8" data-key="obs.out.bundle" data-label="Wpisy z doby"
+      placeholder="Tu mozesz zebrac kilka obserwacji z doby w jeden tekst."></textarea>
+  </div>
 
   <!-- Jednostki: templates -->
   <template id="tplObsUnit_Schizofrenia">
     <details class="acc" open>
-      <summary class="acc-head"><span class="acc-title">Moduł: psychoza/schizofrenia</span><span class="acc-sub">celowane pytania</span></summary>
+      <summary class="acc-head"><span class="acc-title">Modul: psychoza/schizofrenia</span><span class="acc-sub">celowane pytania</span></summary>
       <div class="acc-body">
         <div class="field">
           <label>Omamy i dezorganizacja</label>
           <textarea class="big" rows="2" data-key="obs.unit.schiz.omamy" data-label="Omamy i dezorganizacja"
-            placeholder="Czy nadal słyszy głosy. Czy zachowanie sugeruje halucynowanie. Dezorganizacja wypowiedzi."></textarea>
+            placeholder="Czy nadal slyszy glosy. Czy zachowanie sugeruje halucynowanie. Dezorganizacja wypowiedzi."></textarea>
         </div>
         <div class="field">
           <label>Urojenia i krytycyzm</label>
           <textarea class="big" rows="2" data-key="obs.unit.schiz.urojenia" data-label="Urojenia i krytycyzm"
-            placeholder="Treści urojeniowe, nasilenie, podatność na weryfikację, krytycyzm."></textarea>
+            placeholder="Tresci urojeniowe, nasilenie, podatnosc na weryfikacje, krytycyzm."></textarea>
         </div>
         <div class="field">
-          <label>Negatywne i funkcjonowanie</label>
+          <label>Objawy negatywne</label>
           <textarea class="big" rows="2" data-key="obs.unit.schiz.neg" data-label="Objawy negatywne"
-            placeholder="Wycofanie, spłycenie afektu, awolicja, anhedonia."></textarea>
+            placeholder="Wycofanie, splycenie afektu, awolicja, anhedonia."></textarea>
         </div>
       </div>
     </details>
@@ -166,17 +392,22 @@
 
   <template id="tplObsUnit_CHAD">
     <details class="acc" open>
-      <summary class="acc-head"><span class="acc-title">Moduł: CHAD</span><span class="acc-sub">celowane pytania</span></summary>
+      <summary class="acc-head"><span class="acc-title">Modul: CHAD</span><span class="acc-sub">celowane pytania</span></summary>
       <div class="acc-body">
         <div class="field">
-          <label>Wskaźniki hipomanii/maniakalności</label>
-          <textarea class="big" rows="2" data-key="obs.unit.chad.mania" data-label="Wskaźniki manii"
-            placeholder="Skrócony sen, gonitwa, natłok, drażliwość, wielkościowość, ryzykowne zachowania."></textarea>
+          <label>Wskazniki hipomanii/maniakalnosci</label>
+          <textarea class="big" rows="2" data-key="obs.unit.chad.mania" data-label="Wskazniki manii"
+            placeholder="Skrócony sen, gonitwa, natlok, drazliwosc, wielkosciowosc, ryzykowne zachowania."></textarea>
         </div>
         <div class="field">
-          <label>Impulsywność i ryzyko</label>
-          <textarea class="big" rows="2" data-key="obs.unit.chad.ryzyko" data-label="Impulsywność i ryzyko"
+          <label>Impulsywnosc i ryzyko</label>
+          <textarea class="big" rows="2" data-key="obs.unit.chad.ryzyko" data-label="Impulsywnosc i ryzyko"
             placeholder="Wydatki, konflikty, agresja, zachowania seksualne, substancje."></textarea>
+        </div>
+        <div class="field">
+          <label>Sen i naped</label>
+          <textarea class="big" rows="2" data-key="obs.unit.chad.sen" data-label="Sen i naped w CHAD"
+            placeholder="Ilosc snu, potrzeba snu, pobudzenie, wzrost aktywnosci."></textarea>
         </div>
       </div>
     </details>
@@ -184,17 +415,39 @@
 
   <template id="tplObsUnit_Depresja">
     <details class="acc" open>
-      <summary class="acc-head"><span class="acc-title">Moduł: depresja</span><span class="acc-sub">celowane pytania</span></summary>
+      <summary class="acc-head"><span class="acc-title">Modul: depresja</span><span class="acc-sub">celowane pytania</span></summary>
       <div class="acc-body">
         <div class="field">
           <label>Ruminacje i autokrytycyzm</label>
           <textarea class="big" rows="2" data-key="obs.unit.dep.ruminacje" data-label="Ruminacje i autokrytycyzm"
-            placeholder="Treści samooskarżające, poczucie winy, bezwartościowość."></textarea>
+            placeholder="Tresci samooskarzajace, poczucie winy, bezwartosciowosc."></textarea>
         </div>
         <div class="field">
-          <label>Anhedonia i napęd</label>
-          <textarea class="big" rows="2" data-key="obs.unit.dep.naped" data-label="Anhedonia i napęd"
-            placeholder="Napęd, energia, inicjatywa, odruchowe wycofanie."></textarea>
+          <label>Anhedonia i naped</label>
+          <textarea class="big" rows="2" data-key="obs.unit.dep.naped" data-label="Anhedonia i naped"
+            placeholder="Naped, energia, inicjatywa, odruchowe wycofanie."></textarea>
+        </div>
+        <div class="field">
+          <label>Mysli rezygnacyjne / ryzyko</label>
+          <textarea class="big" rows="2" data-key="obs.unit.dep.ryzyko" data-label="Ryzyko w depresji"
+            placeholder="Mysli rezygnacyjne, plan, zamiar, czynniki chroniace."></textarea>
+        </div>
+      </div>
+    </details>
+  </template>
+  <template id="tplObsUnit_OCD">
+    <details class="acc" open>
+      <summary class="acc-head"><span class="acc-title">Modul: OCD</span><span class="acc-sub">celowane pytania</span></summary>
+      <div class="acc-body">
+        <div class="field">
+          <label>Natrectwa i kompulsje</label>
+          <textarea class="big" rows="2" data-key="obs.unit.ocd.natretnosci" data-label="Natrectwa i kompulsje"
+            placeholder="Tresc, opór, krytycyzm, nasilenie, wplyw na funkcjonowanie."></textarea>
+        </div>
+        <div class="field">
+          <label>Unikanie i czas rytualów</label>
+          <textarea class="big" rows="2" data-key="obs.unit.ocd.unikanie" data-label="Unikanie i rytualy"
+            placeholder="Unikanie, czas zajety rytualami, konsekwencje."></textarea>
         </div>
       </div>
     </details>
@@ -202,25 +455,1102 @@
 
   <template id="tplObsUnit_SUD">
     <details class="acc" open>
-      <summary class="acc-head"><span class="acc-title">Moduł: uzależnienia</span><span class="acc-sub">celowane pytania</span></summary>
+      <summary class="acc-head"><span class="acc-title">Modul: uzaleznienia</span><span class="acc-sub">celowane pytania</span></summary>
       <div class="acc-body">
         <div class="field">
-          <label>Głód, nawroty, dostęp</label>
-          <textarea class="big" rows="2" data-key="obs.unit.sud.glod" data-label="Głód i nawroty"
-            placeholder="Głód, ryzyko nawrotu, plan bezpieczeństwa, dostęp do substancji."></textarea>
+          <label>Glód, nawroty, dostep</label>
+          <textarea class="big" rows="2" data-key="obs.unit.sud.glod" data-label="Glód i nawroty"
+            placeholder="Glód, ryzyko nawrotu, plan bezpieczenstwa, dostep do substancji."></textarea>
         </div>
         <div class="field">
           <label>Objawy odstawienne / intoksykacja</label>
           <textarea class="big" rows="2" data-key="obs.unit.sud.odstaw" data-label="Objawy odstawienne"
-            placeholder="Drżenia, poty, niepokój, bezsenność, objawy autonomiczne."></textarea>
+            placeholder="Drzenia, poty, niepokój, bezsennosc, objawy autonomiczne."></textarea>
+        </div>
+        <div class="field">
+          <label>Wspólpraca / ryzyko zlamania regulaminu</label>
+          <textarea class="big" rows="2" data-key="obs.unit.sud.wsp" data-label="Wspólpraca w SUD"
+            placeholder="Wspólpraca, ryzyko zlamania regulaminu, testy."></textarea>
+        </div>
+      </div>
+    </details>
+  </template>
+
+  <template id="tplObsUnit_Otepienie">
+    <details class="acc" open>
+      <summary class="acc-head"><span class="acc-title">Modul: otepienie/organiczne</span><span class="acc-sub">celowane pytania</span></summary>
+      <div class="acc-body">
+        <div class="field">
+          <label>Fluktuacje swiadomosci i orientacji</label>
+          <textarea class="big" rows="2" data-key="obs.unit.otep.orient" data-label="Orientacja w otepieniu"
+            placeholder="Fluktuacje, dezorientacja, zaburzenia uwagi."></textarea>
+        </div>
+        <div class="field">
+          <label>Zachowanie / ryzyko upadków</label>
+          <textarea class="big" rows="2" data-key="obs.unit.otep.zach" data-label="Zachowanie w otepieniu"
+            placeholder="Pobudzenie, wedrowanie, ryzyko upadków, dezorientacja."></textarea>
+        </div>
+      </div>
+    </details>
+  </template>
+
+  <template id="tplObsUnit_ASD_ADHD">
+    <details class="acc" open>
+      <summary class="acc-head"><span class="acc-title">Modul: ASD/ADHD</span><span class="acc-sub">celowane pytania</span></summary>
+      <div class="acc-body">
+        <div class="field">
+          <label>Tolerancja bodzców / przeciazenie</label>
+          <textarea class="big" rows="2" data-key="obs.unit.asd.bodzce" data-label="Bodzce i przeciazenie"
+            placeholder="Reakcje na bodzce, przeciazenie, potrzeba struktury."></textarea>
+        </div>
+        <div class="field">
+          <label>Impulsywnosc / organizacja</label>
+          <textarea class="big" rows="2" data-key="obs.unit.asd.imp" data-label="Impulsywnosc i organizacja"
+            placeholder="Impulsywnosc, trudnosci w organizacji, potrzeba wsparcia."></textarea>
+        </div>
+      </div>
+    </details>
+  </template>
+
+  <template id="tplObsUnit_PTSD">
+    <details class="acc" open>
+      <summary class="acc-head"><span class="acc-title">Modul: PTSD/trauma</span><span class="acc-sub">celowane pytania</span></summary>
+      <div class="acc-body">
+        <div class="field">
+          <label>Objawy intruzywne i unikanie</label>
+          <textarea class="big" rows="2" data-key="obs.unit.ptsd.intru" data-label="Objawy intruzywne"
+            placeholder="Koszmary, flashbacki, unikanie bodzców."></textarea>
+        </div>
+        <div class="field">
+          <label>Pobudzenie i lek</label>
+          <textarea class="big" rows="2" data-key="obs.unit.ptsd.pob" data-label="Pobudzenie w PTSD"
+            placeholder="Nadmierna czujnosc, drazliwosc, napiecie."></textarea>
         </div>
       </div>
     </details>
   </template>
 </template>
-
 <script>
-;(() => {
+(() => {
+  const $ = (sel, root = document) => root.querySelector(sel);
+  const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
+
+  const readText = (key) => {
+    const node = document.querySelector(`[data-key="${key}"]`);
+    if (!node) return "";
+    return String(node.value || "").trim();
+  };
+
+  const readBool = (key) => {
+    const node = document.querySelector(`[data-key="${key}"]`);
+    if (!node || node.type !== "checkbox") return false;
+    return !!node.checked;
+  };
+
+  const readGroup = (group) => {
+    return $$(`[data-obs-group="${group}"]`)
+      .filter((el) => el.checked)
+      .map((el) => String(el.getAttribute("data-obs-value") || "").trim())
+      .filter(Boolean);
+  };
+
+  const sentence = (x) => {
+    const t = String(x || "").trim();
+    if (!t) return "";
+    return t.endsWith(".") ? t : t + ".";
+  };
+
+  const lineFrom = (label, key, group, fallback) => {
+    const txt = readText(key);
+    if (txt) return `${label}: ${sentence(txt)}`;
+    const list = group ? readGroup(group) : [];
+    if (list.length) return `${label}: ${list.join(", ")}.`;
+    if (fallback) return `${label}: ${sentence(fallback)}`;
+    return "";
+  };
+
+  const buildRiskLine = (trend) => {
+    const txt = readText("obs.base.ryzyko");
+    if (txt) return `Ryzyko: ${sentence(txt)}`;
+    const list = readGroup("ryzyko");
+    if (list.length) return `Ryzyko: ${list.join(", ")}.`;
+    const fb = randRisk(trend);
+    if (fb) return `Ryzyko: ${sentence(fb)}`;
+    return "Ryzyko: nie zglasza mysli samobójczych ani agresywnych, brak zachowan autoagresywnych i ucieczkowych.";
+  };
+
+  const dateStr = () => {
+    const custom = readText("obs.meta.date");
+    if (custom) return custom;
+    const d = new Date();
+    const pad = (n) => String(n).padStart(2, "0");
+    return `${pad(d.getDate())}.${pad(d.getMonth() + 1)}.${d.getFullYear()}`;
+  };
+
+  const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
+
+  const TREND_VARIANTS = {
+    improve: {
+      short: {
+        intro: [
+          "Pacjent spokojniejszy, w lepszym kontakcie.",
+          "Widoczna poprawa w zachowaniu i kontakcie.",
+          "Kontakt bardziej adekwatny, mniej napięcia.",
+          "Pacjent wyraźnie spokojniejszy.",
+          "Lepsza współpraca i stabilniejszy nastrój.",
+          "Pacjent mniej drażliwy, bardziej dostępny w rozmowie.",
+          "Zauważalna poprawa w regulacji afektu.",
+          "Pacjent bardziej wyciszony, mniej konfliktowy."
+        ],
+        state: [
+          "Napięcie mniejsze.",
+          "Nie obserwuje się pobudzenia.",
+          "Afekt stabilniejszy.",
+          "Lęk słabszy.",
+          "Napęd bardziej wyrównany.",
+          "Mniej chwiejności emocjonalnej.",
+          "Mniej drażliwości.",
+          "Bez cech dezorganizacji zachowania."
+        ],
+        coop: [
+          "Współpraca poprawiona.",
+          "Chętniej podejmuje kontakt z personelem.",
+          "Akceptuje zalecenia.",
+          "Udział w aktywnościach oddziałowych większy.",
+          "Lepsza tolerancja interwencji.",
+          "Przyjmuje leki bez zastrzeżeń.",
+          "Współpracuje w leczeniu.",
+          "Wymaga mniej zachęt."
+        ]
+      },
+      long: {
+        intro: [
+          "Pacjent w kontakcie bardziej adekwatnym, współpracuje.",
+          "Kontakt logiczny, bardziej otwarty na rozmowę.",
+          "Lepsza dostępność w rozmowie i spokojniejsze zachowanie.",
+          "Zauważalna poprawa regulacji afektu i napięcia.",
+          "Obraz kliniczny z tendencją do stabilizacji.",
+          "Pacjent spokojniejszy, mniej reaktywny emocjonalnie.",
+          "Współpraca w leczeniu wyraźnie lepsza.",
+          "Większa stabilność zachowania w oddziale."
+        ],
+        state: [
+          "Nasilenie napięcia mniejsze, afekt stabilniejszy.",
+          "Mniej drażliwości i wahań nastroju.",
+          "Brak świeżych incydentów, zachowanie uporządkowane.",
+          "Mniej objawów wytwórczych lub bez nasilenia.",
+          "Sen lepszej jakości, napęd bardziej wyrównany.",
+          "Mniej cech pobudzenia, zachowanie spokojniejsze.",
+          "Poprawa w zakresie lęku i napięcia.",
+          "Mniej impulsywności w oddziale."
+        ],
+        coop: [
+          "Współpraca dobra, akceptuje zalecenia.",
+          "Przyjmuje leczenie, wymaga mniej zachęt.",
+          "Lepiej toleruje interwencje i rozmowy.",
+          "Utrzymuje poprawny kontakt z personelem.",
+          "Bierze udział w zajęciach terapeutycznych.",
+          "Zachowanie bardziej przewidywalne.",
+          "Lepsza samokontrola.",
+          "Zwiększona gotowość do współpracy."
+        ],
+        extra: [
+          "Brak nowych zachowań ryzykownych.",
+          "Bez oznak dezorganizacji zachowania.",
+          "Ryzyko nie zwiększone.",
+          "Funkcjonowanie w oddziale stabilniejsze.",
+          "Mniej potrzeby interwencji doraźnych.",
+          "Lepsza tolerancja stresu."
+        ]
+      }
+    },
+    same: {
+      short: {
+        intro: [
+          "Stan psychiczny bez istotnych zmian.",
+          "Obraz kliniczny stabilny.",
+          "Bez istotnej dynamiki w porównaniu do poprzedniej doby.",
+          "Stan pacjenta bez wyraźnych zmian.",
+          "Utrzymuje się dotychczasowy obraz kliniczny.",
+          "Bez nowości w zachowaniu.",
+          "Pacjent w stanie podobnym do poprzedniego.",
+          "Brak wyraźnej poprawy lub pogorszenia."
+        ],
+        state: [
+          "Kontakt logiczny, bez większych odchyleń.",
+          "Nastrój i napęd bez istotnych zmian.",
+          "Zachowanie stabilne.",
+          "Brak nowych incydentów.",
+          "Napięcie na podobnym poziomie.",
+          "Bez nowych objawów wytwórczych.",
+          "Sen i łaknienie bez większych zmian.",
+          "Wgląd bez istotnej zmiany."
+        ],
+        coop: [
+          "Współpraca zachowana.",
+          "Przyjmuje leczenie jak dotychczas.",
+          "Wymaga okresowych zachęt.",
+          "Kontakt z personelem bez zmian.",
+          "Udział w aktywnościach podobny jak wcześniej.",
+          "Brak odmów leczenia.",
+          "Tolerancja leczenia bez zmian.",
+          "Bez nowych interwencji."
+        ]
+      },
+      long: {
+        intro: [
+          "Obraz kliniczny zasadniczo stabilny.",
+          "Stan pacjenta utrzymuje się na podobnym poziomie.",
+          "Bez wyraźnej dynamiki objawów w ostatniej dobie.",
+          "Utrzymuje się dotychczasowy obraz psychiczny.",
+          "Brak istotnych zmian w funkcjonowaniu.",
+          "Stan stabilny, bez nowych zdarzeń.",
+          "Zachowanie i kontakt bez istotnych odchyleń.",
+          "Funkcjonowanie w oddziale stabilne."
+        ],
+        state: [
+          "Kontakt logiczny, adekwatny do sytuacji.",
+          "Nastrój i napęd bez większych wahań.",
+          "Brak nowych objawów wytwórczych.",
+          "Sen i łaknienie na podobnym poziomie.",
+          "Zachowanie uporządkowane.",
+          "Nie obserwuje się dezorganizacji.",
+          "Brak nowych incydentów.",
+          "Ryzyko bez istotnej zmiany."
+        ],
+        coop: [
+          "Współpraca zachowana, leczenie przyjmowane.",
+          "Wymaga okresowych zachęt do aktywności.",
+          "Kontakt z personelem bez zmian.",
+          "Tolerancja leczenia bez nowych zastrzeżeń.",
+          "Udział w terapii podobny jak wcześniej.",
+          "Nie zgłasza nowych dolegliwości.",
+          "Brak odmów leczenia.",
+          "Akceptuje zalecenia."
+        ],
+        extra: [
+          "Kontynuować dotychczasowe postępowanie.",
+          "Wymaga dalszej obserwacji.",
+          "Bez wskazań do pilnych zmian.",
+          "Monitorować ryzyko zgodnie z planem.",
+          "Utrzymać bieżący nadzór.",
+          "Brak pilnych interwencji."
+        ]
+      }
+    },
+    worse: {
+      short: {
+        intro: [
+          "Pacjent bardziej napięty i drażliwy.",
+          "Pogorszenie w zakresie zachowania i współpracy.",
+          "Kontakt trudniejszy niż poprzednio.",
+          "Wzrost napięcia i niepokoju.",
+          "Pacjent mniej współpracujący.",
+          "Nasilenie objawów w porównaniu do poprzedniej doby.",
+          "Zauważalne pogorszenie w oddziale.",
+          "Większa chwiejność i drażliwość."
+        ],
+        state: [
+          "Wymaga zwiększonej czujności.",
+          "Współpraca gorsza.",
+          "Większa impulsywność.",
+          "Nasilony lęk.",
+          "Zachowanie bardziej konfliktowe.",
+          "Pobudzenie okresowe.",
+          "Możliwe nasilenie objawów wytwórczych.",
+          "Ryzyko wymaga ponownej oceny."
+        ],
+        coop: [
+          "Odmowy leczenia możliwe.",
+          "Wymaga częstszych interwencji.",
+          "Kontakt z personelem utrudniony.",
+          "Potrzebuje więcej zachęt.",
+          "Współpraca ograniczona.",
+          "Mniejsza tolerancja zaleceń.",
+          "Wzrost napięcia w relacjach.",
+          "Mniej stabilne funkcjonowanie."
+        ]
+      },
+      long: {
+        intro: [
+          "Obserwuje się pogorszenie regulacji afektu i zachowania.",
+          "Stan psychiczny mniej stabilny niż poprzednio.",
+          "Wzrost napięcia i drażliwości w oddziale.",
+          "Kontakt trudniejszy, współpraca ograniczona.",
+          "Nasilenie objawów w ostatniej dobie.",
+          "Funkcjonowanie w oddziale mniej uporządkowane.",
+          "Zauważalny spadek współpracy z leczeniem.",
+          "Pogorszenie w zakresie zachowania i nastroju."
+        ],
+        state: [
+          "Większa chwiejność emocjonalna i niepokój.",
+          "Okresowe pobudzenie lub dezorganizacja.",
+          "Możliwe nasilenie objawów wytwórczych.",
+          "Sen gorszej jakości, napęd mniej stabilny.",
+          "Zachowanie bardziej impulsywne.",
+          "Mniejsza tolerancja frustracji.",
+          "Wzrost zachowań ryzykownych.",
+          "Ryzyko wymaga ponownej oceny."
+        ],
+        coop: [
+          "Współpraca ograniczona, wymaga częstych zachęt.",
+          "Odmowy leczenia możliwe lub obserwowane.",
+          "Kontakt z personelem utrudniony.",
+          "Wymaga zwiększonej liczby interwencji.",
+          "Tolerancja leczenia gorsza.",
+          "Mniej udziału w aktywnościach.",
+          "Potrzebuje częstszych rozmów wspierających.",
+          "Współpraca niestabilna."
+        ],
+        extra: [
+          "Zalecana ponowna ocena ryzyka S i H.",
+          "Rozważyć modyfikację leczenia.",
+          "Zwiększyć czujność obserwacyjną.",
+          "Udokumentować czynniki wyzwalające.",
+          "Możliwa potrzeba konsultacji.",
+          "Rozważyć obserwację wzmożoną."
+        ]
+      }
+    }
+  };
+
+  const RAND_LINES = {
+    kontakt: {
+      improve: [
+        ["kontakt logiczny", "kontakt bardziej adekwatny", "kontakt swobodny"],
+        ["wspolpraca dobra", "wspolpraca lepsza", "wspolpraca pelna"],
+        ["nastawienie zyczliwe", "wieksza otwartosc", "mniej oporu"]
+      ],
+      same: [
+        ["kontakt logiczny", "kontakt adekwatny", "kontakt stabilny"],
+        ["wspolpraca zachowana", "wspolpraca umiarkowana", "wspolpraca bez zmian"],
+        ["nastawienie neutralne", "bez istotnych zmian", "bez nowych trudnosci"]
+      ],
+      worse: [
+        ["kontakt utrudniony", "kontakt mniej adekwatny", "kontakt ograniczony"],
+        ["wspolpraca gorsza", "wspolpraca ograniczona", "wspolpraca niestabilna"],
+        ["wiekszy opor", "nastawienie roszczeniowe", "narastajace trudnosci"]
+      ]
+    },
+    zachowanie: {
+      improve: [
+        ["zachowanie spokojniejsze", "mniej napiecia", "wieksze wyciszenie"],
+        ["brak pobudzenia", "bez zachowan agresywnych", "bez konfliktow"],
+        ["lepsza samokontrola", "bardziej przewidywalne funkcjonowanie", "mniej impulsywnosci"]
+      ],
+      same: [
+        ["zachowanie stabilne", "bez istotnych zmian", "funkcjonowanie podobne"],
+        ["brak nowych incydentow", "bez nowych konfliktow", "brak eskalacji"],
+        ["napiecie na podobnym poziomie", "bez wyraznych zmian", "utrzymuje sie obraz"]
+      ],
+      worse: [
+        ["zachowanie bardziej pobudzone", "wzrost napiecia", "wieksza impulsywnosc"],
+        ["konfliktowosc", "epizody pobudzenia", "trudnosci w regulacji"],
+        ["wieksze ryzyko incydentu", "mniej przewidywalne zachowanie", "trudniejsza kontrola"]
+      ]
+    },
+    nastroj: {
+      improve: [
+        ["nastroj stabilniejszy", "mniej drazliwosci", "lepsza regulacja afektu"],
+        ["naped bardziej wyrownany", "mniejszy lek", "mniej chwiejny afekt"],
+        ["wiekszy spokoj", "lepsza tolerancja frustracji", "mniej napiecia"]
+      ],
+      same: [
+        ["nastroj bez istotnych zmian", "afekt podobny jak poprzednio", "naped bez zmian"],
+        ["utrzymuje sie lek", "utrzymuje sie drazliwosc", "utrzymuje sie obnizenie"],
+        ["chwiejny afekt bez dynamiki", "bez wyraznych wahan", "stan stabilny"]
+      ],
+      worse: [
+        ["nastroj bardziej chwiejny", "nasilenie leku", "wzrost drazliwosci"],
+        ["naped mniej stabilny", "wzrost napiecia", "pogorszenie tolerancji"],
+        ["wieksza labilnosc", "nasilenie dysforii", "trudniejsza regulacja"]
+      ]
+    },
+    myslenie: {
+      improve: [
+        ["tok myslenia bardziej spojny", "mniej rozkojarzenia", "lepsza organizacja wypowiedzi"],
+        ["mniej natretnych tresci", "mniej ruminacji", "mniej gonitwy mysli"],
+        ["wieksza kontrola tresci", "mniej wtracen", "bardziej logiczny tok"]
+      ],
+      same: [
+        ["tok myslenia bez istotnych zmian", "spojnosc bez zmian", "bez nowej dezorganizacji"],
+        ["utrzymuja sie trudnosci w koncentracji", "utrzymuja sie ruminacje", "bez poprawy w organizacji"],
+        ["brak nowych tresci", "bez istotnej dynamiki", "stan podobny jak wczoraj"]
+      ],
+      worse: [
+        ["wieksza dezorganizacja wypowiedzi", "nasilenie rozkojarzenia", "gorsza spojnosci"],
+        ["nasilenie natretnych tresci", "wieksza gonitwa mysli", "wieksza ruminacja"],
+        ["trudniejsza komunikacja", "mniej logiczny tok", "wzrost chaosu wypowiedzi"]
+      ]
+    },
+    spostrzeganie: {
+      improve: [
+        ["mniej objawow wytworczych", "bez nasilania omamow", "mniej nasilenia urojen"],
+        ["lepszy krytycyzm wobec doswiadczen", "wiekszy dystans do objawow", "mniej zaabsorbowania"],
+        ["brak zachowan sugerujacych halucynowanie", "spadek nasilenia objawow", "wieksza kontrola"]
+      ],
+      same: [
+        ["objawy wytworcze bez zmian", "utrzymuja sie omamy", "utrzymuja sie urojenia"],
+        ["krytycyzm bez istotnych zmian", "dystans do objawow niezmienny", "obraz stabilny"],
+        ["brak nowych objawow", "bez istotnej dynamiki", "stan podobny jak wczoraj"]
+      ],
+      worse: [
+        ["nasilenie objawow wytworczych", "czestsze omamy", "wieksza intensywnosc urojen"],
+        ["mniejszy krytycyzm", "wieksze zaabsorbowanie", "mniej dystansu do objawow"],
+        ["zachowania sugerujace halucynowanie", "wzrost dezorganizacji", "pogorszenie obrazu"]
+      ]
+    },
+    sen: {
+      improve: [
+        ["sen lepszej jakosci", "bardziej regenerujacy sen", "wydluzenie snu"],
+        ["apetyt poprawiony", "lepsze laknienie", "stabilniejsze odzywianie"],
+        ["mniej wybudzen nocnych", "rzadsze pobudki", "bardziej ciagly sen"]
+      ],
+      same: [
+        ["sen bez istotnych zmian", "utrzymuja sie trudnosci snu", "bez poprawy snu"],
+        ["laknienie bez zmian", "utrzymuje sie obnizony apetyt", "apetyt stabilny"],
+        ["sen na podobnym poziomie", "bez istotnej dynamiki", "stan bez zmian"]
+      ],
+      worse: [
+        ["pogorszenie snu", "skrocenie snu", "wiecej wybudzen nocnych"],
+        ["spadek laknienia", "apetyt oslabiony", "gorsze odzywianie"],
+        ["wieksze trudnosci zasypiania", "bezsennosc", "sen przerywany"]
+      ]
+    },
+    wglad: {
+      improve: [
+        ["wglad lepszy", "wieksza krytycznosc", "bardziej realistyczna ocena stanu"],
+        ["lepsza gotowosc do leczenia", "wieksza akceptacja zaleceń", "wieksza otwartosc na interwencje"],
+        ["bardziej adekwatne wnioski", "mniejsza negacja problemu", "wiecej refleksji"]
+      ],
+      same: [
+        ["wglad bez istotnych zmian", "krytycyzm stabilny", "ocena stanu bez zmian"],
+        ["akceptacja leczenia bez zmian", "gotowosc stabilna", "bez istotnej dynamiki"],
+        ["utrzymuje sie ograniczony wglad", "bez poprawy krytycyzmu", "brak istotnej zmiany"]
+      ],
+      worse: [
+        ["wglad oslabil sie", "krytycyzm gorszy", "mniejsza refleksja nad stanem"],
+        ["mniejsza akceptacja leczenia", "wiekszy opor wobec zaleceń", "spadek gotowosci"],
+        ["wieksza negacja problemu", "mniej krytycyzmu", "trudniejsza akceptacja"]
+      ]
+    },
+    leczenie: {
+      improve: [
+        ["przyjmuje leki", "lepsza adherencja", "mniej odmow leczenia"],
+        ["tolerancja leczenia dobra", "brak nowych dzialan niepozadanych", "lepsza tolerancja"],
+        ["wymaga mniej zachet", "lepsza współpraca w leczeniu", "bardziej stabilna współpraca"]
+      ],
+      same: [
+        ["adherencja bez zmian", "przyjmowanie leczenia bez zmian", "stabilna tolerancja"],
+        ["okresowe zachęty potrzebne", "wymaga przypominania", "współpraca umiarkowana"],
+        ["brak istotnych zmian w leczeniu", "bez nowych problemow", "stan stabilny"]
+      ],
+      worse: [
+        ["odmowy leczenia", "gorsza adherencja", "mniejsza współpraca w leczeniu"],
+        ["nasilone zastrzeżenia co do leczenia", "wzrost oporu", "wiecej zachęt potrzebne"],
+        ["gorsza tolerancja leczenia", "wiecej dolegliwosci", "trudniejsza współpraca"]
+      ]
+    },
+    interwencje: {
+      improve: [
+        ["mniej interwencji doraźnych", "brak potrzeby dodatkowych działań", "rzadsze interwencje"],
+        ["rozmowy wspierające skuteczne", "lepsza reakcja na wsparcie", "mniejsze potrzeby interwencji"],
+        ["brak konieczności obserwacji wzmożonej", "zmniejszony nadzór", "mniejsza potrzeba kontroli"]
+      ],
+      same: [
+        ["interwencje bez zmian", "utrzymany standardowy nadzór", "bez nowych działań"],
+        ["rozmowy wspierające okresowo", "standardowe wsparcie", "bez dodatkowych działań"],
+        ["obserwacja rutynowa", "bez zmian w nadzorze", "brak nowych decyzji"]
+      ],
+      worse: [
+        ["konieczność zwiększenia nadzoru", "więcej interwencji doraźnych", "wzmożona obserwacja"],
+        ["częstsze rozmowy wspierające", "wymaga interwencji personelu", "potrzeba dodatkowego wsparcia"],
+        ["rozważenie ograniczeń", "potrzeba konsultacji", "większa czujność obserwacyjna"]
+      ]
+    },
+    funkcjonowanie: {
+      improve: [
+        ["lepsze funkcjonowanie w oddziale", "większy udział w aktywnościach", "mniej izolacji"],
+        ["mniej konfliktów", "lepsze relacje", "większa współpraca z grupą"],
+        ["większa aktywność", "lepsza organizacja dnia", "lepsza adaptacja"]
+      ],
+      same: [
+        ["funkcjonowanie bez zmian", "aktywność podobna jak wcześniej", "utrzymany poziom uczestnictwa"],
+        ["izolowanie bez zmian", "bez istotnej dynamiki", "brak nowych konfliktów"],
+        ["adaptacja na podobnym poziomie", "bez wyraźnych zmian", "stabilne funkcjonowanie"]
+      ],
+      worse: [
+        ["gorsze funkcjonowanie w oddziale", "większa izolacja", "spadek aktywności"],
+        ["więcej konfliktów", "trudniejsze relacje", "mniej współpracy z grupą"],
+        ["większe wycofanie", "mniejsza aktywność", "gorsza adaptacja"]
+      ]
+    }
+  };
+
+  const RAND_RISK = {
+    improve: [
+      "ryzyko niskie, bez zachowan autoagresywnych i agresywnych",
+      "brak sygnalow zagrozenia dla siebie i otoczenia",
+      "nie zglasza mysli S i H, bez incydentow",
+      "ryzyko stabilne, bez nasilonych zachowan ryzykownych"
+    ],
+    same: [
+      "ryzyko bez zmian, nie zglasza mysli S i H",
+      "brak nowych sygnalow zagrozenia",
+      "ryzyko stabilne, bez nowych incydentow",
+      "utrzymuje sie niski poziom ryzyka"
+    ],
+    worse: [
+      "ryzyko wymaga ponownej oceny",
+      "wzrost ryzyka zachowan autoagresywnych lub agresywnych",
+      "nasilenie sygnalow zagrozenia",
+      "ryzyko wzroslo w ostatniej dobie"
+    ]
+  };
+
+  const RAND_UNITS = {
+    Schizofrenia: {
+      omamy: {
+        improve: [
+          ["mniej omamow", "omamy mniej nasilone", "brak nowych omamow", "spadek intensywnosci doznań", "rzadsze omamy"],
+          ["bez dezorganizacji zachowania", "bez reakcji na glosy", "mniejsza absorpcja objawami", "lepszy dystans do doznań", "mniejsza podejrzliwosc"]
+        ],
+        same: [
+          ["omamy utrzymuja sie", "bez istotnych zmian w omamach", "objawy wytworcze bez zmian", "utrzymuja sie glosy", "obraz bez dynamiki"],
+          ["krytycyzm niezmienny", "dystans ograniczony", "okresowe nasluchiwanie", "stale skupienie na doswiadczeniach", "bez nowych zachowan"]
+        ],
+        worse: [
+          ["nasilenie omamow", "czestsze omamy", "wzrost intensywnosci doznań", "omamy bardziej dokuczliwe", "spadek kontroli"],
+          ["wieksza dezorganizacja", "wiecej reakcji na glosy", "mniejszy dystans do doznań", "nasilona podejrzliwosc", "zachowanie mniej przewidywalne"]
+        ]
+      },
+      urojenia: {
+        improve: [
+          ["slabsze nasilenie urojen", "mniejsza pewnosc przekonan", "urojenia mniej dominujace", "lepszy dystans do tresci", "mniej zaabsorbowania"],
+          ["wiekszy krytycyzm", "lepsza korekcja przekonan", "mniej konfliktow na tle urojen", "bardziej logiczny tok", "wieksza podatnosc na rozmowe"]
+        ],
+        same: [
+          ["urojenia utrzymuja sie", "bez zmian w tresciach urojeniowych", "obraz urojeniowy bez dynamiki", "stale przekonania", "utrzymuje sie podejrzliwosc"],
+          ["krytycyzm ograniczony", "maly dystans do przekonan", "brak korekty", "bez poprawy wgladu", "stan stabilny"]
+        ],
+        worse: [
+          ["nasilenie urojen", "wzrost pewnosci przekonan", "urojenia bardziej dominujace", "silniejsze zaabsorbowanie", "wieksza podejrzliwosc"],
+          ["mniejsza korekcja", "spadek krytycyzmu", "wiecej konfliktow", "tok myslenia mniej logiczny", "trudniejsza wspolpraca"]
+        ]
+      },
+      neg: {
+        improve: [
+          ["mniej wycofania", "wieksza aktywnosc", "lepsza inicjatywa", "mniej apatii", "wieksze zaangazowanie"],
+          ["wieksza ekspresja afektu", "lepszy kontakt", "mniej zobojtnienia", "wiecej reaktywnosci", "wieksza spontanicznosc"]
+        ],
+        same: [
+          ["objawy negatywne bez zmian", "utrzymuje sie wycofanie", "utrzymuje sie apatia", "bez dynamiki w aktywnosci", "stale obnizenie napedu"],
+          ["afekt splaszczony", "kontakt ograniczony", "mala spontanicznosc", "mala inicjatywa", "obraz stabilny"]
+        ],
+        worse: [
+          ["nasilenie wycofania", "wieksza apatia", "mniejsza aktywnosc", "spadek inicjatywy", "zobojtnienie"],
+          ["afekt bardziej splaszczony", "kontakt jeszcze bardziej ograniczony", "mniejsza spontanicznosc", "mniej reaktywnosci", "wieksze zahamowanie"]
+        ]
+      }
+    },
+    CHAD: {
+      mania: {
+        improve: [
+          ["mniej cech manii", "spadek napedu", "mniejsza gonitwa mysli", "mniej pobudzenia", "mniejsza drazliwosc"],
+          ["wieksza kontrola zachowania", "lepsza organizacja", "mniej impulsywnosci", "bardziej stabilny rytm dobowy", "mniej konfliktow"]
+        ],
+        same: [
+          ["cechy manii bez zmian", "naped bez zmian", "utrzymuje sie pobudzenie", "utrzymuje sie gonitwa mysli", "obraz stabilny"],
+          ["impulsywnosc utrzymana", "bez poprawy w kontroli", "rytm dobowy bez zmian", "brak dynamiki", "stan podobny jak wczoraj"]
+        ],
+        worse: [
+          ["nasilenie cech manii", "wzrost napedu", "wieksza gonitwa mysli", "wzrost pobudzenia", "nasilenie drazliwosci"],
+          ["impulsywnosc wyrazniejsza", "gorsza kontrola", "rozchwianie rytmu dobowego", "wiecej konfliktow", "mniejsza zdolnosc do hamowania"]
+        ]
+      },
+      ryzyko: {
+        improve: [
+          ["mniej zachowan ryzykownych", "mniejsza impulsywnosc", "lepsza kontrola", "mniej sklonności do ryzyka", "wieksza ostroznosc"],
+          ["brak incydentow", "bez nowych zgloszen", "stabilne zachowanie", "mniej niepokoju", "lepsza wspolpraca"]
+        ],
+        same: [
+          ["ryzyko bez zmian", "impulsywnosc utrzymana", "zachowania ryzykowne bez dynamiki", "stan bez zmian", "stabilny poziom ryzyka"],
+          ["brak nowych incydentow", "bez nowych zagrozen", "obraz stabilny", "bez istotnych zmian", "utrzymana ostroznosc"]
+        ],
+        worse: [
+          ["wzrost zachowan ryzykownych", "wieksza impulsywnosc", "mniejsza kontrola", "nasilenie sklonności do ryzyka", "spadek ostroznosci"],
+          ["incydenty ryzyka", "wieksza konfliktowosc", "trudniejsza regulacja", "wymaga wzmozonej obserwacji", "potrzeba interwencji"]
+        ]
+      },
+      sen: {
+        improve: [
+          ["sen dluzszy", "poprawa snu", "mniej wybudzen", "bardziej regenerujacy sen", "lepszy rytm dobowy"],
+          ["naped bardziej wyrownany", "mniej pobudzenia nocnego", "wieksza stabilnosc", "mniej objawow nocnych", "lepsze wyciszenie"]
+        ],
+        same: [
+          ["sen bez zmian", "utrzymuja sie trudnosci snu", "sen podobny jak wczoraj", "bez poprawy snu", "stan stabilny"],
+          ["naped bez zmian", "utrzymuje sie pobudzenie nocne", "brak dynamiki", "rytm dobowy bez zmian", "obraz bez zmian"]
+        ],
+        worse: [
+          ["pogorszenie snu", "skrocenie snu", "wiecej wybudzen", "bezsennosc", "gorszy rytm dobowy"],
+          ["naped mniej kontrolowany", "wiecej pobudzenia nocnego", "mniejsza stabilnosc", "gorsze wyciszenie", "wzrost napiecia nocnego"]
+        ]
+      }
+    },
+    Depresja: {
+      ruminacje: {
+        improve: [
+          ["mniej ruminacji", "mniej natrętnych mysli", "mniej samokrytyki", "mniej pesymizmu", "mniej czarnych scenariuszy"],
+          ["wieksza elastycznosc myslenia", "latwiejsza zmiana tematu", "mniejsze nasilenie negatywnych tresci", "wiekszy dystans do mysli", "mniejsza ruminacja"]
+        ],
+        same: [
+          ["ruminacje utrzymane", "mysli negatywne bez zmian", "samokrytyka bez zmian", "obraz bez dynamiki", "utrzymuje sie pesymizm"],
+          ["bez poprawy koncentracji", "trudnosc w odrywaniu sie od mysli", "stale natrętne tresci", "stan stabilny", "bez istotnych zmian"]
+        ],
+        worse: [
+          ["nasilenie ruminacji", "wiecej mysli negatywnych", "wieksza samokrytyka", "wiekszy pesymizm", "nasilenie rezygnacji"],
+          ["mniejsza elastycznosc myslenia", "trudniejsze oderwanie od mysli", "bardziej uporczywe tresci", "wzrost poczucia winy", "spadek nadziei"]
+        ]
+      },
+      naped: {
+        improve: [
+          ["naped nieco lepszy", "mniej spowolnienia", "wieksza aktywnosc", "mniej apatii", "mniej anhedonii"],
+          ["wieksza motywacja", "lepsza inicjatywa", "wieksza gotowosc do dzialania", "mniej zniechecenia", "wieksza energia"]
+        ],
+        same: [
+          ["naped bez zmian", "utrzymuje sie spowolnienie", "aktywność bez zmian", "obraz stabilny", "bez poprawy motywacji"],
+          ["mala inicjatywa", "utrzymuje sie anhedonia", "brak dynamiki", "stan bez zmian", "utrzymana apatia"]
+        ],
+        worse: [
+          ["nasilenie spowolnienia", "mniejsza aktywnosc", "wieksza apatia", "spadek energii", "nasilenie anhedonii"],
+          ["mniejsza motywacja", "spadek inicjatywy", "wieksze zniechecenie", "pogorszenie aktywnosci", "wzrost wycofania"]
+        ]
+      },
+      ryzyko: {
+        improve: [
+          ["ryzyko S i H niskie", "nie zglasza mysli S", "bez sygnalow zagrozenia", "ryzyko stabilne", "brak zachowan autoagresywnych"],
+          ["lepsza wspolpraca w rozmowie o ryzyku", "gotowosc do szukania pomocy", "lepszy kontakt w temacie", "wieksza otwartosc", "mniejszy niepokoj"]
+        ],
+        same: [
+          ["ryzyko bez zmian", "utrzymuje sie zaprzeczanie mysli S", "bez nowych sygnalow", "stan stabilny", "ryzyko oceniane jako niskie"],
+          ["rozmowa o ryzyku bez zmian", "brak nowych deklaracji", "bez dynamiki", "obraz stabilny", "bez incydentow"]
+        ],
+        worse: [
+          ["wzrost ryzyka S", "pojawiaja sie mysli rezygnacyjne", "nasilenie mysli S", "wzrost obciazenia", "ryzyko wymaga ponownej oceny"],
+          ["mniejsza otwartosc na rozmowe", "trudniejszy kontakt w temacie ryzyka", "wiecej niepokoju", "spadek wspolpracy", "potrzeba wzmozonego nadzoru"]
+        ]
+      }
+    },
+    OCD: {
+      natretnosci: {
+        improve: [
+          ["natręctwa mniej nasilone", "mniej mysli natrętnych", "mniejsza potrzeba rytualow", "spadek napiecia", "wieksza kontrola"],
+          ["lepszy dystans do natręctw", "mniejsza absorpcja", "wieksza tolerancja niepokoju", "wieksza elastycznosc", "lepsza kontrola"]
+        ],
+        same: [
+          ["natręctwa bez zmian", "mysli natrętne utrzymane", "rytualy bez zmian", "obraz stabilny", "bez poprawy"],
+          ["dystans ograniczony", "utrzymuje sie niepokoj", "brak dynamiki", "stan bez zmian", "bez istotnej poprawy"]
+        ],
+        worse: [
+          ["nasilenie natręctw", "wiecej mysli natrętnych", "wiecej rytualow", "wzrost napiecia", "mniejsza kontrola"],
+          ["mniejszy dystans", "wieksza absorpcja", "trudniejsze hamowanie rytualow", "wiekszy niepokoj", "gorsza elastycznosc"]
+        ]
+      },
+      unikanie: {
+        improve: [
+          ["mniej unikania", "wieksza ekspozycja", "latwiejsze wchodzenie w sytuacje", "mniej zachowan zabezpieczajacych", "wieksza tolerancja"],
+          ["wieksza gotowosc do pracy", "lepsza wspolpraca terapeutyczna", "wieksza aktywnosc", "wieksza motywacja", "mniej rezygnacji"]
+        ],
+        same: [
+          ["unikanie bez zmian", "utrzymuja sie zachowania zabezpieczajace", "obraz bez zmian", "bez poprawy w ekspozycji", "stan stabilny"],
+          ["wspolpraca bez zmian", "gotowosc do pracy bez zmian", "brak dynamiki", "bez nowych prob", "utrzymana ostroznosc"]
+        ],
+        worse: [
+          ["wzrost unikania", "mniejsza ekspozycja", "wieksza rezygnacja", "wiecej zachowan zabezpieczajacych", "spadek tolerancji"],
+          ["mniejsza motywacja do pracy", "gorsza wspolpraca", "wycofanie z ekspozycji", "wiekszy opor", "trudniejsza terapia"]
+        ]
+      }
+    },
+    SUD: {
+      glod: {
+        improve: [
+          ["glod mniejszy", "mniej mysli o substancjach", "lepsza kontrola impulsow", "mniejsza potrzeba uzycia", "mniejszy nacisk"],
+          ["lepsza motywacja do abstynencji", "wieksza gotowosc do leczenia", "wieksza refleksja", "lepsza samokontrola", "wieksza stabilnosc"]
+        ],
+        same: [
+          ["glod bez zmian", "mysli o substancjach utrzymane", "obraz bez zmian", "bez poprawy kontroli", "stan stabilny"],
+          ["motywacja bez zmian", "gotowosc do abstynencji bez zmian", "brak dynamiki", "utrzymuje sie ambiwalencja", "bez istotnych zmian"]
+        ],
+        worse: [
+          ["glod nasila sie", "wieksza potrzeba uzycia", "wiecej mysli o substancjach", "spadek kontroli", "wieksza pokusa"],
+          ["mniejsza motywacja do abstynencji", "wiecej ambiwalencji", "wzrost ryzyka nawrotu", "spadek samokontroli", "wiecej impulsow"]
+        ]
+      },
+      odstaw: {
+        improve: [
+          ["objawy odstawienne slabna", "mniej dolegliwosci", "lepsza tolerancja", "mniejsze napiecie somatyczne", "mniej drzenia"],
+          ["stabilizacja objawow", "lepszy sen", "mniej niepokoju", "ustepowanie potliwosci", "mniej somatycznych dolegliwosci"]
+        ],
+        same: [
+          ["objawy odstawienne bez zmian", "utrzymuja sie dolegliwosci", "obraz stabilny", "bez poprawy", "stan bez zmian"],
+          ["sen bez zmian", "napiecie bez zmian", "brak dynamiki", "utrzymuje sie niepokoj", "bez nowych objawow"]
+        ],
+        worse: [
+          ["nasilenie objawow odstawiennych", "wiecej dolegliwosci", "wzrost napiecia", "gorsza tolerancja", "nasilenie somatyki"],
+          ["pogorszenie snu", "wiecej niepokoju", "wzrost potliwosci", "drzenia bardziej nasilone", "trudniejsza stabilizacja"]
+        ]
+      },
+      wsp: {
+        improve: [
+          ["lepsza wspolpraca w leczeniu", "mniej odmow", "wieksza akceptacja programu", "bardziej stabilna wspolpraca", "wieksza gotowosc"],
+          ["uczestnictwo w terapii lepsze", "wieksza aktywnosc w oddziale", "wieksza otwartosc", "lepsza komunikacja", "wieksze zaangazowanie"]
+        ],
+        same: [
+          ["wspolpraca bez zmian", "utrzymuje sie ambiwalencja", "brak dynamiki", "obraz stabilny", "bez istotnych zmian"],
+          ["uczestnictwo bez zmian", "aktywnosc bez zmian", "brak nowych decyzji", "utrzymana postawa", "stan bez zmian"]
+        ],
+        worse: [
+          ["wspolpraca pogorszona", "wiecej odmow", "mniejsza akceptacja", "wzrost oporu", "mniejsza gotowosc"],
+          ["mniejsza aktywnosc w terapii", "wycofanie z zajec", "gorsza komunikacja", "wieksza rezygnacja", "mniej zaangazowania"]
+        ]
+      }
+    },
+    Otepienie: {
+      orient: {
+        improve: [
+          ["orientacja lepsza", "mniej dezorientacji", "lepsze rozpoznawanie miejsca", "wieksza swiadomosc", "mniejsze splatanie"],
+          ["spokojniejszy przebieg", "mniej konfabulacji", "lepsza reakcja na wskazowki", "bardziej stabilny kontakt", "mniej niepokoju"]
+        ],
+        same: [
+          ["orientacja bez zmian", "utrzymuje sie dezorientacja", "obraz stabilny", "bez poprawy w orientacji", "stan bez zmian"],
+          ["kontakt bez zmian", "bez nowych epizodow splatania", "brak dynamiki", "stale trudnosci", "obraz bez zmian"]
+        ],
+        worse: [
+          ["pogorszenie orientacji", "wiecej dezorientacji", "wieksze splatanie", "mniejsza swiadomosc", "gorsza orientacja"],
+          ["wiecej konfabulacji", "gorsza reakcja na wskazowki", "bardziej labilny kontakt", "wiecej niepokoju", "trudniejszy przebieg"]
+        ]
+      },
+      zach: {
+        improve: [
+          ["zachowanie spokojniejsze", "mniej pobudzenia", "mniej niepokoju", "lepsza regulacja", "mniej konfliktow"],
+          ["mniej epizodow bledzenia", "mniej pobudzenia wieczornego", "lepszy sen", "mniej krzykow", "mniej opoznien"]
+        ],
+        same: [
+          ["zachowanie bez zmian", "pobudzenie bez zmian", "obraz stabilny", "bez poprawy", "stan bez zmian"],
+          ["utrzymuja sie trudnosci wieczorne", "bez nowych incydentow", "brak dynamiki", "stan stabilny", "bez zmian"]
+        ],
+        worse: [
+          ["nasilenie pobudzenia", "wieksza agresja", "wiecej epizodow niepokoju", "trudniejsze zachowanie", "wzrost konfliktow"],
+          ["wiecej bledzenia", "wiecej epizodow wieczornych", "pogorszenie snu", "wiecej krzykow", "wiecej trudnosci"]
+        ]
+      }
+    },
+    ASD_ADHD: {
+      bodzce: {
+        improve: [
+          ["lepsza tolerancja bodzcow", "mniej przeciazenia", "mniej nadwrazliwosci", "spokojniejsza reakcja", "wieksza regulacja"],
+          ["mniej wycofania", "wieksza gotowosc do kontaktu", "lepsze radzenie sobie", "mniej unikania", "mniejszy dyskomfort"]
+        ],
+        same: [
+          ["tolerancja bodzcow bez zmian", "utrzymuje sie przeciazenie", "obraz stabilny", "bez poprawy", "stan bez zmian"],
+          ["kontakt bez zmian", "brak dynamiki", "utrzymuje sie wycofanie", "bez nowych zachowan", "obraz stabilny"]
+        ],
+        worse: [
+          ["pogorszenie tolerancji bodzcow", "wieksze przeciazenie", "wzrost nadwrazliwosci", "silniejsze reakcje", "mniejsza regulacja"],
+          ["wiecej unikania", "wieksze wycofanie", "mniejsza gotowosc do kontaktu", "wzrost dyskomfortu", "gorsza adaptacja"]
+        ]
+      },
+      imp: {
+        improve: [
+          ["mniej impulsywnosci", "lepsza organizacja", "wieksza przewidywalnosc", "lepsza kontrola", "mniej chaotycznosci"],
+          ["lepsza struktura dnia", "wieksza konsekwencja", "wieksza zdolnosc do planowania", "mniej konfliktow", "lepsza koncentracja"]
+        ],
+        same: [
+          ["impulsywnosc bez zmian", "organizacja bez zmian", "stan stabilny", "bez poprawy", "obraz bez zmian"],
+          ["struktura dnia bez zmian", "brak dynamiki", "utrzymuja sie trudnosci", "bez zmian", "obraz stabilny"]
+        ],
+        worse: [
+          ["wzrost impulsywnosci", "gorsza organizacja", "mniejsza kontrola", "wieksza chaotycznosc", "trudniejsze zachowanie"],
+          ["trudniejsza struktura dnia", "wieksze konflikty", "mniejsza koncentracja", "wiecej rozproszenia", "gorsza przewidywalnosc"]
+        ]
+      }
+    },
+    PTSD: {
+      intru: {
+        improve: [
+          ["mniej intruzji", "mniej koszmarow", "slabsze wspomnienia", "mniej nawrotow", "mniejsza intensywnosc"],
+          ["lepsza kontrola objawow", "mniejsza reaktywnosc", "lepsza stabilnosc", "mniej zalewania", "mniejszy dyskomfort"]
+        ],
+        same: [
+          ["intruzje bez zmian", "koszmary bez zmian", "obraz stabilny", "bez poprawy", "stan bez zmian"],
+          ["reaktywnosc bez zmian", "brak dynamiki", "utrzymuja sie objawy", "bez nowych zmian", "obraz bez zmian"]
+        ],
+        worse: [
+          ["nasilenie intruzji", "wiecej koszmarow", "nasilenie wspomnien", "wiecej nawrotow", "wieksza intensywnosc"],
+          ["wieksza reaktywnosc", "gorsza kontrola objawow", "wiecej zalewania", "silniejszy dyskomfort", "trudniejsze funkcjonowanie"]
+        ]
+      },
+      pob: {
+        improve: [
+          ["mniejsze pobudzenie", "lepszy sen", "mniej czujnosci", "mniej reaktywnosci", "lepsza regulacja"],
+          ["mniej napiecia", "mniej wybuchow", "spokojniejsze zachowanie", "lepsza tolerancja bodzcow", "mniej unikow"]
+        ],
+        same: [
+          ["pobudzenie bez zmian", "czujnosc bez zmian", "obraz stabilny", "bez poprawy", "stan bez zmian"],
+          ["napiecie bez zmian", "brak dynamiki", "utrzymuja sie wybuchy", "bez nowych zmian", "obraz stabilny"]
+        ],
+        worse: [
+          ["nasilenie pobudzenia", "wiecej czujnosci", "gorszy sen", "wzrost reaktywnosci", "wieksze napiecie"],
+          ["wiecej wybuchow", "gorsza tolerancja bodzcow", "wzrost unikow", "mniej stabilne zachowanie", "wiekszy dyskomfort"]
+        ]
+      }
+    }
+  };
+
+  const combo = (def) => {
+    if (!def) return "";
+    if (!Array.isArray(def)) return String(def);
+    if (def.length && Array.isArray(def[0])) return def.map(pick).filter(Boolean).join(", ");
+    return pick(def);
+  };
+
+  const randLine = (key, trend) => {
+    const def = RAND_LINES[key] || {};
+    const t = def[trend] || def.same || def.any;
+    return combo(t);
+  };
+
+  const randRisk = (trend) => combo(RAND_RISK[trend] || RAND_RISK.same);
+
+  const introDaily = (trend, detail) => {
+    const ctx = readText("obs.meta.context");
+    const base = `W dniu dzisiejszym (${dateStr()})` + (ctx ? `, ${ctx}` : "") + ".";
+
+    if (!trend || !TREND_VARIANTS[trend]) return base;
+    const mode = detail === "long" ? "long" : "short";
+    const v = TREND_VARIANTS[trend][mode];
+    if (!v) return base;
+    const parts = [];
+    if (v.intro) parts.push(pick(v.intro));
+    if (v.state) parts.push(pick(v.state));
+    if (v.coop) parts.push(pick(v.coop));
+    if (v.extra) parts.push(pick(v.extra));
+    return `${base} ${parts.filter(Boolean).join(" ")}`;
+  };
+
+  const buildDaily = (trend, detail) => {
+    const lines = [];
+    lines.push(introDaily(trend, detail));
+
+    lines.push(lineFrom("Kontakt i wspólpraca", "obs.base.kontakt", "kontakt", randLine("kontakt", trend)));
+    lines.push(lineFrom("Zachowanie i psychomotoryka", "obs.base.zachowanie", "zachowanie", randLine("zachowanie", trend)));
+    lines.push(lineFrom("Nastrój i afekt / naped", "obs.base.nastroj", "nastroj", randLine("nastroj", trend)));
+    lines.push(lineFrom("Myslenie", "obs.base.myslenie", null, randLine("myslenie", trend)));
+    lines.push(lineFrom("Spostrzeganie / wytwórczosc", "obs.base.spostrzeganie", "spostrzeganie", randLine("spostrzeganie", trend)));
+    lines.push(lineFrom("Sen i laknienie", "obs.base.sen", "sen", randLine("sen", trend)));
+    lines.push(lineFrom("Wglad i krytycyzm", "obs.base.wglad", null, randLine("wglad", trend)));
+
+    lines.push(buildRiskLine(trend));
+
+    if (detail === "long") {
+      lines.push(lineFrom("Adherencja i tolerancja leczenia", "obs.base.leczenie", "leczenie", randLine("leczenie", trend)));
+      lines.push(lineFrom("Interwencje", "obs.base.interwencje", "interwencje", randLine("interwencje", trend)));
+      lines.push(lineFrom("Funkcjonowanie na oddziale", "obs.base.funkcjonowanie", null, randLine("funkcjonowanie", trend)));
+    }
+
+    const extra = readText("obs.base.incydenty");
+    if (extra) lines.push(`Dodatkowe zdarzenia: ${sentence(extra)}`);
+
+    const unit = readText("obs.meta.unit");
+    const unitHints = collectUnitHints(unit, trend);
+    if (unit && unitHints.length) {
+      lines.push(`Aspekt ${unit}: ${unitHints.join(" ")}`.trim());
+    }
+
+    return lines.filter(Boolean).join(" ");
+  };
+
+  const buildIncident = () => {
+    const t = readText("obs.incident.time");
+    const place = readText("obs.incident.place");
+    const desc = readText("obs.incident.desc");
+
+    let intro = `W dniu dzisiejszym (${dateStr()})`;
+    if (t) intro += ` o godz. ${t}`;
+    if (place) intro += ` w ${place}`;
+    intro += desc ? ` odnotowano incydent: ${sentence(desc)}` : " odnotowano incydent.";
+
+    const parts = [
+      intro,
+      lineFrom("Czynniki wyzwalajace", "obs.incident.triggers"),
+      lineFrom("Stan psychiczny w trakcie", "obs.incident.state"),
+      lineFrom("Ryzyko i zagrozenie", "obs.incident.risk"),
+      lineFrom("Interwencje", "obs.incident.interventions"),
+      lineFrom("Skutek interwencji", "obs.incident.outcome"),
+      lineFrom("Plan i zalecenia", "obs.incident.plan")
+    ];
+
+    return parts.filter(Boolean).join(" ");
+  };
+  const planTemplate = (trend, detail) => {
+    const templates = {
+      improve: {
+        short: "Kontynuowac dotychczasowe postepowanie. Utrzymac obserwacje i biezaca ocene ryzyka.",
+        long: "Kontynuowac leczenie. Wzmacniac psychoedukacje i prace terapeutyczna. Utrzymac codzienna ocene ryzyka oraz monitorowac sen i objawy wytwórcze."
+      },
+      same: {
+        short: "Kontynuowac obserwacje i leczenie. Monitorowac ryzyko oraz tolerancje leczenia.",
+        long: "Kontynuowac dotychczasowe postepowanie. Utrzymac strukture dnia, zachecac do aktywnosci. Monitorowac ryzyko, sen, apetyt i objawy wytwórcze."
+      },
+      worse: {
+        short: "Zwiekszyc czujnosc obserwacyjna. Ponownie ocenic ryzyko. Rozwazyc modyfikacje leczenia.",
+        long: "Zwiekszyc nadzór i czestotliwosc obserwacji. Ponownie ocenic ryzyko S i H. Rozwazyc modyfikacje leczenia oraz konsultacje. Udokumentowac czynniki wyzwalajace i plan bezpieczenstwa."
+      }
+    };
+    if (trend && templates[trend]) {
+      return templates[trend][detail === "long" ? "long" : "short"];
+    }
+    return "Kontynuowac obserwacje i leczenie. Monitorowac ryzyko i wspólprace z leczeniem.";
+  };
+
+  const collectUnitHints = (unit, trend) => {
+    const map = {
+      Schizofrenia: [
+        { key: "obs.unit.schiz.omamy", randKey: "omamy" },
+        { key: "obs.unit.schiz.urojenia", randKey: "urojenia" },
+        { key: "obs.unit.schiz.neg", randKey: "neg" }
+      ],
+      CHAD: [
+        { key: "obs.unit.chad.mania", randKey: "mania" },
+        { key: "obs.unit.chad.ryzyko", randKey: "ryzyko" },
+        { key: "obs.unit.chad.sen", randKey: "sen" }
+      ],
+      Depresja: [
+        { key: "obs.unit.dep.ruminacje", randKey: "ruminacje" },
+        { key: "obs.unit.dep.naped", randKey: "naped" },
+        { key: "obs.unit.dep.ryzyko", randKey: "ryzyko" }
+      ],
+      OCD: [
+        { key: "obs.unit.ocd.natretnosci", randKey: "natretnosci" },
+        { key: "obs.unit.ocd.unikanie", randKey: "unikanie" }
+      ],
+      SUD: [
+        { key: "obs.unit.sud.glod", randKey: "glod" },
+        { key: "obs.unit.sud.odstaw", randKey: "odstaw" },
+        { key: "obs.unit.sud.wsp", randKey: "wsp" }
+      ],
+      Otepienie: [
+        { key: "obs.unit.otep.orient", randKey: "orient" },
+        { key: "obs.unit.otep.zach", randKey: "zach" }
+      ],
+      ASD_ADHD: [
+        { key: "obs.unit.asd.bodzce", randKey: "bodzce" },
+        { key: "obs.unit.asd.imp", randKey: "imp" }
+      ],
+      PTSD: [
+        { key: "obs.unit.ptsd.intru", randKey: "intru" },
+        { key: "obs.unit.ptsd.pob", randKey: "pob" }
+      ]
+    };
+    const list = map[unit] || [];
+    const out = [];
+    list.forEach((item) => {
+      const t = readText(item.key);
+      if (t) {
+        out.push(sentence(t));
+        return;
+      }
+      if (trend && RAND_UNITS[unit] && RAND_UNITS[unit][item.randKey]) {
+        const def = RAND_UNITS[unit][item.randKey];
+        const picked = combo(def[trend] || def.same);
+        if (picked) out.push(sentence(picked));
+      }
+    });
+    return out;
+  };
+
+  const generate = ({ trend, detail } = {}) => {
+    const wantDaily = readBool("obs.flags.daily");
+    const wantIncident = readBool("obs.flags.incident");
+    const hasAny = wantDaily || wantIncident;
+
+    const d = detail || readText("obs.meta.detail") || "short";
+    const parts = [];
+
+    if (wantDaily || !hasAny) parts.push(buildDaily(trend, d));
+    if (wantIncident) parts.push(buildIncident());
+
+    const finalText = parts.filter(Boolean).join("\n\n");
+    const noteEl = document.querySelector(`[data-key="obs.out.note"]`);
+    if (noteEl) noteEl.value = finalText;
+
+    const preferredPlan = readText("obs.base.plan") || readText("obs.incident.plan");
+    const planEl = document.querySelector(`[data-key="obs.out.plan"]`);
+    if (planEl) planEl.value = preferredPlan || planTemplate(trend, d);
+
+    window.markEdited && window.markEdited();
+  };
+
+  const appendToBundle = () => {
+    const note = readText("obs.out.note");
+    const plan = readText("obs.out.plan");
+    if (!note && !plan) return;
+
+    const block = [note, plan ? `Plan: ${plan}` : ""].filter(Boolean).join("\n");
+    const existing = readText("obs.out.bundle");
+    const merged = existing ? `${existing}\n\n${block}` : block;
+    const el = document.querySelector(`[data-key="obs.out.bundle"]`);
+    if (el) el.value = merged;
+    window.markEdited && window.markEdited();
+  };
+
+  const clearBundle = () => {
+    const el = document.querySelector(`[data-key="obs.out.bundle"]`);
+    if (el) el.value = "";
+    window.markEdited && window.markEdited();
+  };
+
+  const renderUnit = () => {
+    const unitMount = document.getElementById("obsUnitMount");
+    if (!unitMount) return;
+    const unit = readText("obs.meta.unit");
+    const map = {
+      Schizofrenia: "tplObsUnit_Schizofrenia",
+      CHAD: "tplObsUnit_CHAD",
+      Depresja: "tplObsUnit_Depresja",
+      OCD: "tplObsUnit_OCD",
+      SUD: "tplObsUnit_SUD",
+      Otepienie: "tplObsUnit_Otepienie",
+      ASD_ADHD: "tplObsUnit_ASD_ADHD",
+      PTSD: "tplObsUnit_PTSD"
+    };
+    const tplId = map[unit];
+    unitMount.innerHTML = "";
+    if (!tplId) return;
+    const tpl = document.getElementById(tplId);
+    if (!tpl) return;
+    unitMount.appendChild(tpl.content.cloneNode(true));
+    window.markEdited && window.markEdited();
+  };
+
+  const clearUnitModules = () => {
+    const unitMount = document.getElementById("obsUnitMount");
+    if (unitMount) unitMount.innerHTML = "";
+    window.markEdited && window.markEdited();
+  };
+
+  const ensureDefaults = () => {
+    $$('[data-default-checked]').forEach((el) => {
+      if (el.type === "checkbox" && !el.checked) el.checked = true;
+    });
+  };
+
+  const toggleIncidentCard = () => {
+    const card = document.getElementById("obsIncidentCard");
+    if (!card) return;
+    card.style.display = readBool("obs.flags.incident") ? "" : "none";
+  };
+
   const mount = () => {
     const host = document.getElementById("obsRoot");
     const tpl = document.getElementById("tplObs");
@@ -228,167 +1558,27 @@
     host.innerHTML = "";
     host.appendChild(tpl.content.cloneNode(true));
 
-    const unitMount = document.getElementById("obsUnitMount");
+    ensureDefaults();
+    toggleIncidentCard();
 
-    const getUnit = () => String(document.getElementById("obs_unit")?.value || "").trim();
-    const getDetail = () => String(document.getElementById("obs_detail")?.value || "short").trim();
+    $("#obs_unit")?.addEventListener("change", renderUnit);
+    $("#btnObsAddUnit")?.addEventListener("click", renderUnit);
+    $("#btnObsClearUnit")?.addEventListener("click", clearUnitModules);
 
-    const clearUnitModules = () => {
-      if (unitMount) unitMount.innerHTML = "";
-      window.markEdited && window.markEdited();
-    };
+    $("[data-key=\"obs.flags.incident\"]")?.addEventListener("change", toggleIncidentCard);
 
-    const addUnitModule = () => {
-      const unit = getUnit();
-      if (!unit) return;
+    $("#btnObsGenFromData")?.addEventListener("click", () => generate({}));
+    $("#btnObsGenImprove")?.addEventListener("click", () => generate({ trend: "improve", detail: readText("obs.meta.detail") }));
+    $("#btnObsGenSame")?.addEventListener("click", () => generate({ trend: "same", detail: readText("obs.meta.detail") }));
+    $("#btnObsGenWorse")?.addEventListener("click", () => generate({ trend: "worse", detail: readText("obs.meta.detail") }));
 
-      const map = {
-        Schizofrenia: "tplObsUnit_Schizofrenia",
-        CHAD: "tplObsUnit_CHAD",
-        Depresja: "tplObsUnit_Depresja",
-        SUD: "tplObsUnit_SUD"
-      };
-
-      const tplId = map[unit];
-      if (!tplId) return;
-
-      if (unitMount && unitMount.querySelector(`[data-unit="${unit}"]`)) return;
-
-      const tpl = document.getElementById(tplId);
-      if (!tpl || !unitMount) return;
-
-      const wrap = document.createElement("div");
-      wrap.dataset.unit = unit;
-      wrap.appendChild(tpl.content.cloneNode(true));
-      unitMount.appendChild(wrap);
-
-      window.markEdited && window.markEdited();
-    };
-
-    const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
-
-    const read = (key) => {
-      const node = document.querySelector(`[data-key="${key}"]`);
-      return node ? String(node.value || "").trim() : "";
-    };
-
-    const write = (key, val) => {
-      const node = document.querySelector(`[data-key="${key}"]`);
-      if (!node) return;
-      node.value = val;
-    };
-
-    const normalize = (x) => x && x.length ? x : "";
-
-    const gen = ({ trend, detail }) => {
-      const base = "W dniu dzisiejszym";
-
-      const kontakt = read("obs.base.kontakt");
-      const motoryka = read("obs.base.motoryka");
-      const nastroj = read("obs.base.nastroj");
-      const wytworcze = read("obs.base.wytworcze");
-      const sen = read("obs.base.sen");
-      const ryzyko = read("obs.base.ryzyko");
-      const leczenie = read("obs.base.leczenie");
-      const incyd = read("obs.base.incydenty");
-      const terapia = read("obs.base.terapia");
-
-      const unit = getUnit();
-
-      const unitHints = {
-        Schizofrenia: [read("obs.unit.schiz.omamy"), read("obs.unit.schiz.urojenia"), read("obs.unit.schiz.neg")].filter(Boolean),
-        CHAD: [read("obs.unit.chad.mania"), read("obs.unit.chad.ryzyko")].filter(Boolean),
-        Depresja: [read("obs.unit.dep.ruminacje"), read("obs.unit.dep.naped")].filter(Boolean),
-        SUD: [read("obs.unit.sud.glod"), read("obs.unit.sud.odstaw")].filter(Boolean)
-      };
-
-      const trendPhrases = {
-        improve: {
-          short: [
-            `${base} stan psychiczny stabilniejszy, pacjent spokojniejszy, w lepszym kontakcie. Współpraca lepsza. Bez zachowań autoagresywnych.`
-          ],
-          long: [
-            `${base} pacjent w kontakcie bardziej adekwatnym, współpracuje. Nasilenie napięcia mniejsze. Nie obserwuje się zachowań sugerujących pogorszenie stanu.`
-          ]
-        },
-        same: {
-          short: [
-            `${base} stan psychiczny bez istotnych zmian. Kontakt logiczny, współpraca zachowana. Bez nowych incydentów.`
-          ],
-          long: [
-            `${base} obraz kliniczny zasadniczo stabilny. Funkcjonowanie w oddziale bez istotnych odchyleń od poprzedniej obserwacji.`
-          ]
-        },
-        worse: {
-          short: [
-            `${base} pacjent bardziej napięty i drażliwy, współpraca gorsza. Wymaga zwiększonej czujności i ponownej oceny ryzyka.`
-          ],
-          long: [
-            `${base} obserwuje się pogorszenie regulacji afektu i zachowania, większą chwiejność oraz trudniejszą współpracę. Zalecana ponowna ocena ryzyka i modyfikacja postępowania.`
-          ]
-        }
-      };
-
-      const intro = pick((trendPhrases[trend] && trendPhrases[trend][detail]) || trendPhrases.same.short);
-
-      const piecesShort = [
-        intro,
-        normalize(kontakt ? `Kontakt i współpraca: ${kontakt}.` : ""),
-        normalize(motoryka ? `Zachowanie i psychomotoryka: ${motoryka}.` : ""),
-        normalize(nastroj ? `Nastrój i afekt: ${nastroj}.` : ""),
-        normalize(wytworcze ? `Objawy wytwórcze: ${wytworcze}.` : ""),
-        normalize(sen ? `Sen i łaknienie: ${sen}.` : ""),
-        normalize(ryzyko ? `Ryzyko S i H: ${ryzyko}.` : "")
-      ].filter(Boolean);
-
-      const piecesLong = [
-        ...piecesShort,
-        normalize(leczenie ? `Adherencja i tolerancja leczenia: ${leczenie}.` : ""),
-        normalize(incyd ? `Incydenty: ${incyd}.` : ""),
-        normalize(terapia ? `Udział w terapii: ${terapia}.` : "")
-      ].filter(Boolean);
-
-      const unitPart = (unit && unitHints[unit] && unitHints[unit].length)
-        ? `Aspekt ${unit}: ${unitHints[unit].join(" ")}.`
-        : "";
-
-      const note = (detail === "long" ? piecesLong : piecesShort).join(" ");
-      const finalNote = unitPart ? `${note} ${unitPart}` : note;
-
-      write("obs.out.note", finalNote);
-
-      const planTemplates = {
-        improve: {
-          short: "Kontynuować dotychczasowe postępowanie. Utrzymać obserwację i bieżącą ocenę ryzyka.",
-          long: "Kontynuować leczenie. Wzmacniać psychoedukację i pracę terapeutyczną. Utrzymać codzienną ocenę ryzyka oraz monitorować sen i objawy wytwórcze."
-        },
-        same: {
-          short: "Kontynuować obserwację i leczenie. Monitorować ryzyko oraz tolerancję leczenia.",
-          long: "Kontynuować dotychczasowe postępowanie. Utrzymać strukturę dnia, zachęcać do aktywności. Monitorować ryzyko, sen, apetyt i ewentualne objawy wytwórcze."
-        },
-        worse: {
-          short: "Zwiększyć czujność obserwacyjną. Ponownie ocenić ryzyko. Rozważyć modyfikację leczenia według wskazań klinicznych.",
-          long: "Zwiększyć nadzór i częstotliwość obserwacji. Ponownie ocenić ryzyko S i H. Rozważyć modyfikację leczenia oraz ewentualne konsultacje. Udokumentować czynniki wyzwalające i plan bezpieczeństwa."
-        }
-      };
-
-      const plan = ((planTemplates[trend] && planTemplates[trend][detail]) || planTemplates.same.short);
-      write("obs.out.plan", plan);
-
-      window.markEdited && window.markEdited();
-    };
-
-    document.getElementById("btnObsAddUnit")?.addEventListener("click", addUnitModule);
-    document.getElementById("btnObsClearUnit")?.addEventListener("click", clearUnitModules);
-
-    document.getElementById("btnObsGenImprove")?.addEventListener("click", () => gen({ trend: "improve", detail: getDetail() }));
-    document.getElementById("btnObsGenSame")?.addEventListener("click", () => gen({ trend: "same", detail: getDetail() }));
-    document.getElementById("btnObsGenWorse")?.addEventListener("click", () => gen({ trend: "worse", detail: getDetail() }));
+    $("#btnObsAppend")?.addEventListener("click", appendToBundle);
+    $("#btnObsClearBundle")?.addEventListener("click", clearBundle);
 
     window.Obs = {
-      generate: gen,
-      getDetail: () => getDetail(),
-      addUnitModule,
+      generate,
+      getDetail: () => readText("obs.meta.detail") || "short",
+      addUnitModule: renderUnit,
       clearUnitModules
     };
   };

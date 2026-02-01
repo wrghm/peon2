@@ -236,9 +236,41 @@
     }
   };
 
+  function migrateMSE(stateObj) {
+    if (!stateObj) return stateObj;
+    if (!stateObj.modules) stateObj.modules = {};
+
+    const legacyKeys = ["mse_legacy", "mse2", "status_mentalis", "mse_old"];
+    const hasNew = Boolean(stateObj.modules.mse);
+
+    for (const k of legacyKeys) {
+      if (stateObj.modules[k] && !hasNew) {
+        stateObj.modules.mse = stateObj.modules[k];
+      }
+      if (stateObj.modules[k]) {
+        delete stateObj.modules[k];
+      }
+    }
+
+    if (Array.isArray(stateObj.moduleOrder)) {
+      const filtered = [];
+      const seen = new Set();
+      for (const id of stateObj.moduleOrder) {
+        const mapped = legacyKeys.includes(id) ? "mse" : id;
+        if (!seen.has(mapped)) {
+          seen.add(mapped);
+          filtered.push(mapped);
+        }
+      }
+      stateObj.moduleOrder = filtered;
+    }
+
+    return stateObj;
+  }
+
   const restore = () => {
     readMetaFromUI();
-    const payload = loadLocal(state.meta.patientId);
+    const payload = migrateMSE(loadLocal(state.meta.patientId));
     if (!payload) return toast("Brak zapisanego stanu", "Nie znaleziono danych w pamięci lokalnej");
 
     state.meta = payload.meta || state.meta;
@@ -563,7 +595,7 @@
     bindUI();
 
     readMetaFromUI();
-    const payload = loadLocal(state.meta.patientId);
+    const payload = migrateMSE(loadLocal(state.meta.patientId));
 
     if (payload && payload.fields) {
       state.meta = payload.meta || state.meta;
@@ -600,6 +632,50 @@
     coJeszcze,
     buildReportText
   };
+
+  // --- Step 1: State shim skeleton (no behavior change yet) ---
+  const STATE_KEY = "PEON2_V4";
+
+  const AppState = (() => {
+    const listeners = {};
+    const on = (evt, fn) => {
+      listeners[evt] = listeners[evt] || [];
+      listeners[evt].push(fn);
+    };
+    const emit = (evt, payload) => (listeners[evt] || []).forEach(fn => fn(payload));
+
+    const loadLegacy = () => {
+      const legacy = {
+        v3: localStorage.getItem("PEON2_PSY_FORM_V3__LAST"),
+        v2Modules: localStorage.getItem("PEON2_PSY_FORM_V2__MODULES__LAST"),
+        windowSTATE: window.STATE || null,
+        peon2Store: window.PEON2_STORE || null,
+        peon2State: window.PEON2_STATE || null
+      };
+      return legacy;
+    };
+
+    const getState = () => {
+      try { return JSON.parse(localStorage.getItem(STATE_KEY)); }
+      catch (_) { return null; }
+    };
+
+    const setState = (next) => {
+      localStorage.setItem(STATE_KEY, JSON.stringify(next || {}));
+      emit("state:changed", next);
+    };
+
+    const save = () => emit("state:save");
+
+    return { getState, setState, save, on, loadLegacy };
+  })();
+
+  window.App = window.App || {};
+  window.App.getState = AppState.getState;
+  window.App.setState = AppState.setState;
+  window.App.save = AppState.save;
+  window.App.on = AppState.on;
+  window.App._loadLegacy = AppState.loadLegacy;
 
   document.addEventListener("DOMContentLoaded", init);
 })();
