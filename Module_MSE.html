@@ -51,19 +51,19 @@
     return `
       <section class="peon-card" id="mseCard">
         <style>
-          #mseCard.peon-card{margin:12px 0;padding:14px;border:1px solid rgba(0,0,0,0.16);border-radius:14px;background:#fff}
+          #mseCard.peon-card{margin:12px 0;padding:14px;border:1px solid var(--line);border-radius:14px;background:var(--panel);box-shadow:var(--shadow-soft)}
           #mseCard h2{margin:0 0 10px 0;font-size:18px;letter-spacing:.2px}
           #mseCard h3{margin:14px 0 8px 0;font-size:14px;opacity:.9}
           #mseCard .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-          #mseCard .box{padding:10px;border-radius:12px;border:1px solid rgba(0,0,0,0.10);background:rgba(0,0,0,0.02)}
+          #mseCard .box{padding:10px;border-radius:12px;border:1px solid var(--line2);background:var(--panel-soft)}
           #mseCard .row{display:flex;align-items:flex-start;gap:10px;margin:7px 0;font-size:13px;line-height:1.25}
           #mseCard .row input[type="checkbox"]{transform:translateY(2px)}
           #mseCard .textrow{display:grid;grid-template-columns:170px 1fr;gap:10px;align-items:center;margin:8px 0}
-          #mseCard .label{font-size:12px;opacity:.85}
-          #mseCard input[type="text"]{width:100%;padding:9px 10px;border-radius:12px;border:1px solid rgba(0,0,0,0.18);background:#fff;font-size:13px}
+          #mseCard .label{font-size:12px;color:var(--muted2)}
+          #mseCard input[type="text"]{width:100%;padding:9px 10px;border-radius:12px;border:1px solid var(--line);background:var(--panel);color:var(--text);font-size:13px}
           #mseCard .actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
-          #mseCard button{padding:10px 12px;border-radius:12px;border:1px solid rgba(0,0,0,0.2);background:#fff;font-size:13px;cursor:pointer}
-          #mseCard .out{margin-top:10px;width:100%;min-height:120px;padding:10px;border-radius:12px;border:1px dashed rgba(0,0,0,0.28);background:rgba(0,0,0,0.01);font-size:13px;white-space:pre-wrap}
+          #mseCard button{padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--panel);color:var(--text);font-size:13px;cursor:pointer}
+          #mseCard .out{margin-top:10px;width:100%;min-height:120px;padding:10px;border-radius:12px;border:1px dashed var(--line);background:var(--panel);color:var(--text);font-size:13px;white-space:pre-wrap}
           @media (max-width:900px){
             #mseCard .grid{grid-template-columns:1fr}
             #mseCard .textrow{grid-template-columns:1fr}

@@ -1,27 +1,34 @@
 <!-- PATCH_02_THEME.html -->
 <style>
   :root {
-    --bg: #0b0d10;
-    --panel: #0f1318;
-    --text: #e7eef9;
-    --muted: #a8b3c2;
-    --bd: rgba(255,255,255,0.10);
-    --bd2: rgba(255,255,255,0.08);
-    --accent: #7aa2ff;
+    --bg: #f5f7fb;
+    --panel: #ffffff;
+    --text: #0f172a;
+    --muted: rgba(15,23,42,.72);
+    --bd: rgba(15,23,42,.14);
+    --bd2: rgba(15,23,42,.10);
+    --accent: #1d4ed8;
+    --glow1: rgba(29,78,216,.12);
+    --glow2: rgba(15,118,110,.12);
   }
 
-  html[data-theme="light"] {
-    --bg: #f7f8fb;
-    --panel: #ffffff;
-    --text: #0d1117;
-    --muted: #52606d;
-    --bd: rgba(13,17,23,0.12);
-    --bd2: rgba(13,17,23,0.10);
-    --accent: #2563eb;
+  html[data-theme="dark"] {
+    --bg: #0b1220;
+    --panel: #111827;
+    --text: #e5e7eb;
+    --muted: rgba(229,231,235,.68);
+    --bd: rgba(148,163,184,.22);
+    --bd2: rgba(148,163,184,.14);
+    --accent: #60a5fa;
+    --glow1: rgba(96,165,250,.14);
+    --glow2: rgba(52,211,153,.12);
   }
 
   body {
-    background: var(--bg);
+    background:
+      radial-gradient(900px 520px at 12% -10%, var(--glow1) 0%, rgba(0,0,0,0) 60%),
+      radial-gradient(760px 520px at 100% 0%, var(--glow2) 0%, rgba(0,0,0,0) 60%),
+      var(--bg);
     color: var(--text);
   }
 

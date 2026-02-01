@@ -8,30 +8,73 @@
     <title>Wywiad psychiatryczny</title>
 
     <style>
+      @import url("https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap");
+
       :root{
-        --bg: #f6f8fc;
+        --bg: #f5f7fb;
         --panel: #ffffff;
-        --card: #f0f4ff;
+        --panel-ghost: rgba(255,255,255,.86);
+        --panel-soft: rgba(15,23,42,.03);
+        --card: #eef3ff;
         --card2: #ffffff;
 
-        --text: #0b1220;
-        --muted: rgba(11,18,32,.72);
-        --muted2: rgba(11,18,32,.55);
+        --text: #0f172a;
+        --muted: rgba(15,23,42,.72);
+        --muted2: rgba(15,23,42,.52);
 
         --line: rgba(15,23,42,.14);
         --line2: rgba(15,23,42,.10);
+        --bd: var(--line);
+        --bd2: var(--line2);
 
-        --accent: #2563eb;
-        --accent2: #14b8a6;
+        --accent: #1d4ed8;
+        --accent2: #0f766e;
+        --glow1: rgba(29,78,216,.12);
+        --glow2: rgba(15,118,110,.12);
+        --focus-border: rgba(29,78,216,.45);
+        --focus: rgba(29,78,216,.14);
 
-        --ok: #059669;
-        --warn: #b45309;
+        --ok: #16a34a;
+        --warn: #d97706;
         --bad: #dc2626;
 
-        --shadow: 0 18px 55px rgba(2,6,23,.10);
+        --shadow: 0 18px 50px rgba(15,23,42,.12);
+        --shadow-soft: 0 10px 24px rgba(15,23,42,.08);
         --radius: 16px;
         --max: 1180px;
-        --font: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+        --font: "Manrope", "Segoe UI", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+      }
+
+      html[data-theme="dark"]{
+        --bg: #0b1220;
+        --panel: #111827;
+        --panel-ghost: rgba(17,24,39,.86);
+        --panel-soft: rgba(148,163,184,.08);
+        --card: #0f172a;
+        --card2: #111827;
+
+        --text: #e5e7eb;
+        --muted: rgba(229,231,235,.68);
+        --muted2: rgba(229,231,235,.48);
+
+        --line: rgba(148,163,184,.22);
+        --line2: rgba(148,163,184,.14);
+        --bd: var(--line);
+        --bd2: var(--line2);
+
+        --accent: #60a5fa;
+        --accent2: #34d399;
+        --glow1: rgba(96,165,250,.14);
+        --glow2: rgba(52,211,153,.12);
+        --focus-border: rgba(96,165,250,.55);
+        --focus: rgba(96,165,250,.18);
+
+        --ok: #22c55e;
+        --warn: #f59e0b;
+        --bad: #f87171;
+
+        --shadow: 0 20px 60px rgba(2,6,23,.45);
+        --shadow-soft: 0 12px 32px rgba(2,6,23,.35);
       }
 
       *{ box-sizing:border-box }
@@ -40,9 +83,10 @@
         margin:0;
         font-family: var(--font);
         color: var(--text);
+        line-height: 1.45;
         background:
-          radial-gradient(900px 520px at 15% 0%, rgba(37,99,235,.10) 0%, rgba(37,99,235,0) 60%),
-          radial-gradient(760px 520px at 100% 10%, rgba(20,184,166,.10) 0%, rgba(20,184,166,0) 60%),
+          radial-gradient(900px 520px at 12% -10%, var(--glow1) 0%, rgba(0,0,0,0) 60%),
+          radial-gradient(760px 520px at 100% 0%, var(--glow2) 0%, rgba(0,0,0,0) 60%),
           var(--bg);
       }
 
@@ -52,7 +96,7 @@
         position: sticky;
         top: 0;
         z-index: 50;
-        background: rgba(255,255,255,.82);
+        background: var(--panel-ghost);
         backdrop-filter: blur(10px);
         border-bottom: 1px solid var(--line);
       }
@@ -74,8 +118,8 @@
         width: 34px;
         height: 34px;
         border-radius: 10px;
-        background: linear-gradient(135deg, rgba(37,99,235,.95), rgba(20,184,166,.92));
-        box-shadow: 0 10px 26px rgba(37,99,235,.18);
+        background: linear-gradient(135deg, var(--accent), var(--accent2));
+        box-shadow: 0 10px 26px rgba(29,78,216,.18);
       }
       .brand h1{ margin:0; font-size: 15px; letter-spacing:.2px; line-height:1.15 }
       .brand .sub{ margin-top: 2px; font-size: 12px; color: var(--muted2) }
@@ -87,7 +131,7 @@
         padding: 6px 10px;
         border-radius: 999px;
         border: 1px solid var(--line);
-        background: rgba(255,255,255,.75);
+        background: var(--panel);
         color: var(--muted);
         font-size: 12px;
         white-space: nowrap;
@@ -98,7 +142,7 @@
       .btn{
         appearance:none;
         border: 1px solid var(--line);
-        background: rgba(255,255,255,.85);
+        background: var(--panel);
         color: var(--text);
         padding: 9px 10px;
         border-radius: 12px;
@@ -112,14 +156,14 @@
         user-select:none;
       }
       .btn:hover{
-        background: #fff;
-        border-color: rgba(37,99,235,.28);
-        box-shadow: 0 10px 24px rgba(2,6,23,.06);
+        background: var(--panel);
+        border-color: rgba(29,78,216,.28);
+        box-shadow: var(--shadow-soft);
       }
       .btn:active{ transform: translateY(1px) }
       .btn.primary{
-        border-color: rgba(37,99,235,.35);
-        background: linear-gradient(135deg, rgba(37,99,235,.14), rgba(20,184,166,.10));
+        border-color: rgba(29,78,216,.35);
+        background: linear-gradient(135deg, rgba(29,78,216,.14), rgba(15,118,110,.10));
       }
       .btn.ghost{ background: transparent }
 
@@ -141,7 +185,7 @@
         overflow:auto;
         border-radius: var(--radius);
         border: 1px solid var(--line);
-        background: rgba(255,255,255,.75);
+        background: var(--panel-ghost);
         box-shadow: var(--shadow);
       }
       .side-inner{ padding: 12px }
@@ -157,8 +201,8 @@
       .card{
         border: 1px solid var(--line);
         border-radius: var(--radius);
-        background: var(--card2);
-        box-shadow: 0 10px 26px rgba(2,6,23,.06);
+        background: var(--panel);
+        box-shadow: var(--shadow-soft);
       }
       .card.pad{ padding: 12px }
 
@@ -167,20 +211,37 @@
 
       select, input[type="text"], textarea{
         width: 100%;
-        border: 1px solid rgba(15,23,42,.16);
-        background: #fff;
+        border: 1px solid var(--line);
+        background: var(--panel);
         color: var(--text);
         border-radius: 12px;
-        padding: 10px 10px;
+        padding: 9px 10px;
         font-size: 13px;
         outline: none;
+        transition: border-color .12s ease, box-shadow .12s ease, background .12s ease;
       }
       select:focus, input[type="text"]:focus, textarea:focus{
-        border-color: rgba(37,99,235,.42);
-        box-shadow: 0 0 0 4px rgba(37,99,235,.10);
+        border-color: var(--focus-border);
+        box-shadow: 0 0 0 3px var(--focus);
       }
-      textarea{ min-height: 110px; resize: vertical; line-height: 1.35 }
-      textarea::placeholder, input::placeholder{ color: rgba(11,18,32,.38) }
+      input[disabled]{
+        background: var(--panel-soft);
+        color: var(--muted2);
+      }
+      textarea{ min-height: 120px; resize: vertical; line-height: 1.35 }
+      textarea[rows="2"]{ min-height: 64px }
+      textarea[rows="3"]{ min-height: 80px }
+      textarea[rows="8"]{ min-height: 180px }
+      textarea.big[rows="2"]{ min-height: 72px }
+
+      input[type="text"][data-key*=".date"],
+      input[type="text"][data-key*=".time"],
+      input[type="text"]#patientId,
+      input[type="text"]#lastSaved{
+        width: 16ch;
+        max-width: 220px;
+      }
+      textarea::placeholder, input::placeholder{ color: var(--muted2) }
 
       .side-actions{ display:grid; grid-template-columns: 1fr 1fr; gap: 10px }
       .side-actions .btn{ width:100% }
@@ -189,7 +250,7 @@
       .main{
         border-radius: var(--radius);
         border: 1px solid var(--line);
-        background: rgba(255,255,255,.72);
+        background: var(--panel-ghost);
         box-shadow: var(--shadow);
         overflow:hidden;
       }
@@ -199,7 +260,7 @@
         display:flex;
         align-items:center;
         gap: 10px;
-        background: rgba(255,255,255,.82);
+        background: var(--panel-ghost);
       }
       .main-head h2{ margin:0; font-size: 14px; letter-spacing:.2px }
       .main-head .meta{ color: var(--muted2); font-size: 12px }
@@ -208,12 +269,12 @@
       details.acc{
         border: 1px solid var(--line);
         border-radius: var(--radius);
-        background: rgba(255,255,255,.90);
+        background: var(--panel);
         margin-bottom: 12px;
         overflow:hidden;
-        box-shadow: 0 8px 18px rgba(2,6,23,.05);
+        box-shadow: var(--shadow-soft);
       }
-      details.acc[open]{ background: #fff }
+      details.acc[open]{ background: var(--panel) }
       summary.acc-head{
         cursor:pointer;
         padding: 12px 12px;
@@ -222,20 +283,22 @@
         align-items:center;
         gap: 10px;
         user-select:none;
+        background: var(--panel-ghost);
       }
       summary.acc-head::-webkit-details-marker{ display:none }
+      details.acc[open] summary.acc-head{ border-bottom: 1px solid var(--line2) }
       .acc-title{ font-weight: 700; font-size: 13px; letter-spacing: .2px }
       .acc-sub{ margin-left:auto; color: var(--muted2); font-size: 12px }
       .acc-body{ padding: 12px }
 
       .info{
-        border: 1px dashed rgba(15,23,42,.18);
+        border: 1px dashed var(--line);
         border-radius: 12px;
         padding: 10px;
         color: var(--muted);
         font-size: 12px;
         line-height:1.35;
-        background: rgba(37,99,235,.04);
+        background: var(--panel-soft);
       }
 
       .toast{
@@ -248,13 +311,22 @@
         padding: 10px 12px;
         border-radius: 14px;
         border: 1px solid var(--line);
-        background: rgba(255,255,255,.92);
-        box-shadow: 0 18px 55px rgba(2,6,23,.12);
+        background: var(--panel);
+        box-shadow: var(--shadow);
         color: var(--text);
         font-size: 13px;
       }
       .toast.show{ display:block }
       .toast small{ color: var(--muted2) }
+
+      @keyframes floatIn{
+        from{ opacity:0; transform: translateY(6px); }
+        to{ opacity:1; transform: translateY(0); }
+      }
+      .card, .sidebar, .main, details.acc{ animation: floatIn .35s ease both }
+      @media (prefers-reduced-motion: reduce){
+        *{ animation: none !important; transition: none !important }
+      }
 
       body.sidebar-collapsed .layout{ grid-template-columns: 1fr }
       body.sidebar-collapsed .sidebar{ display:none }
@@ -445,13 +517,13 @@
         }
 
         function toggleTheme() {
-          const cur = document.documentElement.getAttribute("data-theme") || "dark"
+          const cur = document.documentElement.getAttribute("data-theme") || "light"
           setTheme(cur === "dark" ? "light" : "dark")
         }
 
         ;(() => {
           const saved = localStorage.getItem("PEON2_THEME")
-          setTheme(saved || "dark")
+          setTheme(saved || "light")
 
           const btn = document.getElementById("btnTheme")
           if (btn) btn.addEventListener("click", toggleTheme)
