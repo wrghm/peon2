@@ -337,178 +337,140 @@
       notes: "Zrodla: EMA Zyprexa SmPC (PL i EN, 06.06.2025) oraz FDA Zyprexa label (accessdata)."
     },
     arypiprazol: {
-      source: "EU: UK SmPC (emc, Aripiprazole tablets) + US: FDA Abilify label (2020). PL: brak (RPL niedostepny).",
+      source: "EMA Abilify SmPC (Product Information, 12.01.2026).",
       dose: [
-        "PL: brak (RPL niedostepny).",
-        "EU: schizofrenia start 10-15 mg/d, zakres 10-30 mg/d, max 30 mg/d; CHAD I mania start 15 mg/d (mono) lub 10-15 mg/d (adj), max 30 mg/d; dawka podtrzymujaca zwykle 15 mg/d; modyfikacje dawki przy silnych inhibitorach/induktorach CYP2D6/CYP3A4.",
-        "US: schizofrenia dorosli 10-15 mg/d start, max 30 mg/d; CHAD mania/mixed 15 mg/d (mono) lub 10-15 mg/d (adj); MDD adjunct 2-5 mg/d start, docelowo 5-10 mg/d, max 15 mg/d."
+        "EU: schizofrenia dorosli start 10-15 mg/d; dawka podtrzymujaca 15 mg/d; zakres 10-30 mg/d; max 30 mg/d.",
+        "EU: epizody manii CHAD I: start 15 mg/d (mono lub adj), max 30 mg/d; profilaktyka nawrotu manii: kontynuuj te sama dawke.",
+        "EU: mlodziez >=15 lat (schizofrenia): 2 mg (2 dni) -> 5 mg (2 dni) -> 10 mg/d; dalsze zwiekszanie co 5 mg; max 30 mg/d.",
+        "EU: mlodziez >=13 lat (mania): 2 mg -> 5 mg -> 10 mg/d; leczenie do 12 tyg., dawki >10 mg tylko wyjatkowo; max 30 mg/d.",
+        "EU: nerki bez modyfikacji; watroba lagodna/umiark. bez modyfikacji, w ciezkiej ostroznie (max 30 mg/d)."
       ].join("\n"),
       indications: [
-        "PL: brak (RPL niedostepny).",
-        "EU: schizofrenia (>=15 lat); epizody manii CHAD I i profilaktyka nawrotow u doroslych; mania u mlodziezy >=13 lat (do 12 tyg.).",
-        "US: schizofrenia; ostra mania/mixed CHAD I; adjunct MDD; drazliwosc w autyzmie; zespol Tourette; IM na ostre pobudzenie w schizofrenii/CHAD."
+        "EU: schizofrenia (dorosli i mlodziez >=15 lat).",
+        "EU: umiarkowane/ciezkie epizody manii w CHAD I oraz zapobieganie nawrotom manii u doroslych po odpowiedzi.",
+        "EU: leczenie epizodow manii w CHAD I do 12 tyg. u mlodziezy >=13 lat."
       ].join("\n"),
-      contra: [
-        "PL: brak (RPL niedostepny).",
-        "EU: nadwrazliwosc.",
-        "US: nadwrazliwosc."
-      ].join("\n"),
+      contra: "EU: nadwrazliwosc na arypiprazol lub skladniki.",
       warnings: [
-        "PL: brak (RPL niedostepny).",
-        "EU: zwiekszona smiertelnosc u osob z psychoza w przebiegu otepienia; NMS; pozne dyskinezy; napady; hipotonia ortostatyczna.",
-        "US: boxed warning smiertelnosci w psychozie otepiennej oraz ryzyko samobojstw u mlodych w leczeniu depresji; ryzyko zaburzen metabolicznych (glikemia, lipidy, masa); NMS; TD; napady; hipotonia ortostatyczna; zaburzenia kontroli impulsow."
+        "EU: ryzyko zachowan samobojczych; ostroznosc w chorobach sercowo-naczyniowych i przy skonnosci do hipotensji.",
+        "EU: ostroznosc przy ryzyku QT; ryzyko TD/EPS, NMS, napadow; ryzyko zylnej choroby zakrzepowo-zatorowej.",
+        "EU: zwiekszona smiertelnosc i ryzyko CVA u osob z psychoza w przebiegu ot."
       ].join("\n"),
       interactions: [
-        "PL: brak (RPL niedostepny).",
-        "EU: silne inhibitory CYP2D6/CYP3A4 zmniejszaja dawke; induktory CYP3A4 zwiekszaja dawke; ostroznosc z alkoholem i lekami OUN.",
-        "US: podobnie; dostosuj dawke przy inhibitorach/induktorach CYP2D6/CYP3A4."
+        "EU: silne inhibitory CYP3A4/CYP2D6 zmniejszaja dawke arypiprazolu; silne induktory CYP3A4 wymagaja zwiekszenia dawki.",
+        "EU: ostroznosc z lekami serotoninergicznymi (ryzyko zespolu serotoninowego) i z lekami wydluzajacymi QT."
       ].join("\n"),
       monitoring: [
-        "PL: brak (RPL niedostepny).",
-        "EU: obserwacja EPS, hipotensji, napadow i ryzyka samobojczego.",
-        "US: monitoruj mase ciala, glukoze, lipidy; kontroluj BP i objawy EPS; CBC przy niskiej liczbie leukocytow w wywiadzie."
+        "EU: monitoruj stan psychiczny (ryzyko samobojcze), EPS/TD, NMS, napady.",
+        "EU: zwroc uwage na ryzyko sercowo-naczyniowe, hipotensje i VTE; u osob starszych z ot. ryzyko CVA."
       ].join("\n"),
-      preg: [
-        "PL: brak (RPL niedostepny).",
-        "EU: ostroznosc w ciazy; ryzyko objawow noworodka po ekspozycji w III trymestrze.",
-        "US: objawy pozapiramidowe/odstawienne u noworodka po ekspozycji w III trymestrze."
-      ].join("\n"),
-      renal: [
-        "PL: brak (RPL niedostepny).",
-        "EU: niewyd. nerek bez modyfikacji; w ciezkiej niewyd. watroby ostroznosc.",
-        "US: brak modyfikacji w nerkach; ostroznosc w watrobie."
-      ].join("\n"),
-      notes: "Podsumowanie: UK SmPC (emc) + FDA Abilify label."
+      preg: "EU: brak wystarczajacych danych; stosowac tylko gdy korzysc przewyzsza ryzyko; u noworodkow po ekspozycji w III trymestrze mozliwe objawy odstawienne/EPS.",
+      renal: "EU: nerki bez modyfikacji; watroba lagodna/umiark. bez modyfikacji, ciezka - ostroznosc. U 65+ rozwaz nizszy start.",
+      notes: "Zrodlo: EMA Abilify SmPC (Product Information, 12.01.2026)."
     },
     kwetiapina: {
-      source: "EU: UK SmPC (emc, Quetiapine tablets) + US: FDA Seroquel label (2020). PL: brak (RPL niedostepny).",
+      source: "EMA Seroquel XR SmPC (Annex III, 19.11.2010).",
       dose: [
-        "PL: brak (RPL niedostepny).",
-        "EU: schizofrenia titracja 50-100-200-300 mg (dni 1-4), zwykle 300-450 mg/d, zakres 150-750 mg/d; mania titracja 100-200-300-400 mg (dni 1-4), zakres 200-800 mg/d; depresja CHAD 50-100-200-300 mg (dni 1-4), zwykle 300 mg/d (zakres 200-600 mg/d); w niewyd. watroby start 25 mg/d i wolna titracja.",
-        "US: schizofrenia 150-750 mg/d; mania 400-800 mg/d; depresja CHAD 300 mg/d (zakres 300-600 mg/d); dawki ustalac indywidualnie i titrowac wg tolerancji."
+        "EU (XR): podawac 1x/d, bez jedzenia; tabletki polykac w calosci.",
+        "EU (XR) schizofrenia/mania: dzien 1: 300 mg, dzien 2: 600 mg; dawka zalecana 600 mg; zakres 400-800 mg/d; w leczeniu podtrzymujacym zwykle bez zmian.",
+        "EU (XR) depresja w CHAD: 50-100-200-300 mg (dni 1-4); dawka zalecana 300 mg (u wybranych do 600 mg); uzywac najnizszej skutecznej.",
+        "EU (XR) profilaktyka nawrotow CHAD: kontynuacja dawki 300-800 mg/d na noc.",
+        "EU (XR) MDD add-on: 50 mg (dni 1-2), 150 mg (dni 3-4); zwykle 150-300 mg/d, najnizsza skuteczna.",
+        "EU (XR) osoby starsze: start 50 mg/d i wolna titracja; nerki bez modyfikacji; watroba start 50 mg/d i zwiekszanie co 50 mg."
       ].join("\n"),
       indications: [
-        "PL: brak (RPL niedostepny).",
-        "EU: schizofrenia; epizody manii CHAD; epizody depresji w CHAD; zapobieganie nawrotom w CHAD.",
-        "US: schizofrenia; ostra mania/mixed CHAD; depresja CHAD; leczenie podtrzymujace (adj z litem/valproinianem)."
+        "EU: schizofrenia (w tym zapobieganie nawrotom u stabilnych pacjentow).",
+        "EU: CHAD - leczenie manii, leczenie depresji w CHAD, zapobieganie nawrotom po odpowiedzi.",
+        "EU: add-on w MDD u pacjentow z suboptymalna odpowiedzia na AD."
       ].join("\n"),
-      contra: [
-        "PL: brak (RPL niedostepny).",
-        "EU: nadwrazliwosc; jednoczesne silne inhibitory CYP3A4 (np. azole, makrolidy, nefazodon, HIV PI).",
-        "US: nadwrazliwosc."
-      ].join("\n"),
+      contra: "EU: nadwrazliwosc; jednoczesne silne inhibitory CYP3A4 (np. azole, makrolidy, nefazodon, HIV PI) - przeciwwskazane.",
       warnings: [
-        "PL: brak (RPL niedostepny).",
-        "EU: zwiekszona smiertelnosc u osob z psychoza w przebiegu otepienia; NMS; pozne dyskinezy; hipotonia ortostatyczna; zaburzenia metaboliczne; napady.",
-        "US: boxed warning smiertelnosci w psychozie otepiennej oraz ryzyko samobojstw u mlodych; ryzyko metaboliczne; NMS; TD; hipotonia ortostatyczna; leukopenia/neutropenia; napady."
+        "EU: ryzyko samobojcze (szcz. mlodsi), sedacja/somnolencja, hipotonia ortostatyczna.",
+        "EU: ostroznosc w chorobach sercowo-naczyniowych, ryzyko QT; NMS, TD/EPS, napady.",
+        "EU: neutropenia (rzadko), przyrost masy ciala i zaburzenia metaboliczne; VTE; niezalecany w psychozie ot."
       ].join("\n"),
       interactions: [
-        "PL: brak (RPL niedostepny).",
-        "EU: unikac silnych inhibitorow CYP3A4; induktory (np. karbamazepina) zmniejszaja stezenie; ostroznosc z alkoholem i lekami OUN.",
-        "US: podobnie; silne inhibitory CYP3A4 zwiekszaja ekspozycje, induktory zmniejszaja."
+        "EU: CNS depresanty i alkohol - ostroznosc.",
+        "EU: CYP3A4 inhibitory zwiekszaja ekspozycje (wspolstosowanie przeciwwskazane); induktory (karbamazepina, fenytoina) zmniejszaja st. i skutecznosc.",
+        "EU: ostroznosc z lekami wydluzajacymi QT; grapefruit juice niewskazany."
       ].join("\n"),
       monitoring: [
-        "PL: brak (RPL niedostepny).",
-        "EU: monitoruj mase ciala, glikemie, lipidy; obserwuj hipotensje i EPS.",
-        "US: monitoruj mase ciala, glukoze i lipidy; kontroluj BP i objawy EPS; CBC przy niskiej WBC."
+        "EU: monitoruj mase ciala/metabolizm, BP (hipotonia), objawy EPS/TD i NMS.",
+        "EU: obserwuj objawy neutropenii/infekcji; u pacjentow z ryzykiem QT - EKG wg wskazan."
       ].join("\n"),
-      preg: [
-        "PL: brak (RPL niedostepny).",
-        "EU: ostroznosc w ciazy; ryzyko objawow noworodka po ekspozycji w III trymestrze.",
-        "US: objawy pozapiramidowe/odstawienne u noworodka po ekspozycji w III trymestrze."
-      ].join("\n"),
-      renal: [
-        "PL: brak (RPL niedostepny).",
-        "EU: niewyd. nerek bez modyfikacji; w niewyd. watroby start 25 mg/d i wolna titracja.",
-        "US: niewyd. watroby wymaga wolnej titracji; nerkowe bez modyfikacji."
-      ].join("\n"),
-      notes: "Podsumowanie: UK SmPC (emc) + FDA Seroquel label."
+      preg: "EU: brak danych wystarczajacych; stosowac tylko gdy korzysc przewyzsza ryzyko; po ekspozycji mozliwe objawy odstawienne u noworodka; nie karmic piersia.",
+      renal: "EU: nerki bez modyfikacji; watroba - start 50 mg/d i wolna titracja.",
+      notes: "Zrodlo: EMA Seroquel XR SmPC (Annex III, 19.11.2010) - dotyczy postaci XR."
     },
     klozapina: {
-      source: "EU: UK SmPC (emc, Clozaril) + US: FDA clozapine label (2025). PL: brak (RPL niedostepny).",
+      source: "EMA Leponex Article 30 summary/SmPC (EMEA/CPMP/6034/02, 12.11.2002).",
       dose: [
-        "PL: brak (RPL niedostepny).",
-        "EU: start 12.5 mg 1-2x/d w 1. dobie; zwiekszanie 25-50 mg/d; docelowo 300-450 mg/d do 2-3 tyg.; max 900 mg/d; w psychozie Parkinsona start 12.5 mg na noc, max 50 mg/d; po przerwie >48 h restart 12.5 mg.",
-        "US: start 12.5 mg 1-2x/d; zwiekszanie 25-50 mg/d; docelowo 300-450 mg/d do 2 tyg.; max 900 mg/d; po przerwie >48 h restart 12.5 mg."
+        "EU: leczenie opornej schizofrenii - start 12.5 mg 1-2x w 1. dobie; dzien 2: 25 mg 1-2x; zwiekszanie 25-50 mg do 300 mg/d w 2-3 tyg.; typowy zakres 200-450 mg/d; max 900 mg/d.",
+        "EU: dawke utrzymujaca mozna zmniejszac po stabilizacji; przy przerwie >2 dni - restart 12.5 mg.",
+        "EU: osoby starsze - start 12.5 mg/d, zwiekszanie max 25 mg/d.",
+        "EU: psychoza w chorobie Parkinsona - start 12.5 mg na noc; zwiekszanie o 12.5 mg max 2x/tydz.; zwykle 25-37.5 mg/d; max 100 mg/d.",
+        "EU: leczenie tylko przy prawidlowym WBC/ANC i mozliwosci regularnego monitorowania."
       ].join("\n"),
       indications: [
-        "PL: brak (RPL niedostepny).",
-        "EU: leczenie opornej schizofrenii; psychoza w chorobie Parkinsona (gdy standardowe leczenie zawodzi).",
-        "US: oporna schizofrenia; zmniejszenie ryzyka nawrotu zachowan samobojczych w schizofrenii/schizoafektywnym."
+        "EU: leczenie opornej schizofrenii lub nietolerancji innych przeciwpsychotykow.",
+        "EU: psychoza w chorobie Parkinsona, gdy standardowe leczenie zawiodlo."
       ].join("\n"),
       contra: [
-        "PL: brak (RPL niedostepny).",
-        "EU: nadwrazliwosc; brak mozliwosci monitorowania morfologii; wywiad agranulocytozy po klozapinie; niekontrolowana padaczka; ciezka depresja OUN.",
-        "US: nadwrazliwosc na klozapine."
+        "EU: nadwrazliwosc; brak mozliwosci regularnych badan krwi; historia agranulocytozy/granulocytopenii; uposledzona czynnost szpiku; niekontrolowana padaczka.",
+        "EU: zatrucia/psychozy toksyczne, stany comatose, zapasc krazeniowa/CNS depression.",
+        "EU: ciezkie choroby serca (np. myocarditis), ciezkie choroby nerek; aktywna choroba watroby z nudnosciami/anoreksja/zoltaczka; paralytic ileus.",
+        "EU: jednoczesne leki o duzym ryzyku agranulocytozy; depot neuroleptyki."
       ].join("\n"),
       warnings: [
-        "PL: brak (RPL niedostepny).",
-        "EU: ciezka neutropenia/agranulocytoza (obowiazkowe monitorowanie); zapalenie miesnia sercowego/kardiomiopatia; napady; hipotonia ortostatyczna; zespol NMS; zaparcia i niedroznosc porazenna.",
-        "US: boxed warnings: ciezka neutropenia; hipotonia/bradykardia/omdlenia; napady; zapalenie miesnia sercowego/kardiomiopatia; zwiekszona smiertelnosc w psychozie otepiennej."
+        "EU: ryzyko agranulocytozy - obowiazkowe monitorowanie WBC/ANC (co tydzien 18 tyg., potem co 4 tyg. i 4 tyg. po odstawieniu).",
+        "EU: ryzyko zapalenia miesnia sercowego/kardiomiopatii, hipotensji ortostatycznej, napadow, NMS; zaparcia/ileus.",
+        "EU: przy infekcji natychmiastowa kontrola morfologii i rozwazenie odstawienia."
       ].join("\n"),
       interactions: [
-        "PL: brak (RPL niedostepny).",
-        "EU: inhibitory CYP1A2 (np. fluvoxamina, ciprofloksacyna) zwiekszaja stezenie; induktory (palenie tytoniu, karbamazepina) zmniejszaja; ostroznosc z benzodiazepinami.",
-        "US: podobnie; ostroznosc z lekami mielosupresyjnymi i benzodiazepinami."
+        "EU: zakaz laczenia z lekami silnie mielosupresyjnymi; unikac depot neuroleptykow.",
+        "EU: ostroznosc z benzodiazepinami i innymi depresantami OUN (ryzyko zapasci/respiratory).",
+        "EU: leki o dzialaniu antycholinergicznym i hipotensyjnym nasilaja dzialanie klozapiny."
       ].join("\n"),
       monitoring: [
-        "PL: brak (RPL niedostepny).",
-        "EU: obowiazkowe ANC/WBC; monitoruj objawy zapalenia miesnia sercowego i napadow; kontroluj parametry metaboliczne.",
-        "US: ANC wg REMS; monitoruj serce (myocarditis), napady i parametry metaboliczne."
+        "EU: WBC/ANC wg schematu; obserwacja objawow infekcji.",
+        "EU: kontrola BP i objawow sercowych; rozwaz EKG przed terapia."
       ].join("\n"),
-      preg: [
-        "PL: brak (RPL niedostepny).",
-        "EU: ostroznosc w ciazy; ryzyko objawow noworodka po ekspozycji w III trymestrze.",
-        "US: objawy pozapiramidowe/odstawienne u noworodka po ekspozycji w III trymestrze."
-      ].join("\n"),
-      renal: [
-        "PL: brak (RPL niedostepny).",
-        "EU: w niewyd. nerek/watroby dawki mniejsze i wolna titracja.",
-        "US: ostroznosc w niewyd. nerek i watroby; wolna titracja."
-      ].join("\n"),
-      notes: "Podsumowanie: UK SmPC (emc) + FDA clozapine label."
+      preg: "EU: ograniczone dane w ciazy - stosowac z ostroznoscia; nie karmic piersia; zapewnic antykoncepcje u kobiet w wieku rozrodczym.",
+      renal: "EU: ciezkie choroby nerek/watroby przeciwwskazane; przy ryzyku - ostroznosc i wolna titracja.",
+      notes: "Zrodlo: EMA Leponex Article 30 summary/SmPC (12.11.2002)."
     },
     paliperidon: {
-      source: "EU: Invega SmPC (emc, 03 Jul 2025) + US: Invega FDA label (2021/2022). PL: brak (RPL niedostepny).",
+      source: "EMA Invega SmPC (Product Information, 12.07.2024).",
       dose: [
-        "PL: brak (RPL niedostepny).",
-        "EU: schizofrenia dorosli 6 mg 1x/d (zakres 3-12 mg); schizoafektywne 6 mg 1x/d (zakres 6-12 mg); zwiekszanie o 3 mg w odstepach >5 dni; tabletki polykac w calosci, przyjmowac zawsze z jedzeniem albo zawsze na czczo.",
-        "US: schizofrenia dorosli 6 mg/d (zakres 3-12 mg); mlodziez 12-17: start 3 mg/d, max 6 mg (<51 kg) lub 12 mg (>=51 kg); schizoafektywne 6 mg/d (zakres 3-12 mg)."
+        "EU: schizofrenia dorosli 6 mg 1x/d rano; zakres 3-12 mg; zwiekszanie o 3 mg co >5 dni.",
+        "EU: schizoafektywne dorosli 6 mg 1x/d; zakres 6-12 mg; zwiekszanie o 3 mg co >4 dni.",
+        "EU: mlodziez >=15 lat (schizofrenia) start 3 mg/d; max 6 mg (<51 kg) lub 12 mg (>=51 kg).",
+        "EU: nerki - CrCl 50-80: start 3 mg/d (max 6); CrCl 10-50: 3 mg co drugi dzien -> 3 mg/d; <10 ml/min niezalecane.",
+        "EU: watroba lagodna/umiark. bez modyfikacji; ciezka - ostroznosc.",
+        "EU: podawac zawsze na czczo albo zawsze z posilkiem; tabletka nie do dzielenia/kruszenia."
       ].join("\n"),
       indications: [
-        "PL: brak (RPL niedostepny).",
-        "EU: schizofrenia (dorosli i mlodziez >=15 lat); zaburzenia schizoafektywne u doroslych.",
-        "US: schizofrenia (dorosli i 12-17 lat); zaburzenia schizoafektywne u doroslych (mono lub adj do nastroju/AD)."
+        "EU: schizofrenia (dorosli i mlodziez >=15 lat).",
+        "EU: zaburzenia schizoafektywne u doroslych."
       ].join("\n"),
-      contra: [
-        "PL: brak (RPL niedostepny).",
-        "EU: nadwrazliwosc na paliperidon lub risperidon.",
-        "US: nadwrazliwosc na paliperidon lub risperidon."
-      ].join("\n"),
+      contra: "EU: nadwrazliwosc na paliperidon lub risperidon (lub skladniki).",
       warnings: [
-        "PL: brak (RPL niedostepny).",
-        "EU: ostroznosc w QT; NMS; TD; leukopenia/neutropenia; hiperglikemia i przyrost masy; hiperprolaktynemia; hipotonia ortostatyczna; drgawki; niedroznosc przewodu pokarmowego (tabletka nierozpuszczalna); zwiekszona smiertelnosc/CVA w psychozie otepiennej.",
-        "US: boxed warning smiertelnosci w psychozie otepiennej; QT, NMS, TD, zaburzenia metaboliczne, hiperprolaktynemia, niedroznosc przewodu pokarmowego."
+        "EU: ostroznosc przy ryzyku QT; NMS; TD/EPS; napady.",
+        "EU: leukopenia/neutropenia, hiperglikemia/DM, przyrost masy, hiperprolaktynemia; hipotonia ortostatyczna.",
+        "EU: ryzyko niedroznosci przewodu pokarmowego (tabletka nierozpuszczalna); ostroznosc u osob z ot. (ryzyko CVA i zgonu)."
       ].join("\n"),
       interactions: [
-        "PL: brak (RPL niedostepny).",
-        "EU: unikac lekow wydluzajacych QT; karbamazepina zmniejsza stezenie; valproinian zwieksza Cmax/AUC; niezalecane laczenie z risperidonem; ostroznosc z depresantami OUN.",
-        "US: silne induktory CYP3A4/P-gp (np. karbamazepina) zmniejszaja stezenie; divalproex zwieksza ekspozycje; ostroznosc z depresantami OUN."
+        "EU: ostroznosc z lekami wydluzajacymi QT i depresantami OUN.",
+        "EU: silne induktory (np. karbamazepina) moga zmniejszac ekspozycje; unika? jednoczesnego stosowania z risperidonem.",
+        "EU: dostosuj dawke przy zmianach funkcji nerek."
       ].join("\n"),
       monitoring: [
-        "PL: brak (RPL niedostepny).",
-        "EU/US: masa ciala, glikemia, lipidy; EKG przy ryzyku QT; CBC u osob z niska WBC."
+        "EU: monitoruj mase ciala i glikemie; u osob z niska WBC monitoruj morfologie.",
+        "EU: obserwuj objawy EPS/TD, NMS, hipotensji; EKG przy ryzyku QT."
       ].join("\n"),
-      preg: [
-        "PL: brak (RPL niedostepny).",
-        "EU/US: objawy pozapiramidowe/odstawienne u noworodka po ekspozycji w III trymestrze."
-      ].join("\n"),
-      renal: [
-        "PL: brak (RPL niedostepny).",
-        "EU: CrCl 50-80 start 3 mg/d (max 6 mg); CrCl 10-50 start 3 mg co drugi dzien -> 3 mg/d; <10 ml/min nie zalecane; watroba: brak korekty w lagodnej/umiark., ostroznosc w ciezkiej.",
-        "US: dawki dostosowac do funkcji nerek; brak istotnych zmian w lagodnej/umiark. niewyd. watroby."
-      ].join("\n"),
-      notes: "Podsumowanie: Invega SmPC (emc) + FDA label."
+      preg: "EU: stosowac tylko gdy korzysc przewyzsza ryzyko; u noworodkow po ekspozycji w III trymestrze mozliwe objawy EPS/odstawienne.",
+      renal: "EU: wymaga dostosowania w niewyd. nerek; <10 ml/min niezalecane; watroba lagodna/umiark. bez korekty, ciezka - ostroznosc.",
+      notes: "Zrodlo: EMA Invega SmPC (Product Information, 12.07.2024)."
     },
     lurazydon: {
       source: "EU: Lurasidone SmPC (emc, 09 Jan 2026) + US: Latuda FDA label (2019). PL: brak (RPL niedostepny).",
@@ -811,646 +773,636 @@
       notes: "Podsumowanie: UK SmPC (emc) + FDA label (Haldol injection)."
     },
     risperidon: {
-      source: "EU: UK SmPC (emc, Risperidone tablets) + US: FDA risperidone label. PL: brak (RPL niedostepny).",
+      source: "EMA Risperdal Article 30 SmPC (Annex III, 13.11.2008).",
       dose: [
-        "PL: brak (RPL niedostepny).",
-        "EU: schizofrenia start 2 mg/d, dzien 2: 4 mg/d; zwykle 4-6 mg/d; dawki >10 mg/d nie zwiekszaja skutecznosci i nasilaja EPS (nie przekraczac 16 mg/d). Mania: start 2 mg/d, zakres 1-6 mg/d. Starsi: start 0.5 mg 2x/d. Ciezka niewyd. nerek/watroby: 0.5 mg 2x/d.",
-        "US: schizofrenia dorosli start 2 mg/d (zalecane 4-8 mg/d); mania start 2-3 mg/d; dawki titrowac wg tolerancji; w ciezkiej niewyd. nerek/watroby start 0.5 mg 2x/d."
+        "EU: schizofrenia dorosli start 2 mg/d, dzien 2: 4 mg/d; zwykle 4-6 mg/d; >10 mg/d bez lepszej skutecznosci, >16 mg/d niezalecane.",
+        "EU: osoby starsze - start 0.5 mg 2x/d, titracja do 1-2 mg 2x/d.",
+        "EU: mania w CHAD - start 2 mg/d, zwiekszanie co >=24 h o 1 mg; zakres 1-6 mg/d; >6 mg/d niebadane.",
+        "EU: agresja w ot. Alzheimera (krotko, do 6 tyg.) - start 0.25 mg 2x/d, zwykle 0.5 mg 2x/d, max 1 mg 2x/d.",
+        "EU: agresja w zab. zachowania 5-18 lat - >=50 kg: start 0.5 mg 1x/d (zwykle 1 mg/d, max 1.5 mg/d); <50 kg: start 0.25 mg 1x/d (zwykle 0.5 mg/d, max 0.75 mg/d).",
+        "EU: ciezka niewyd. nerek/watroby - start 0.5 mg 2x/d, wolna titracja."
       ].join("\n"),
       indications: [
-        "PL: brak (RPL niedostepny).",
-        "EU: schizofrenia; epizody manii w CHAD; krotkoterminowo agresja w ot. Alzheimera; krotkoterminowo agresja w zaburzeniach zachowania u dzieci/mlodziezy.",
-        "US: schizofrenia; epizody manii w CHAD (mono lub adj); drazliwosc w autyzmie."
+        "EU: schizofrenia.",
+        "EU: umiarkowane/ciezkie epizody manii w CHAD.",
+        "EU: krotkoterminowo (do 6 tyg.) uporczywa agresja w ot. Alzheimera i w zab. zachowania u dzieci/mlodziezy."
       ].join("\n"),
-      contra: [
-        "PL: brak (RPL niedostepny).",
-        "EU: nadwrazliwosc.",
-        "US: nadwrazliwosc na risperidon lub paliperidon."
-      ].join("\n"),
+      contra: "EU: nadwrazliwosc na risperidon (lub skladniki).",
       warnings: [
-        "PL: brak (RPL niedostepny).",
-        "EU: zwiekszona smiertelnosc u osob z otepieniem; ostroznosc przy furosemidzie; ryzyko hipotensji i udaru u starszych.",
-        "US: boxed warning smiertelnosci w psychozie otepiennej; NMS; pozne dyskinezy; zmiany metaboliczne (hiperglikemia, dyslipidemia, przyrost masy); hiperprolaktynemia; hipotonia ortostatyczna; leukopenia/neutropenia; drgawki."
+        "EU: zwiekszona smiertelnosc i ryzyko CVA u osob z ot.; ostroznosc z furosemidem.",
+        "EU: ryzyko hipotensji ortostatycznej, EPS/TD, NMS, napadow; hiperprolaktynemia.",
+        "EU: u dzieci monitoruj wzrost/masa i objawy prolaktynowe."
       ].join("\n"),
       interactions: [
-        "PL: brak (RPL niedostepny).",
-        "EU: ostroznosc z lekami wydluzajacymi QT i depresyjnymi OUN; inhibitory CYP2D6 zwiekszaja stezenie; induktory (np. karbamazepina) zmniejszaja.",
-        "US: fluoksetyna/paroksetyna zwiekszaja stezenie (CYP2D6); karbamazepina zmniejsza; ostroznosc z lekami hipotensyjnymi i depresyjnymi OUN."
+        "EU: ostroznosc z lekami wydluzajacymi QT i depresantami OUN; antagonizuje dopaminergiki.",
+        "EU: karbamazepina i inne induktory CYP3A4/P-gp zmniejszaja st.; fluoksetyna/paroksetyna (CYP2D6) zwiekszaja st.; verapamil zwieksza st.",
+        "EU: niezalecane laczenie z paliperidonem."
       ].join("\n"),
       monitoring: [
-        "PL: brak (RPL niedostepny).",
-        "EU: obserwacja sedacji/hipotensji u osob starszych.",
-        "US: monitoruj glukoze, lipidy, mase ciala; rozwaz kontrole prolaktyny; CBC przy niskiej WBC."
+        "EU: monitoruj EPS i inne zaburzenia ruchowe; u dzieci kontroluj wzrost/masa i objawy prolaktynowe.",
+        "EU: u osob z ot. obserwuj objawy CVA; rozwa? monitorowanie metabolizmu."
       ].join("\n"),
-      preg: [
-        "PL: brak (RPL niedostepny).",
-        "EU: stosowac tylko gdy korzysc przewyzsza ryzyko; noworodki po ekspozycji w III trymestrze moga miec EPS/odstawienie.",
-        "US: ryzyko objawow u noworodkow po ekspozycji w III trymestrze."
-      ].join("\n"),
-      renal: [
-        "PL: brak (RPL niedostepny).",
-        "EU: w ciezkiej niewyd. nerek/watroby start 0.5 mg 2x/d, titracja ostrozna.",
-        "US: start 0.5 mg 2x/d w ciezkiej niewyd. nerek/watroby."
-      ].join("\n"),
-      notes: "Podsumowanie: UK SmPC (emc) + FDA risperidone label."
+      preg: "EU: stosowac tylko gdy korzysc przewyzsza ryzyko; u noworodkow po ekspozycji w III trymestrze mozliwe objawy EPS/odstawienne.",
+      renal: "EU: w niewyd. nerek/watroby - start 0.5 mg 2x/d, ostrozna titracja.",
+      notes: "Zrodlo: EMA Risperdal Article 30 SmPC (Annex III, 13.11.2008)."
     },
     sertralina: {
-      source: "EU: UK SmPC (emc, Sertraline 50 mg tablets) + US: FDA Zoloft label. PL: brak (RPL niedostepny).",
+      source: "EU: Sertraline 100 mg film-coated tablets SmPC (emc, 06 Nov 2025) + US: FDA Zoloft label. PL: RPL/CHPL 500 (01.02.2026) - tymczasowo wg EU/US.",
       dose: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): MDD/OCD start 50 mg/d; PD/PTSD/SAD start 25 mg/d -> 50 mg/d po 1 tyg.; zwiekszanie co >=7 dni w krokach 50 mg; max 200 mg/d; dawke zmniejszyc lub podawac rzadziej w niewyd. watroby.",
         "EU: MDD/OCD start 50 mg/d; PD/PTSD/SAD start 25 mg/d -> 50 mg/d po 1 tyg.; zwiekszanie co >=7 dni w krokach 50 mg; max 200 mg/d; dawke zmniejszyc lub podawac rzadziej w niewyd. watroby.",
         "US: MDD start 50 mg/d; PD/PTSD/SAD start 25 mg/d; max 200 mg/d. PMDD 50-150 mg/d (ciagle lub faza lutealna). Umiark./ciezka niewyd. watroby: nie zalecane."
       ].join("\n"),
       indications: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): duza depresja (leczenie i zapobieganie nawrotom); zaburzenie obsesyjno-kompulsyjne (dorosli i 6-17 lat); lek paniczny; fobia spoleczna; PTSD.",
         "EU: duza depresja (leczenie i zapobieganie nawrotom); zaburzenie obsesyjno-kompulsyjne (dorosli i 6-17 lat); lek paniczny; fobia spoleczna; PTSD.",
         "US: MDD, OCD, PD, PTSD, SAD, PMDD."
       ].join("\n"),
       contra: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): nadwrazliwosc; jednoczesne MAOI (i 14 dni przerwy); pimozyd.",
         "EU: nadwrazliwosc; jednoczesne MAOI (i 14 dni przerwy); pimozyd.",
         "US: MAOI (w tym linezolid/blekit metylenowy); pimozyd; nadwrazliwosc; roztwor doustny z disulfiramem."
       ].join("\n"),
       warnings: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): zespol serotoninowy/NMS; ryzyko manii; drgawki; wydluzenie QT; krwawienia; samobojstwa u mlodych.",
         "EU: zespol serotoninowy/NMS; ryzyko manii; drgawki; wydluzenie QT; krwawienia; samobojstwa u mlodych.",
         "US: boxed warning samobojstw u <25 lat; zespol serotoninowy; krwawienia; mania; drgawki; wydluzenie QT; hiponatremia; jaskra z zamknietym katem."
       ].join("\n"),
       interactions: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): serotonergiki i MAOI; pimozyd; leki wydluzajace QT; warfaryna (INR); lit; fenytoina; grepfrut.",
         "EU: serotonergiki i MAOI; pimozyd; leki wydluzajace QT; warfaryna (INR); lit; fenytoina; grepfrut.",
         "US: MAOI/serotonergiki; pimozyd; leki wydluzajace QT; NLPZ/antykoagulanty (krwawienia)."
       ].join("\n"),
       monitoring: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): obserwacja ryzyka krwawien; INR przy warfarynie; objawy zespolu serotoninowego.",
         "EU: obserwacja ryzyka krwawien; INR przy warfarynie; objawy zespolu serotoninowego.",
         "US: monitoruj ryzyko krwawien, hiponatremii i objawy serotoninowe."
       ].join("\n"),
       preg: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): nie zalecane w ciazy, chyba ze niezbedne; ryzyko PPHN i objawow odstawiennych u noworodka.",
         "EU: nie zalecane w ciazy, chyba ze niezbedne; ryzyko PPHN i objawow odstawiennych u noworodka.",
         "US: ryzyko objawow u noworodka po ekspozycji w III trymestrze."
       ].join("\n"),
       renal: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): brak koniecznosci modyfikacji w niewyd. nerek; w niewyd. watroby dawke zmniejszyc lub wydluzyc odstep.",
         "EU: brak koniecznosci modyfikacji w niewyd. nerek; w niewyd. watroby dawke zmniejszyc lub wydluzyc odstep.",
         "US: umiark./ciezka niewyd. watroby: nie zalecane lub znaczna redukcja; nerkowe bez modyfikacji."
       ].join("\n"),
-      notes: "Podsumowanie: UK SmPC (emc) + FDA Zoloft label."
+      notes: "Podsumowanie: Sertraline 100 mg SmPC (emc, 06 Nov 2025) + FDA Zoloft label."
     },
     fluoksetyna: {
-      source: "EU: UK SmPC (emc, Fluoxetine capsules) + US: FDA fluoxetine label. PL: brak (RPL niedostepny).",
+      source: "EU: Fluoxetine 20 mg hard capsules SmPC (emc, 24 Sep 2021) + US: FDA fluoxetine label. PL: RPL/CHPL 500 (01.02.2026) - tymczasowo wg EU/US.",
       dose: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): depresja start 20 mg/d, zwykle 20 mg/d, max 60 mg/d; OCD 20-60 mg/d; bulimia 60 mg/d; dzieci 8+ start 10 mg/d -> 20 mg/d. W niewyd. watroby: 20 mg co drugi dzien.",
         "EU: depresja start 20 mg/d, zwykle 20 mg/d, max 60 mg/d; OCD 20-60 mg/d; bulimia 60 mg/d; dzieci 8+ start 10 mg/d -> 20 mg/d. W niewyd. watroby: 20 mg co drugi dzien.",
         "US: MDD start 20 mg/d; OCD 20-60 mg/d (max 80 mg/d); bulimia 60 mg/d; panic start 10 mg/d -> 20 mg/d; w niewyd. watroby/ starszych: dawki nizsze lub rzadsze."
       ].join("\n"),
       indications: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): duza depresja; OCD; bulimia (zmniejszenie napadow); dzieci 8+ z MDD.",
         "EU: duza depresja; OCD; bulimia (zmniejszenie napadow); dzieci 8+ z MDD.",
         "US: MDD, OCD, bulimia, panic disorder."
       ].join("\n"),
       contra: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): nadwrazliwosc; jednoczesne MAOI (i 5 tyg. przerwy po fluoksetynie).",
         "EU: nadwrazliwosc; jednoczesne MAOI (i 5 tyg. przerwy po fluoksetynie).",
         "US: MAOI (i 5 tyg. przerwy); pimozyd; tiorydazyna; nadwrazliwosc."
       ].join("\n"),
       warnings: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): zespol serotoninowy/NMS; wydluzenie QT; drgawki; mania; krwawienia; hiponatremia; dlugi T1/2.",
         "EU: zespol serotoninowy/NMS; wydluzenie QT; drgawki; mania; krwawienia; hiponatremia; dlugi T1/2.",
         "US: boxed warning samobojstw u <25 lat; zespol serotoninowy; wydluzenie QT/TdP; drgawki; mania; krwawienia; hiponatremia."
       ].join("\n"),
       interactions: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): silny inhibitor CYP2D6 (interakcje z TLPD, neuroleptykami); unikac MAOI i QT-prolongerow; uwaga z tamoksyfenem.",
         "EU: silny inhibitor CYP2D6 (interakcje z TLPD, neuroleptykami); unikac MAOI i QT-prolongerow; uwaga z tamoksyfenem.",
         "US: inhibitor CYP2D6; interakcje z TLPD, neuroleptykami i benzodiazepinami; unikac pimozydu/tiorydazyny."
       ].join("\n"),
       monitoring: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): monitoruj krwawienia, QT i objawy serotoninowe.",
         "EU: monitoruj krwawienia, QT i objawy serotoninowe.",
         "US: monitoruj objawy serotoninowe, krwawienia, QT i hiponatremie."
       ].join("\n"),
       preg: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): stosowac tylko gdy niezbedne; ryzyko objawow u noworodka i PPHN.",
         "EU: stosowac tylko gdy niezbedne; ryzyko objawow u noworodka i PPHN.",
         "US: ryzyko objawow u noworodka po ekspozycji w III trymestrze."
       ].join("\n"),
       renal: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): w niewyd. watroby dawki mniejsze lub co drugi dzien.",
         "EU: w niewyd. watroby dawki mniejsze lub co drugi dzien.",
         "US: w niewyd. watroby/ u starszych dawki mniejsze lub rzadsze."
       ].join("\n"),
-      notes: "Podsumowanie: UK SmPC (emc) + FDA fluoxetine label."
+      notes: "Podsumowanie: Fluoxetine 20 mg SmPC (emc, 24 Sep 2021) + FDA fluoxetine label."
     },
     citalopram: {
-      source: "EU: Citalopram SmPC (emc) + US: FDA Celexa label. PL: brak (RPL niedostepny).",
+      source: "EU: Citalopram 20 mg film-coated tablets SmPC (emc, 29 Feb 2024) + US: FDA Celexa label. PL: RPL/CHPL 500 (01.02.2026) - tymczasowo wg EU/US.",
       dose: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): depresja start 20 mg/d, max 40 mg/d; panic start 10 mg przez 1 tydz. -> 20 mg/d, max 40 mg/d.",
         "EU: depresja start 20 mg/d, max 40 mg/d; panic start 10 mg przez 1 tydz. -> 20 mg/d, max 40 mg/d.",
         "US: start 20 mg/d, max 40 mg/d; u >60 lat, w niewyd. watroby lub przy inhibitorach/PM CYP2C19 max 20 mg/d."
       ].join("\n"),
       indications: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): duza depresja; zespol paniczny z lub bez agorafobii.",
         "EU: duza depresja; zespol paniczny z lub bez agorafobii.",
         "US: epizody depresji (MDD)."
       ].join("\n"),
       contra: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): MAOI (i okresy odstepu); wrodzone lub stwierdzone wydluzenie QT; jednoczesne leki wydluzajace QT.",
         "EU: MAOI (i okresy odstepu); wrodzone lub stwierdzone wydluzenie QT; jednoczesne leki wydluzajace QT.",
         "US: MAOI; pimozyd; znane wydluzenie QT lub inne leki wydluzajace QT."
       ].join("\n"),
       warnings: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): ryzyko wydluzenia QT/TdP (szczegolnie dawki >40 mg); zespol serotoninowy; ryzyko samobojstw u mlodych; krwawienia; hiponatremia; mania/hipomania; objawy odstawienne.",
         "EU/US: ryzyko wydluzenia QT/TdP (szczegolnie dawki >40 mg); zespol serotoninowy; ryzyko samobojstw u mlodych; krwawienia; hiponatremia; mania/hipomania; objawy odstawienne."
       ].join("\n"),
       interactions: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): MAOI i inne serotonergiczne; leki wydluzajace QT; silne inhibitory CYP2C19 (np. omeprazol) zwiekszaja ekspozycje; NLPZ/antykoagulanty zwiekszaja ryzyko krwawien.",
         "EU/US: MAOI i inne serotonergiczne; leki wydluzajace QT; silne inhibitory CYP2C19 (np. omeprazol) zwiekszaja ekspozycje; NLPZ/antykoagulanty zwiekszaja ryzyko krwawien."
       ].join("\n"),
       monitoring: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): EKG i elektrolity u osob z ryzykiem QT; obserwuj krwawienia, hiponatremie i objawy serotoninowe.",
         "EU/US: EKG i elektrolity u osob z ryzykiem QT; obserwuj krwawienia, hiponatremie i objawy serotoninowe."
       ].join("\n"),
       preg: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): stosowac tylko gdy korzysc przewyzsza ryzyko; ryzyko objawow u noworodka i PPHN po ekspozycji w III trymestrze.",
         "EU/US: stosowac tylko gdy korzysc przewyzsza ryzyko; ryzyko objawow u noworodka i PPHN po ekspozycji w III trymestrze."
       ].join("\n"),
       renal: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): lagodne/umiark. zab. nerek bez korekty; w ciezkiej ostroznosc.",
         "EU: lagodne/umiark. zab. nerek bez korekty; w ciezkiej ostroznosc.",
         "US: ostroznosc w ciezkiej niewyd. nerek; dawki nizsze w niewyd. watroby."
       ].join("\n"),
-      notes: "Podsumowanie: Citalopram SmPC (emc) + FDA Celexa label."
+      notes: "Podsumowanie: Citalopram 20 mg SmPC (emc, 29 Feb 2024) + FDA Celexa label."
     },
     escitalopram: {
-      source: "EU: Escitalopram SmPC (emc) + US: FDA Lexapro label. PL: brak (RPL niedostepny).",
+      source: "EU: Escitalopram 10 mg tablets SmPC (emc, 15 Oct 2025) + US: FDA Lexapro label. PL: RPL/CHPL 500 (01.02.2026) - tymczasowo wg EU/US.",
       dose: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): MDD 10 mg/d start, max 20 mg/d; panic start 5 mg przez 1 tydz. -> 10 mg/d, max 20 mg/d; u 65+ start 5 mg, max 10 mg; w niewyd. watroby start 5 mg.",
         "EU: MDD 10 mg/d start, max 20 mg/d; panic start 5 mg przez 1 tydz. -> 10 mg/d, max 20 mg/d; u 65+ start 5 mg, max 10 mg; w niewyd. watroby start 5 mg.",
         "US: MDD/GAD start 10 mg/d; max 20 mg/d; u 65+ zwykle 10 mg/d."
       ].join("\n"),
       indications: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): duza depresja; zespol paniczny; fobia spoleczna; GAD; OCD.",
         "EU: duza depresja; zespol paniczny; fobia spoleczna; GAD; OCD.",
         "US: MDD; GAD."
       ].join("\n"),
       contra: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): MAOI (i okresy odstepu); wrodzone/stwierdzone wydluzenie QT; jednoczesne leki wydluzajace QT.",
         "EU: MAOI (i okresy odstepu); wrodzone/stwierdzone wydluzenie QT; jednoczesne leki wydluzajace QT.",
         "US: MAOI; pimozyd; znane wydluzenie QT."
       ].join("\n"),
       warnings: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): ryzyko QT (dawki zalezne); zespol serotoninowy; ryzyko samobojstw u mlodych; krwawienia; hiponatremia; mania/hipomania; objawy odstawienne.",
         "EU/US: ryzyko QT (dawki zalezne); zespol serotoninowy; ryzyko samobojstw u mlodych; krwawienia; hiponatremia; mania/hipomania; objawy odstawienne."
       ].join("\n"),
       interactions: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): MAOI i inne serotonergiczne; leki wydluzajace QT; inhibitory CYP2C19 zwiekszaja ekspozycje; NLPZ/antykoagulanty zwiekszaja ryzyko krwawien.",
         "EU/US: MAOI i inne serotonergiczne; leki wydluzajace QT; inhibitory CYP2C19 zwiekszaja ekspozycje; NLPZ/antykoagulanty zwiekszaja ryzyko krwawien."
       ].join("\n"),
       monitoring: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): EKG u osob z ryzykiem QT; obserwuj krwawienia, hiponatremie i objawy serotoninowe.",
         "EU/US: EKG u osob z ryzykiem QT; obserwuj krwawienia, hiponatremie i objawy serotoninowe."
       ].join("\n"),
       preg: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): stosowac tylko gdy korzysc przewyzsza ryzyko; ryzyko objawow u noworodka i PPHN po ekspozycji w III trymestrze.",
         "EU/US: stosowac tylko gdy korzysc przewyzsza ryzyko; ryzyko objawow u noworodka i PPHN po ekspozycji w III trymestrze."
       ].join("\n"),
       renal: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): lagodne/umiark. zab. nerek bez korekty; w ciezkiej ostroznosc.",
         "EU: lagodne/umiark. zab. nerek bez korekty; w ciezkiej ostroznosc.",
         "US: ostroznosc w ciezkiej niewyd. nerek; dawki nizsze w niewyd. watroby."
       ].join("\n"),
-      notes: "Podsumowanie: Escitalopram SmPC (emc) + FDA Lexapro label."
+      notes: "Podsumowanie: Escitalopram 10 mg SmPC (emc, 15 Oct 2025) + FDA Lexapro label."
     },
     paroksetyna: {
-      source: "EU: Paroxetine SmPC (emc) + US: Paxil label (DailyMed). PL: brak (RPL niedostepny).",
+      source: "EU: Paroxetine 20 mg tablets SmPC (emc, 17 Apr 2024) + US: Paxil label (DailyMed). PL: RPL/CHPL 500 (01.02.2026) - tymczasowo wg EU/US.",
       dose: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): depresja start 20 mg/d, zwykle 20-50 mg/d; OCD 20-60 mg/d; panic start 10 mg/d, zakres 20-40 mg/d (max 60 mg/d); SAD/GAD/PTSD zwykle 20-50 mg/d.",
         "EU: depresja start 20 mg/d, zwykle 20-50 mg/d; OCD 20-60 mg/d; panic start 10 mg/d, zakres 20-40 mg/d (max 60 mg/d); SAD/GAD/PTSD zwykle 20-50 mg/d.",
         "US: podobnie; dawki titrowac co 1 tydz.; u starszych/niewyd. watroby dawki nizsze."
       ].join("\n"),
       indications: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): duza depresja; OCD; zespol paniczny; fobia spoleczna; GAD; PTSD.",
         "EU: duza depresja; OCD; zespol paniczny; fobia spoleczna; GAD; PTSD.",
         "US: MDD, OCD, panic disorder, SAD, GAD, PTSD."
       ].join("\n"),
       contra: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): MAOI (i okresy odstepu); tiorydazyna; pimozyd.",
         "EU/US: MAOI (i okresy odstepu); tiorydazyna; pimozyd."
       ].join("\n"),
       warnings: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): ryzyko samobojstw u mlodych; zespol serotoninowy; drgawki; mania/hipomania; krwawienia; hiponatremia; silne objawy odstawienne przy naglym odstawieniu.",
         "EU/US: ryzyko samobojstw u mlodych; zespol serotoninowy; drgawki; mania/hipomania; krwawienia; hiponatremia; silne objawy odstawienne przy naglym odstawieniu."
       ].join("\n"),
       interactions: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): silny inhibitor CYP2D6 (interakcje m.in. z TLPD i neuroleptykami); MAOI; tiorydazyna/pimozyd; NLPZ/antykoagulanty; ostroznosc z tamoksyfenem.",
         "EU/US: silny inhibitor CYP2D6 (interakcje m.in. z TLPD i neuroleptykami); MAOI; tiorydazyna/pimozyd; NLPZ/antykoagulanty; ostroznosc z tamoksyfenem."
       ].join("\n"),
       monitoring: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): monitoruj ryzyko samobojcze, krwawienia i hiponatremie; odstawianie stopniowe.",
         "EU/US: monitoruj ryzyko samobojcze, krwawienia i hiponatremie; odstawianie stopniowe."
       ].join("\n"),
       preg: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): ryzyko wad serca i PPHN; stosowac tylko gdy korzysc przewyzsza ryzyko.",
         "EU/US: ryzyko wad serca i PPHN; stosowac tylko gdy korzysc przewyzsza ryzyko."
       ].join("\n"),
       renal: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): w ciezkiej niewyd. nerek lub watroby dawki poczatkowe nizsze.",
         "EU/US: w ciezkiej niewyd. nerek lub watroby dawki poczatkowe nizsze."
       ].join("\n"),
-      notes: "Podsumowanie: Paroxetine SmPC (emc) + Paxil label (DailyMed)."
+      notes: "Podsumowanie: Paroxetine 20 mg SmPC (emc, 17 Apr 2024) + Paxil label (DailyMed)."
     },
     fluwoksamina: {
-      source: "EU: Fluvoxamine SmPC (emc) + US: Luvox label (DailyMed). PL: brak (RPL niedostepny).",
+      source: "EU: Faverin 50 mg film-coated tablets SmPC (emc, 06 Sep 2023) + US: Luvox label (DailyMed). PL: RPL/CHPL 500 (01.02.2026) - tymczasowo wg EU/US.",
       dose: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): depresja/OCD start 50 mg/d; zwykle 100-200 mg/d; max 300 mg/d; dawki >150 mg/d dzielic na 2-3 dawki; w niewyd. watroby dawki nizsze.",
         "EU: depresja/OCD start 50 mg/d; zwykle 100-200 mg/d; max 300 mg/d; dawki >150 mg/d dzielic na 2-3 dawki; w niewyd. watroby dawki nizsze.",
         "US: OCD start 50 mg na noc; titracja do 100-300 mg/d; dawki >100 mg/d dzielic."
       ].join("\n"),
       indications: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): depresja; OCD.",
         "EU: depresja; OCD.",
         "US: OCD."
       ].join("\n"),
       contra: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): MAOI (i okresy odstepu); tizanidyna; nadwrazliwosc.",
         "EU/US: MAOI (i okresy odstepu); tizanidyna; nadwrazliwosc."
       ].join("\n"),
       warnings: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): ryzyko samobojstw u mlodych; zespol serotoninowy; drgawki; mania/hipomania; krwawienia; hiponatremia.",
         "EU/US: ryzyko samobojstw u mlodych; zespol serotoninowy; drgawki; mania/hipomania; krwawienia; hiponatremia."
       ].join("\n"),
       interactions: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): silny inhibitor CYP1A2/CYP2C19 (zwieksza stezenia m.in. teofiliny, klozapiny, TLPD, benzodiazepin); MAOI; tizanidyna przeciwwskazana; NLPZ/antykoagulanty.",
         "EU/US: silny inhibitor CYP1A2/CYP2C19 (zwieksza stezenia m.in. teofiliny, klozapiny, TLPD, benzodiazepin); MAOI; tizanidyna przeciwwskazana; NLPZ/antykoagulanty."
       ].join("\n"),
       monitoring: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): obserwuj sedacje, krwawienia i objawy serotoninowe; kontrola INR przy warfarynie.",
         "EU/US: obserwuj sedacje, krwawienia i objawy serotoninowe; kontrola INR przy warfarynie."
       ].join("\n"),
       preg: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): stosowac tylko gdy korzysc przewyzsza ryzyko; ryzyko objawow u noworodka po ekspozycji w III trymestrze.",
         "EU/US: stosowac tylko gdy korzysc przewyzsza ryzyko; ryzyko objawow u noworodka po ekspozycji w III trymestrze."
       ].join("\n"),
       renal: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): w niewyd. watroby dawki nizsze; nerkowe bez istotnej korekty.",
         "EU: w niewyd. watroby dawki nizsze; nerkowe bez istotnej korekty.",
         "US: ostroznosc w niewyd. watroby."
       ].join("\n"),
-      notes: "Podsumowanie: Fluvoxamine SmPC (emc) + Luvox label (DailyMed)."
+      notes: "Podsumowanie: Faverin 50 mg SmPC (emc, 06 Sep 2023) + Luvox label (DailyMed)."
     },
     diazepam: {
-      source: "EU: UK SmPC (emc, Diazepam oral suspension) + US: FDA Valium label. PL: brak (RPL niedostepny).",
+      source: "EU: UK SmPC (emc, Diazepam oral suspension) + US: FDA Valium label. PL: RPL/CHPL 500 (01.02.2026) - tymczasowo wg EU/US.",
       dose: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): ciezki lek 2 mg 3x/d -> do 30 mg/d; bezsennosc 5-15 mg na noc; skurcze miesni 2-15 mg/d (do 60 mg/d); tetanus 3-10 mg/kg/d; odstawienie alkoholu 5-20 mg, powt. po 2-4 h; premedykacja 5 mg na noc + rano + 2 h przed zabiegiem; osoby starsze zwykle 1/2 dawki.",
         "EU: ciezki lek 2 mg 3x/d -> do 30 mg/d; bezsennosc 5-15 mg na noc; skurcze miesni 2-15 mg/d (do 60 mg/d); tetanus 3-10 mg/kg/d; odstawienie alkoholu 5-20 mg, powt. po 2-4 h; premedykacja 5 mg na noc + rano + 2 h przed zabiegiem; osoby starsze zwykle 1/2 dawki.",
         "US: dawki wg wskazania (lek przeciwlekowy, odstawienie alkoholu, skurcze miesni, leczenie wspomagajace w padaczce); skutecznosc w lek uogolnionym oceniana do 4 mies. - dalsza terapia wymaga okresowej oceny."
       ].join("\n"),
       indications: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): krotkoterminowo ciezki lek; sedacja/premedykacja; przeciwdrgawkowo (m.in. status), spastycznosc i skurcze; odstawienie alkoholu.",
         "EU: krotkoterminowo ciezki lek; sedacja/premedykacja; przeciwdrgawkowo (m.in. status), spastycznosc i skurcze; odstawienie alkoholu.",
         "US: zaburzenia lekowe; ostry zespol odstawienia alkoholu; skurcze miesni; leczenie wspomagajace w zaburzeniach drgawkowych."
       ].join("\n"),
       contra: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): nadwrazliwosc; ciezka niewyd. oddechowa; bezdech senny; miastenia; ciezka niewyd. watroby; fobie/obsesyjne; nie stosowac w monoterapii depresji; porfiria.",
         "EU: nadwrazliwosc; ciezka niewyd. oddechowa; bezdech senny; miastenia; ciezka niewyd. watroby; fobie/obsesyjne; nie stosowac w monoterapii depresji; porfiria.",
         "US: nadwrazliwosc; ciezka niewyd. oddechowa; ciezka niewyd. watroby; bezdech senny; miastenia; ostra jaskra z waskim katem; niemowleta <6 mies."
       ].join("\n"),
       warnings: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): ryzyko uzaleznienia i odstawienia; sedacja i upadki; nie laczyc z alkoholem; ostroznosc w depresji i u starszych; ryzyko z opioidami.",
         "EU: ryzyko uzaleznienia i odstawienia; sedacja i upadki; nie laczyc z alkoholem; ostroznosc w depresji i u starszych; ryzyko z opioidami.",
         "US: boxed warning o skojarzeniu z opioidami (sedacja/respiratory depression); ryzyko naduzycia i uzaleznienia; odstawianie stopniowe."
       ].join("\n"),
       interactions: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): alkohol i inne depresanty OUN nasilaja sedacje; ostroznosc z opioidami.",
         "EU: alkohol i inne depresanty OUN nasilaja sedacje; ostroznosc z opioidami.",
         "US: alkohole/depresanty OUN (w tym opioidy) zwiekszaja ryzyko depresji oddechowej."
       ].join("\n"),
       monitoring: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): obserwuj sedacje, ryzyko upadkow i objawy odstawienne.",
         "EU: obserwuj sedacje, ryzyko upadkow i objawy odstawienne.",
         "US: monitoruj depresje oddechowa przy skojarzeniu z opioidami."
       ].join("\n"),
       preg: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): nie stosowac w ciazy i laktacji (ryzyko hipotermii/hipotonii/odstawienia u noworodka).",
         "EU: nie stosowac w ciazy i laktacji (ryzyko hipotermii/hipotonii/odstawienia u noworodka).",
         "US: ryzyko wad i objawow u noworodka; stosowac tylko gdy korzysc przewyzsza ryzyko."
       ].join("\n"),
       renal: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): ostroznosc w niewyd. nerek i watroby; u starszych dawki nizsze.",
         "EU: ostroznosc w niewyd. nerek i watroby; u starszych dawki nizsze.",
         "US: ostroznosc w niewyd. watroby i oddechowej."
       ].join("\n"),
       notes: "Podsumowanie: UK SmPC (emc) + FDA Valium label."
     },
     alprazolam: {
-      source: "EU: Xanax SmPC (emc). US: FDA boxed warning class + alprazolam label. PL: brak (RPL niedostepny).",
+      source: "EU: Xanax SmPC (emc). US: FDA boxed warning class + alprazolam label. PL: RPL/CHPL 500 (01.02.2026) - tymczasowo wg EU/US.",
       dose: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): ciezki lek - start 0.25-0.5 mg 3x/d; dawke zwiekszac stopniowo do typowo 3 mg/d; osoby starsze 0.25 mg 2-3x/d; leczenie krotkoterminowe (2-4 tyg. wlacznie z odstawianiem).",
         "EU: ciezki lek - start 0.25-0.5 mg 3x/d; dawke zwiekszac stopniowo do typowo 3 mg/d; osoby starsze 0.25 mg 2-3x/d; leczenie krotkoterminowe (2-4 tyg. wlacznie z odstawianiem).",
         "US: dawki indywidualne, zwykle 0.25-0.5 mg 3x/d; stopniowa titracja i odstawianie."
       ].join("\n"),
       indications: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): krotkoterminowe leczenie ciezkiego leku.",
         "EU: krotkoterminowe leczenie ciezkiego leku.",
         "US: zaburzenia lekowe; zespol paniczny."
       ].join("\n"),
       contra: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): nadwrazliwosc; miastenia; ciezka niewyd. oddechowa; bezdech senny; ciezka niewyd. watroby.",
         "EU: nadwrazliwosc; miastenia; ciezka niewyd. oddechowa; bezdech senny; ciezka niewyd. watroby.",
         "US: podobnie; przeciwwskazane z silnymi inhibitorami CYP3A (azole)."
       ].join("\n"),
       warnings: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): ryzyko uzaleznienia i odstawienia; sedacja i upadki; depresja oddechowa przy skojarzeniu z opioidami; reakcje paradoksalne; tylko krotkoterminowo.",
         "EU/US: ryzyko uzaleznienia i odstawienia; sedacja i upadki; depresja oddechowa przy skojarzeniu z opioidami; reakcje paradoksalne; tylko krotkoterminowo."
       ].join("\n"),
       interactions: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): alkohol, opioidy i inne depresanty OUN zwiekszaja ryzyko depresji oddechowej; silne inhibitory CYP3A4 zwiekszaja ekspozycje.",
         "EU/US: alkohol, opioidy i inne depresanty OUN zwiekszaja ryzyko depresji oddechowej; silne inhibitory CYP3A4 zwiekszaja ekspozycje."
       ].join("\n"),
       monitoring: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): monitoruj sedacje, ryzyko upadkow i uzaleznienia; odstawianie stopniowe.",
         "EU/US: monitoruj sedacje, ryzyko upadkow i uzaleznienia; odstawianie stopniowe."
       ].join("\n"),
       preg: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): nie zalecane w ciazy i laktacji; ryzyko objawow u noworodka.",
         "EU/US: nie zalecane w ciazy i laktacji; ryzyko objawow u noworodka."
       ].join("\n"),
       renal: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): ostroznosc w niewyd. nerek i watroby; u starszych dawki nizsze.",
         "EU/US: ostroznosc w niewyd. nerek i watroby; u starszych dawki nizsze."
       ].join("\n"),
       notes: "Podsumowanie: Xanax SmPC (emc)."
     },
     bromazepam: {
-      source: "EU: Lexotan (HPRA, info via RxReasoner). PL/US: brak (RPL/FDA niedostepne).",
+      source: "EU: Lexotan (HPRA, info via RxReasoner). PL: RPL/CHPL 500 (01.02.2026) - tymczasowo wg EU/US.",
       dose: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): zwykle 3-18 mg/d w dawkach podzielonych; w ciezkich przypadkach (zwykle szpital) do 60 mg/d; osoby starsze ok. polowa dawki; leczenie krotkoterminowe.",
         "EU: zwykle 3-18 mg/d w dawkach podzielonych; w ciezkich przypadkach (zwykle szpital) do 60 mg/d; osoby starsze ok. polowa dawki; leczenie krotkoterminowe.",
         "US: brak (niezatwierdzony)."
       ].join("\n"),
       indications: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): krotkoterminowo ciezki lek.",
         "EU: krotkoterminowo ciezki lek.",
         "US: brak (niezatwierdzony)."
       ].join("\n"),
       contra: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): nadwrazliwosc; miastenia; ciezka niewyd. oddechowa; bezdech senny; ciezka niewyd. watroby.",
         "EU: nadwrazliwosc; miastenia; ciezka niewyd. oddechowa; bezdech senny; ciezka niewyd. watroby.",
         "US: brak (niezatwierdzony)."
       ].join("\n"),
       warnings: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): ryzyko uzaleznienia i odstawienia; sedacja i upadki; depresja oddechowa z opioidami; tylko krotkoterminowo.",
         "EU: ryzyko uzaleznienia i odstawienia; sedacja i upadki; depresja oddechowa z opioidami; tylko krotkoterminowo."
       ].join("\n"),
       interactions: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): alkohol i inne depresanty OUN nasilaja sedacje; ostroznosc z inhibitorami CYP3A.",
         "EU: alkohol i inne depresanty OUN nasilaja sedacje; ostroznosc z inhibitorami CYP3A."
       ].join("\n"),
       monitoring: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): monitoruj sedacje i objawy odstawienne.",
         "EU: monitoruj sedacje i objawy odstawienne."
       ].join("\n"),
       preg: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): nie zalecane w ciazy i laktacji; ryzyko objawow u noworodka.",
         "EU: nie zalecane w ciazy i laktacji; ryzyko objawow u noworodka."
       ].join("\n"),
       renal: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): ostroznosc w niewyd. nerek i watroby; u starszych dawki nizsze.",
         "EU: ostroznosc w niewyd. nerek i watroby; u starszych dawki nizsze."
       ].join("\n"),
       notes: "Podsumowanie: Lexotan info (HPRA via RxReasoner)."
     },
     chlordiazepoksyd: {
-      source: "EU: Librium SmPC (emc). US: FDA boxed warning class. PL: brak (RPL niedostepny).",
+      source: "EU: Librium SmPC (emc). US: FDA boxed warning class. PL: RPL/CHPL 500 (01.02.2026) - tymczasowo wg EU/US.",
       dose: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): lek - 10 mg 2-4x/d (do 30 mg/d), ciezki lek 20 mg 2-4x/d (do 100 mg/d); bezsennosc zwiazana z lekiem 10-30 mg na noc; odstawienie alkoholu 25-100 mg, powt. co 2-4 h; skurcze miesni 10-30 mg/d.",
         "EU: lek - 10 mg 2-4x/d (do 30 mg/d), ciezki lek 20 mg 2-4x/d (do 100 mg/d); bezsennosc zwiazana z lekiem 10-30 mg na noc; odstawienie alkoholu 25-100 mg, powt. co 2-4 h; skurcze miesni 10-30 mg/d.",
         "US: dawki zalezne od wskazania; stopniowe odstawianie."
       ].join("\n"),
       indications: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): krotkoterminowo ciezki lek; bezsennosc zwiazana z lekiem; skurcze miesni; ostry zespol odstawienia alkoholu.",
         "EU: krotkoterminowo ciezki lek; bezsennosc zwiazana z lekiem; skurcze miesni; ostry zespol odstawienia alkoholu.",
         "US: podobnie (lek/odstawienie alkoholu)."
       ].join("\n"),
       contra: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): nadwrazliwosc; miastenia; ciezka niewyd. oddechowa; bezdech senny; ciezka niewyd. watroby; ataksja; zaburzenia psychotyczne.",
         "EU: nadwrazliwosc; miastenia; ciezka niewyd. oddechowa; bezdech senny; ciezka niewyd. watroby; ataksja; zaburzenia psychotyczne.",
         "US: podobnie."
       ].join("\n"),
       warnings: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): ryzyko uzaleznienia i odstawienia; sedacja i upadki; depresja oddechowa z opioidami; tylko krotkoterminowo.",
         "EU/US: ryzyko uzaleznienia i odstawienia; sedacja i upadki; depresja oddechowa z opioidami; tylko krotkoterminowo."
       ].join("\n"),
       interactions: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): alkohol i depresanty OUN (w tym opioidy) zwiekszaja ryzyko depresji oddechowej.",
         "EU/US: alkohol i depresanty OUN (w tym opioidy) zwiekszaja ryzyko depresji oddechowej."
       ].join("\n"),
       monitoring: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): monitoruj sedacje i objawy odstawienne.",
         "EU/US: monitoruj sedacje i objawy odstawienne."
       ].join("\n"),
       preg: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): nie zalecane w ciazy i laktacji; ryzyko objawow u noworodka.",
         "EU/US: nie zalecane w ciazy i laktacji; ryzyko objawow u noworodka."
       ].join("\n"),
       renal: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): ostroznosc w niewyd. nerek i watroby; u starszych dawki nizsze.",
         "EU/US: ostroznosc w niewyd. nerek i watroby; u starszych dawki nizsze."
       ].join("\n"),
       notes: "Podsumowanie: Librium SmPC (emc)."
     },
     estazolam: {
-      source: "US: Estazolam label (DailyMed). EU/PL: brak (RPL niedostepny).",
+      source: "US: Estazolam label (DailyMed). EU/PL: RPL/CHPL 500 (01.02.2026) - tymczasowo wg US.",
       dose: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): bezsennosc - zwykle 1 mg na noc; w razie potrzeby 2 mg; osoby starsze lub oslabione 1 mg (czasem 0.5 mg).",
         "EU: brak (niezatwierdzony).",
         "US: bezsennosc - zwykle 1 mg na noc; w razie potrzeby 2 mg; osoby starsze lub oslabione 1 mg (czasem 0.5 mg)."
       ].join("\n"),
       indications: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): krotkoterminowe leczenie bezsennosci.",
         "EU: brak (niezatwierdzony).",
         "US: krotkoterminowe leczenie bezsennosci."
       ].join("\n"),
       contra: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): nadwrazliwosc na benzodiazepiny.",
         "EU: brak (niezatwierdzony).",
         "US: nadwrazliwosc na benzodiazepiny."
       ].join("\n"),
       warnings: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): boxed warning (opioidy) + ryzyko naduzycia/uzaleznienia; sedacja, upadki, zaburzenia oddychania.",
         "US: boxed warning (opioidy) + ryzyko naduzycia/uzaleznienia; sedacja, upadki, zaburzenia oddychania."
       ].join("\n"),
       interactions: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): alkohol i depresanty OUN nasilaja sedacje; ostroznosc z inhibitorami CYP3A.",
         "US: alkohol i depresanty OUN nasilaja sedacje; ostroznosc z inhibitorami CYP3A."
       ].join("\n"),
       monitoring: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): monitoruj sedacje, oddychanie i ryzyko uzaleznienia.",
         "US: monitoruj sedacje, oddychanie i ryzyko uzaleznienia."
       ].join("\n"),
       preg: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): nie zalecane w ciazy i laktacji; ryzyko objawow u noworodka.",
         "US: nie zalecane w ciazy i laktacji; ryzyko objawow u noworodka."
       ].join("\n"),
       renal: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): ostroznosc w niewyd. nerek i watroby; dawki nizsze u starszych.",
         "US: ostroznosc w niewyd. nerek i watroby; dawki nizsze u starszych."
       ].join("\n"),
       notes: "Podsumowanie: Estazolam label (DailyMed)."
     },
     klonazepam: {
-      source: "EU: Clonazepam SmPC (emc). US: FDA boxed warning class. PL: brak (RPL niedostepny).",
+      source: "EU: Clonazepam SmPC (emc). US: FDA boxed warning class. PL: RPL/CHPL 500 (01.02.2026) - tymczasowo wg EU/US.",
       dose: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): padaczka - start zwykle do 1 mg/d w 2-3 dawkach; zwiekszac co 3 dni o 0.5-1 mg; podtrzymujaco zwykle 4-8 mg/d; max 20 mg/d; osoby starsze dawki nizsze.",
         "EU: padaczka - start zwykle do 1 mg/d w 2-3 dawkach; zwiekszac co 3 dni o 0.5-1 mg; podtrzymujaco zwykle 4-8 mg/d; max 20 mg/d; osoby starsze dawki nizsze.",
         "US: dawki zalezne od wskazania; ostrozna titracja."
       ].join("\n"),
       indications: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): leczenie padaczki (napady uogolnione/ogniskowe).",
         "EU: leczenie padaczki (napady uogolnione/ogniskowe).",
         "US: padaczka; niektore zaburzenia napadowe."
       ].join("\n"),
       contra: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): nadwrazliwosc; ciezka niewyd. watroby; ostra porfiria.",
         "EU: nadwrazliwosc; ciezka niewyd. watroby; ostra porfiria.",
         "US: nadwrazliwosc; ciezka niewyd. watroby."
       ].join("\n"),
       warnings: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): ryzyko uzaleznienia i odstawienia; sedacja i depresja oddechowa z opioidami; ostroznosc w depresji i u starszych.",
         "EU/US: ryzyko uzaleznienia i odstawienia; sedacja i depresja oddechowa z opioidami; ostroznosc w depresji i u starszych."
       ].join("\n"),
       interactions: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): alkohol i depresanty OUN nasilaja sedacje; ostroznosc z lekami przeciwpadaczkowymi.",
         "EU/US: alkohol i depresanty OUN nasilaja sedacje; ostroznosc z lekami przeciwpadaczkowymi."
       ].join("\n"),
       monitoring: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): obserwuj sedacje, oddychanie i objawy odstawienne.",
         "EU/US: obserwuj sedacje, oddychanie i objawy odstawienne."
       ].join("\n"),
       preg: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): nie zalecane w ciazy i laktacji; ryzyko objawow u noworodka.",
         "EU/US: nie zalecane w ciazy i laktacji; ryzyko objawow u noworodka."
       ].join("\n"),
       renal: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): ostroznosc w niewyd. nerek; w watrobie dawki nizsze.",
         "EU/US: ostroznosc w niewyd. nerek; w watrobie dawki nizsze."
       ].join("\n"),
       notes: "Podsumowanie: Clonazepam SmPC (emc)."
     },
     klorazepan: {
-      source: "US: Clorazepate label (DailyMed). EU/PL: brak (RPL niedostepny).",
+      source: "US: Clorazepate label (DailyMed). EU/PL: RPL/CHPL 500 (01.02.2026) - tymczasowo wg US.",
       dose: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): lek - zwykle 15-60 mg/d (max 90 mg/d); osoby starsze 7.5-15 mg/d; odstawienie alkoholu zwykle 30 mg poczatkowo, potem 30-60 mg/d; jako adjunct w padaczce 7.5 mg 2-3x/d, max 90 mg/d.",
         "EU: brak (niezatwierdzony).",
         "US: lek - zwykle 15-60 mg/d (max 90 mg/d); osoby starsze 7.5-15 mg/d; odstawienie alkoholu zwykle 30 mg poczatkowo, potem 30-60 mg/d; jako adjunct w padaczce 7.5 mg 2-3x/d, max 90 mg/d."
       ].join("\n"),
       indications: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): zaburzenia lekowe; ostry zespol odstawienia alkoholu; terapia wspomagajaca w padaczce.",
         "EU: brak (niezatwierdzony).",
         "US: zaburzenia lekowe; ostry zespol odstawienia alkoholu; terapia wspomagajaca w padaczce."
       ].join("\n"),
       contra: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): nadwrazliwosc na benzodiazepiny.",
         "EU: brak (niezatwierdzony).",
         "US: nadwrazliwosc na benzodiazepiny."
       ].join("\n"),
       warnings: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): boxed warning (opioidy) + ryzyko naduzycia/uzaleznienia; sedacja i depresja oddechowa.",
         "US: boxed warning (opioidy) + ryzyko naduzycia/uzaleznienia; sedacja i depresja oddechowa."
       ].join("\n"),
       interactions: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): alkohol i depresanty OUN nasilaja sedacje; ostroznosc z opioidami.",
         "US: alkohol i depresanty OUN nasilaja sedacje; ostroznosc z opioidami."
       ].join("\n"),
       monitoring: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): monitoruj sedacje, oddychanie i objawy odstawienne.",
         "US: monitoruj sedacje, oddychanie i objawy odstawienne."
       ].join("\n"),
       preg: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): nie zalecane w ciazy i laktacji; ryzyko objawow u noworodka.",
         "US: nie zalecane w ciazy i laktacji; ryzyko objawow u noworodka."
       ].join("\n"),
       renal: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): ostroznosc w niewyd. nerek i watroby.",
         "US: ostroznosc w niewyd. nerek i watroby."
       ].join("\n"),
       notes: "Podsumowanie: Clorazepate label (DailyMed)."
     },
     lorazepam: {
-      source: "EU: Lorazepam SmPC (emc). US: FDA boxed warning class. PL: brak (RPL niedostepny).",
+      source: "EU: Lorazepam SmPC (emc). US: FDA boxed warning class. PL: RPL/CHPL 500 (01.02.2026) - tymczasowo wg EU/US.",
       dose: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): lek - 1-4 mg/d w dawkach podzielonych; bezsennosc zwiazana z lekiem 1-2 mg na noc; premedykacja 2-3 mg na noc przed zabiegiem i 2-4 mg 1-2 h przed; osoby starsze dawki nizsze.",
         "EU: lek - 1-4 mg/d w dawkach podzielonych; bezsennosc zwiazana z lekiem 1-2 mg na noc; premedykacja 2-3 mg na noc przed zabiegiem i 2-4 mg 1-2 h przed; osoby starsze dawki nizsze.",
         "US: dawki zalezne od wskazania; ostrozna titracja."
       ].join("\n"),
       indications: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): krotkoterminowo ciezki lek; bezsennosc zwiazana z lekiem; premedykacja.",
         "EU: krotkoterminowo ciezki lek; bezsennosc zwiazana z lekiem; premedykacja.",
         "US: zaburzenia lekowe; sedacja/premedykacja."
       ].join("\n"),
       contra: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): nadwrazliwosc; miastenia; ciezka niewyd. oddechowa; bezdech senny; ciezka niewyd. watroby.",
         "EU: nadwrazliwosc; miastenia; ciezka niewyd. oddechowa; bezdech senny; ciezka niewyd. watroby.",
         "US: podobnie."
       ].join("\n"),
       warnings: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): ryzyko uzaleznienia i odstawienia; sedacja i upadki; depresja oddechowa z opioidami; tylko krotkoterminowo.",
         "EU/US: ryzyko uzaleznienia i odstawienia; sedacja i upadki; depresja oddechowa z opioidami; tylko krotkoterminowo."
       ].join("\n"),
       interactions: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): alkohol i depresanty OUN nasilaja sedacje; opioidy zwiekszaja ryzyko depresji oddechowej.",
         "EU/US: alkohol i depresanty OUN nasilaja sedacje; opioidy zwiekszaja ryzyko depresji oddechowej."
       ].join("\n"),
       monitoring: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): monitoruj sedacje, oddychanie i objawy odstawienne.",
         "EU/US: monitoruj sedacje, oddychanie i objawy odstawienne."
       ].join("\n"),
       preg: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): nie zalecane w ciazy i laktacji; ryzyko objawow u noworodka.",
         "EU/US: nie zalecane w ciazy i laktacji; ryzyko objawow u noworodka."
       ].join("\n"),
       renal: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): ostroznosc w niewyd. nerek i watroby; u starszych dawki nizsze.",
         "EU/US: ostroznosc w niewyd. nerek i watroby; u starszych dawki nizsze."
       ].join("\n"),
       notes: "Podsumowanie: Lorazepam SmPC (emc)."
     },
     lormetazepam: {
-      source: "EU: Lormetazepam SmPC (emc). PL/US: brak (RPL/FDA niedostepne).",
+      source: "EU: Lormetazepam SmPC (emc). PL: RPL/CHPL 500 (01.02.2026) - tymczasowo wg EU/US.",
       dose: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): bezsennosc - zwykle 0.5-1.5 mg na noc; osoby starsze 0.5-1 mg; leczenie krotkoterminowe.",
         "EU: bezsennosc - zwykle 0.5-1.5 mg na noc; osoby starsze 0.5-1 mg; leczenie krotkoterminowe.",
         "US: brak (niezatwierdzony)."
       ].join("\n"),
       indications: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): krotkoterminowe leczenie bezsennosci.",
         "EU: krotkoterminowe leczenie bezsennosci.",
         "US: brak (niezatwierdzony)."
       ].join("\n"),
       contra: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): nadwrazliwosc; miastenia; ciezka niewyd. oddechowa; bezdech senny; ciezka niewyd. watroby.",
         "EU: nadwrazliwosc; miastenia; ciezka niewyd. oddechowa; bezdech senny; ciezka niewyd. watroby.",
         "US: brak (niezatwierdzony)."
       ].join("\n"),
       warnings: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): ryzyko uzaleznienia i odstawienia; sedacja i upadki; depresja oddechowa z opioidami; tylko krotkoterminowo.",
         "EU: ryzyko uzaleznienia i odstawienia; sedacja i upadki; depresja oddechowa z opioidami; tylko krotkoterminowo."
       ].join("\n"),
       interactions: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): alkohol i depresanty OUN nasilaja sedacje; opioidy zwiekszaja ryzyko depresji oddechowej.",
         "EU: alkohol i depresanty OUN nasilaja sedacje; opioidy zwiekszaja ryzyko depresji oddechowej."
       ].join("\n"),
       monitoring: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): monitoruj sedacje i ryzyko upadkow.",
         "EU: monitoruj sedacje i ryzyko upadkow."
       ].join("\n"),
       preg: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): nie zalecane w ciazy i laktacji; ryzyko objawow u noworodka.",
         "EU: nie zalecane w ciazy i laktacji; ryzyko objawow u noworodka."
       ].join("\n"),
       renal: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): ostroznosc w niewyd. nerek i watroby; u starszych dawki nizsze.",
         "EU: ostroznosc w niewyd. nerek i watroby; u starszych dawki nizsze."
       ].join("\n"),
       notes: "Podsumowanie: Lormetazepam SmPC (emc)."
@@ -1458,289 +1410,289 @@
     medazepam: {
       source: "PL/EU/US: brak publicznej CHPL/SmPC/FDA label - uzupelnij recznie.",
       dose: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): brak danych (nie znaleziono publicznej SmPC).",
         "EU: brak danych (nie znaleziono publicznej SmPC).",
         "US: brak (niezatwierdzony)."
       ].join("\n"),
       indications: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): brak danych.",
         "EU: brak danych.",
         "US: brak (niezatwierdzony)."
       ].join("\n"),
       contra: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): brak danych.",
         "EU: brak danych.",
         "US: brak (niezatwierdzony)."
       ].join("\n"),
       warnings: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): brak danych.",
         "EU: brak danych.",
         "US: brak (niezatwierdzony)."
       ].join("\n"),
       interactions: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): brak danych.",
         "EU: brak danych.",
         "US: brak (niezatwierdzony)."
       ].join("\n"),
       monitoring: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): brak danych.",
         "EU: brak danych.",
         "US: brak (niezatwierdzony)."
       ].join("\n"),
       preg: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): brak danych.",
         "EU: brak danych.",
         "US: brak (niezatwierdzony)."
       ].join("\n"),
       renal: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): brak danych.",
         "EU: brak danych.",
         "US: brak (niezatwierdzony)."
       ].join("\n"),
       notes: "Brak danych w publicznych zrodlach - wpisz recznie."
     },
     midazolam: {
-      source: "EU: Buccolam SmPC (emc) / Miprosed SmPC (emc). US: FDA boxed warning class. PL: brak (RPL niedostepny).",
+      source: "EU: Buccolam SmPC (emc) / Miprosed SmPC (emc). US: FDA boxed warning class. PL: RPL/CHPL 500 (01.02.2026) - tymczasowo wg EU/US.",
       dose: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): oromukozalnie w ostrych napadach drgawkowych - dawki zalezne od wieku (ok. 2.5-10 mg jednorazowo); inne wskazania i drogi podania wymagaja monitorowania.",
         "EU: oromukozalnie w ostrych napadach drgawkowych - dawki zalezne od wieku (ok. 2.5-10 mg jednorazowo); inne wskazania i drogi podania wymagaja monitorowania.",
         "US: dawki zalezne od wskazania i drogi podania; tylko pod nadzorem."
       ].join("\n"),
       indications: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): ostre napady drgawkowe (buccal); sedacja/premedykacja zalezne od preparatu.",
         "EU: ostre napady drgawkowe (buccal); sedacja/premedykacja zalezne od preparatu.",
         "US: sedacja, znieczulenie, napady drgawkowe (zalezne od preparatu)."
       ].join("\n"),
       contra: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): nadwrazliwosc; ciezka niewyd. oddechowa; bezdech senny; ciezka niewyd. watroby.",
         "EU: nadwrazliwosc; ciezka niewyd. oddechowa; bezdech senny; ciezka niewyd. watroby.",
         "US: podobnie."
       ].join("\n"),
       warnings: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): depresja oddechowa (szczegolnie z opioidami); konieczny monitoring; ryzyko uzaleznienia.",
         "EU/US: depresja oddechowa (szczegolnie z opioidami); konieczny monitoring; ryzyko uzaleznienia."
       ].join("\n"),
       interactions: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): alkohol i depresanty OUN nasilaja sedacje; inhibitory CYP3A4 zwiekszaja ekspozycje.",
         "EU/US: alkohol i depresanty OUN nasilaja sedacje; inhibitory CYP3A4 zwiekszaja ekspozycje."
       ].join("\n"),
       monitoring: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): monitoruj oddychanie, tetno i sedacje.",
         "EU/US: monitoruj oddychanie, tetno i sedacje."
       ].join("\n"),
       preg: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): nie zalecane w ciazy i laktacji; ryzyko objawow u noworodka.",
         "EU/US: nie zalecane w ciazy i laktacji; ryzyko objawow u noworodka."
       ].join("\n"),
       renal: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): ostroznosc w niewyd. nerek i watroby; dawki nizsze u starszych.",
         "EU/US: ostroznosc w niewyd. nerek i watroby; dawki nizsze u starszych."
       ].join("\n"),
       notes: "Podsumowanie: Buccolam/Miprosed SmPC (emc)."
     },
     nitrazepam: {
-      source: "EU: Mogadon SmPC (emc). PL/US: brak (RPL/FDA niedostepne).",
+      source: "EU: Mogadon SmPC (emc). PL: RPL/CHPL 500 (01.02.2026) - tymczasowo wg EU/US.",
       dose: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): bezsennosc - dorosli 5 mg na noc, w razie potrzeby 10 mg; osoby starsze 2.5-5 mg; leczenie krotkoterminowe.",
         "EU: bezsennosc - dorosli 5 mg na noc, w razie potrzeby 10 mg; osoby starsze 2.5-5 mg; leczenie krotkoterminowe.",
         "US: brak (niezatwierdzony)."
       ].join("\n"),
       indications: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): krotkoterminowe leczenie bezsennosci.",
         "EU: krotkoterminowe leczenie bezsennosci.",
         "US: brak (niezatwierdzony)."
       ].join("\n"),
       contra: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): nadwrazliwosc; miastenia; ciezka niewyd. oddechowa; bezdech senny; ciezka niewyd. watroby.",
         "EU: nadwrazliwosc; miastenia; ciezka niewyd. oddechowa; bezdech senny; ciezka niewyd. watroby.",
         "US: brak (niezatwierdzony)."
       ].join("\n"),
       warnings: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): ryzyko uzaleznienia i odstawienia; sedacja i upadki; depresja oddechowa z opioidami; tylko krotkoterminowo.",
         "EU: ryzyko uzaleznienia i odstawienia; sedacja i upadki; depresja oddechowa z opioidami; tylko krotkoterminowo."
       ].join("\n"),
       interactions: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): alkohol i depresanty OUN nasilaja sedacje.",
         "EU: alkohol i depresanty OUN nasilaja sedacje."
       ].join("\n"),
       monitoring: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): monitoruj sedacje i ryzyko upadkow.",
         "EU: monitoruj sedacje i ryzyko upadkow."
       ].join("\n"),
       preg: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): nie zalecane w ciazy i laktacji; ryzyko objawow u noworodka.",
         "EU: nie zalecane w ciazy i laktacji; ryzyko objawow u noworodka."
       ].join("\n"),
       renal: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): ostroznosc w niewyd. nerek i watroby; u starszych dawki nizsze.",
         "EU: ostroznosc w niewyd. nerek i watroby; u starszych dawki nizsze."
       ].join("\n"),
       notes: "Podsumowanie: Mogadon SmPC (emc)."
     },
     oksazepam: {
-      source: "EU: Oxazepam SmPC (emc). US: FDA boxed warning class. PL: brak (RPL niedostepny).",
+      source: "EU: Oxazepam SmPC (emc). US: FDA boxed warning class. PL: RPL/CHPL 500 (01.02.2026) - tymczasowo wg EU/US.",
       dose: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): lek - 15-30 mg 3-4x/d (max 120 mg/d); bezsennosc zwiazana z lekiem 15-25 mg na noc (max 50 mg); osoby starsze 10-20 mg 3-4x/d.",
         "EU: lek - 15-30 mg 3-4x/d (max 120 mg/d); bezsennosc zwiazana z lekiem 15-25 mg na noc (max 50 mg); osoby starsze 10-20 mg 3-4x/d.",
         "US: dawki zalezne od wskazania; ostrozna titracja."
       ].join("\n"),
       indications: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): krotkoterminowo ciezki lek; bezsennosc zwiazana z lekiem.",
         "EU: krotkoterminowo ciezki lek; bezsennosc zwiazana z lekiem.",
         "US: zaburzenia lekowe."
       ].join("\n"),
       contra: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): nadwrazliwosc; miastenia; ciezka niewyd. oddechowa; bezdech senny; ciezka niewyd. watroby.",
         "EU: nadwrazliwosc; miastenia; ciezka niewyd. oddechowa; bezdech senny; ciezka niewyd. watroby.",
         "US: podobnie."
       ].join("\n"),
       warnings: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): ryzyko uzaleznienia i odstawienia; sedacja i upadki; depresja oddechowa z opioidami; tylko krotkoterminowo.",
         "EU/US: ryzyko uzaleznienia i odstawienia; sedacja i upadki; depresja oddechowa z opioidami; tylko krotkoterminowo."
       ].join("\n"),
       interactions: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): alkohol i depresanty OUN nasilaja sedacje.",
         "EU/US: alkohol i depresanty OUN nasilaja sedacje."
       ].join("\n"),
       monitoring: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): monitoruj sedacje i objawy odstawienne.",
         "EU/US: monitoruj sedacje i objawy odstawienne."
       ].join("\n"),
       preg: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): nie zalecane w ciazy i laktacji; ryzyko objawow u noworodka.",
         "EU/US: nie zalecane w ciazy i laktacji; ryzyko objawow u noworodka."
       ].join("\n"),
       renal: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): ostroznosc w niewyd. nerek i watroby; u starszych dawki nizsze.",
         "EU/US: ostroznosc w niewyd. nerek i watroby; u starszych dawki nizsze."
       ].join("\n"),
       notes: "Podsumowanie: Oxazepam SmPC (emc)."
     },
     temazepam: {
-      source: "EU: Normison SmPC (HPRA). US: FDA boxed warning class. PL: brak (RPL niedostepny).",
+      source: "EU: Normison SmPC (HPRA). US: FDA boxed warning class. PL: RPL/CHPL 500 (01.02.2026) - tymczasowo wg EU/US.",
       dose: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): bezsennosc - zwykle 10-20 mg na noc; w razie potrzeby 30-40 mg; osoby starsze 10 mg (max 20 mg); premedykacja 20-40 mg 30-60 min przed zabiegiem.",
         "EU: bezsennosc - zwykle 10-20 mg na noc; w razie potrzeby 30-40 mg; osoby starsze 10 mg (max 20 mg); premedykacja 20-40 mg 30-60 min przed zabiegiem.",
         "US: dawki zalezne od wskazania; ostrozna titracja."
       ].join("\n"),
       indications: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): krotkoterminowe leczenie bezsennosci; premedykacja.",
         "EU: krotkoterminowe leczenie bezsennosci; premedykacja.",
         "US: krotkoterminowo bezsennosc."
       ].join("\n"),
       contra: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): nadwrazliwosc; miastenia; ciezka niewyd. oddechowa; bezdech senny; ciezka niewyd. watroby.",
         "EU: nadwrazliwosc; miastenia; ciezka niewyd. oddechowa; bezdech senny; ciezka niewyd. watroby.",
         "US: podobnie."
       ].join("\n"),
       warnings: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): ryzyko uzaleznienia i odstawienia; sedacja i upadki; depresja oddechowa z opioidami; tylko krotkoterminowo.",
         "EU/US: ryzyko uzaleznienia i odstawienia; sedacja i upadki; depresja oddechowa z opioidami; tylko krotkoterminowo."
       ].join("\n"),
       interactions: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): alkohol i depresanty OUN nasilaja sedacje.",
         "EU/US: alkohol i depresanty OUN nasilaja sedacje."
       ].join("\n"),
       monitoring: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): monitoruj sedacje i ryzyko upadkow.",
         "EU/US: monitoruj sedacje i ryzyko upadkow."
       ].join("\n"),
       preg: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): nie zalecane w ciazy i laktacji; ryzyko objawow u noworodka.",
         "EU/US: nie zalecane w ciazy i laktacji; ryzyko objawow u noworodka."
       ].join("\n"),
       renal: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): ostroznosc w niewyd. nerek i watroby; u starszych dawki nizsze.",
         "EU/US: ostroznosc w niewyd. nerek i watroby; u starszych dawki nizsze."
       ].join("\n"),
       notes: "Podsumowanie: Normison SmPC (HPRA)."
     },
     duloksetyna: {
-      source: "EU: Duloxetine SmPC (emc, 60 mg GR capsules) + US: Cymbalta label (FDA, 2017). PL: brak (RPL niedostepny).",
+      source: "EU: Cymbalta 30/60 mg hard gastro-resistant capsules SmPC (emc, 05 Jul 2024) + US: Cymbalta label (FDA, 2017). PL: RPL/CHPL 500 (01.02.2026) - tymczasowo wg EU/US.",
       dose: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): MDD start/maint 60 mg 1x/d; GAD start 30 mg 1x/d -> 60 mg; DPNP 60 mg 1x/d; max 120 mg/d; brak dowodow na korzysc z >60 mg w MDD; odstawianie stopniowe 1-2 tyg.",
         "EU: MDD start/maint 60 mg 1x/d; GAD start 30 mg 1x/d -> 60 mg; DPNP 60 mg 1x/d; max 120 mg/d; brak dowodow na korzysc z >60 mg w MDD; odstawianie stopniowe 1-2 tyg.",
         "US: MDD 40-60 mg/d (max 120 mg/d); GAD 30-60 mg/d (max 120 mg/d); DPNP 60 mg/d; fibromialgia 30->60 mg/d; bol miesniowo-szkieletowy 30->60 mg/d; unikac w ciezkiej niewyd. nerek (GFR <30) i chorobie watroby."
       ].join("\n"),
       indications: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): MDD; GAD; bol neuropatyczny w cukrzycy (DPNP).",
         "EU: MDD; GAD; bol neuropatyczny w cukrzycy (DPNP).",
         "US: MDD; GAD; DPNP; fibromialgia; przewlekly bol miesniowo-szkieletowy."
       ].join("\n"),
       contra: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): nadwrazliwosc; MAOI; ciezka niewyd. watroby; ciezka niewyd. nerek (CrCl <30); silne inhibitory CYP1A2 (np. fluvoxamina, cyprofloksacyna); niekontrolowane nadcisnienie.",
         "EU: nadwrazliwosc; MAOI; ciezka niewyd. watroby; ciezka niewyd. nerek (CrCl <30); silne inhibitory CYP1A2 (np. fluvoxamina, cyprofloksacyna); niekontrolowane nadcisnienie.",
         "US: MAOI; przewlekla choroba watroby/istotne uszkodzenie watroby; ciezka niewyd. nerek; nadwrazliwosc."
       ].join("\n"),
       warnings: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): wzrost cisnienia i HR; ryzyko zespolu serotoninowego; ryzyko manii/drgawek; uszkodzenie watroby; odstawianie stopniowe.",
         "EU: wzrost cisnienia i HR; ryzyko zespolu serotoninowego; ryzyko manii/drgawek; uszkodzenie watroby; odstawianie stopniowe.",
         "US: hepatotoksycznosc; hipotonia ortostatyczna/omdlenia; krwawienia; hiponatremia; zespol serotoninowy; monitoruj cisnienie."
       ].join("\n"),
       interactions: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): MAOI i inne serotonergiczne; silne inhibitory CYP1A2; ostroznosc z inhibitorami CYP2D6; NLPZ/antykoagulanty (krwawienia).",
         "EU: MAOI i inne serotonergiczne; silne inhibitory CYP1A2; ostroznosc z inhibitorami CYP2D6; NLPZ/antykoagulanty (krwawienia).",
         "US: unikac silnych inhibitorow CYP1A2; ostroznosc z inhibitorami CYP2D6 i serotonergikami; NLPZ/antykoagulanty."
       ].join("\n"),
       monitoring: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): cisnienie, objawy watrobowe, objawy serotoninowe; ryzyko samobojcze.",
         "EU: cisnienie, objawy watrobowe, objawy serotoninowe; ryzyko samobojcze.",
         "US: cisnienie, funkcja watroby, objawy krwawien/serotoninowe."
       ].join("\n"),
       preg: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): stosowac gdy korzysc przewyzsza ryzyko; objawy u noworodka po ekspozycji w III trymestrze.",
         "EU: stosowac gdy korzysc przewyzsza ryzyko; objawy u noworodka po ekspozycji w III trymestrze.",
         "US: potencjalne ryzyko dla plodu; ostroznosc w ciazy i laktacji."
       ].join("\n"),
       renal: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): brak korekty w lagodnej/umiark. niewyd. nerek; przeciwwskazane w ciezkiej (CrCl <30).",
         "EU: brak korekty w lagodnej/umiark. niewyd. nerek; przeciwwskazane w ciezkiej (CrCl <30).",
         "US: unikac przy GFR <30; ostroznosc w umiark. niewyd. nerek."
       ].join("\n"),
-      notes: "Podsumowanie: emc Duloxetine SmPC + FDA Cymbalta label."
+      notes: "Podsumowanie: Cymbalta SmPC (emc, 05 Jul 2024) + FDA Cymbalta label."
     },
     wenlafaksyna: {
-      source: "EU: Efexor XL SmPC (emc) + US: Effexor XR label (FDA, 2023). PL: brak (RPL niedostepny).",
+      source: "EU: Venlafaxine prolonged-release capsules SmPC (emc, 20 May 2024) + US: Effexor XR label (FDA, 2023). PL: RPL/CHPL 500 (01.02.2026) - tymczasowo wg EU/US.",
       dose: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): MDD start 75 mg 1x/d, max 375 mg/d; GAD 75 mg 1x/d, max 225 mg/d; SAD 75 mg 1x/d; PD start 37.5 mg/d przez 7 dni -> 75 mg/d, max 225 mg/d; titracja co >=2 tyg.",
         "EU: MDD start 75 mg 1x/d, max 375 mg/d; GAD 75 mg 1x/d, max 225 mg/d; SAD 75 mg 1x/d; PD start 37.5 mg/d przez 7 dni -> 75 mg/d, max 225 mg/d; titracja co >=2 tyg.",
         "US: MDD 37.5-75 mg/d start, target 75 mg/d, max 225 mg/d; GAD 37.5-75 mg/d start, max 225 mg/d; SAD 75 mg/d; PD 37.5 mg/d start -> 75 mg/d, max 225 mg/d."
       ].join("\n"),
       indications: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): MDD i zapobieganie nawrotom; GAD; SAD; PD.",
         "EU: MDD i zapobieganie nawrotom; GAD; SAD; PD.",
         "US: MDD; GAD; SAD; PD."
       ].join("\n"),
       contra: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): nadwrazliwosc; jednoczesne MAOI (i odstep).",
         "EU: nadwrazliwosc; jednoczesne MAOI (i odstep).",
         "US: nadwrazliwosc; MAOI."
       ].join("\n"),
       warnings: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): ryzyko samobojcze; zespol serotoninowy; wzrost cisnienia; krwawienia; hiponatremia; mania; drgawki; odstawianie stopniowe.",
         "EU: ryzyko samobojcze; zespol serotoninowy; wzrost cisnienia; krwawienia; hiponatremia; mania; drgawki; odstawianie stopniowe.",
         "US: podobnie; kontrola cisnienia; ryzyko zespolu odstawiennego."
       ].join("\n"),
       interactions: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): MAOI/serotonergiki; NLPZ/antykoagulanty; ostroznosc z lekami wydluzajacymi QT.",
         "EU: MAOI/serotonergiki; NLPZ/antykoagulanty; ostroznosc z lekami wydluzajacymi QT.",
         "US: MAOI/serotonergiki; NLPZ/antykoagulanty."
       ].join("\n"),
       monitoring: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): cisnienie, objawy serotoninowe, ryzyko samobojcze; odstawianie stopniowe.",
         "EU: cisnienie, objawy serotoninowe, ryzyko samobojcze; odstawianie stopniowe.",
         "US: cisnienie, objawy odstawienne."
       ].join("\n"),
       preg: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): ryzyko objawow adaptacyjnych u noworodka po ekspozycji w III trymestrze.",
         "EU: ryzyko objawow adaptacyjnych u noworodka po ekspozycji w III trymestrze.",
         "US: ryzyko objawow adaptacyjnych u noworodka."
       ].join("\n"),
       renal: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): redukcja dawki w niewyd. watroby (ok. 50%); w ciezkiej niewyd. nerek i dializie redukcja dawki o >=50%.",
         "EU/US: redukcja dawki w niewyd. watroby (ok. 50%); w ciezkiej niewyd. nerek i dializie redukcja dawki o >=50%."
       ].join("\n"),
-      notes: "Podsumowanie: Efexor XL SmPC (emc) + FDA Effexor XR label."
+      notes: "Podsumowanie: Venlafaxine prolonged-release SmPC (emc, 20 May 2024) + FDA Effexor XR label."
     },
     amitryptylina: {
       source: "EU: Amitriptyline SmPC (emc, 50 mg tablets) + US: Amitriptyline HCl label (FDA, 2025). PL: brak (RPL niedostepny).",
@@ -1919,48 +1871,48 @@
       notes: "Podsumowanie: Mirtazapine SmPC (emc) + FDA Remeron label."
     },
     wortioksetyna: {
-      source: "EU: Brintellix SmPC (emc) + US: Trintellix label (FDA, 2021). PL: brak (RPL niedostepny).",
+      source: "PL/EU: EMA Brintellix SmPC (PL, 07 Jan 2025) + US: Trintellix label (FDA, 2021).",
       dose: [
-        "PL: brak (RPL niedostepny).",
+        "PL: start 10 mg 1x/d; dawka 5-20 mg/d wg tolerancji; po ustapieniu objawow leczenie >=6 mies.",
         "EU: start 10 mg 1x/d; dawka 5-20 mg/d wg tolerancji; po ustapieniu objawow leczenie >=6 mies.",
         "US: start 10 mg 1x/d -> 20 mg/d; rozwaz 5 mg/d przy nietolerancji; max 10 mg/d u poor metabolizer CYP2D6; mozliwa redukcja przed odstawieniem."
       ].join("\n"),
       indications: [
-        "PL: brak (RPL niedostepny).",
+        "PL: epizody MDD u doroslych.",
         "EU: epizody MDD u doroslych.",
         "US: MDD u doroslych."
       ].join("\n"),
       contra: [
-        "PL: brak (RPL niedostepny).",
+        "PL: nadwrazliwosc; MAOI (odstep).",
         "EU: nadwrazliwosc; MAOI (odstep).",
         "US: nadwrazliwosc; MAOI (odstep)."
       ].join("\n"),
       warnings: [
-        "PL: brak (RPL niedostepny).",
+        "PL: ryzyko samobojcze; zespol serotoninowy; krwawienia; hiponatremia; mania; odstawianie.",
         "EU: ryzyko samobojcze; zespol serotoninowy; krwawienia; hiponatremia; mania; odstawianie.",
         "US: podobnie; krwawienia; dysfunkcje seksualne."
       ].join("\n"),
       interactions: [
-        "PL: brak (RPL niedostepny).",
+        "PL: MAOI/serotonergiki; inhibitory/induktory CYP2D6.",
         "EU: MAOI/serotonergiki; inhibitory/induktory CYP2D6.",
         "US: MAOI/serotonergiki; modulatory CYP2D6."
       ].join("\n"),
       monitoring: [
-        "PL: brak (RPL niedostepny).",
+        "PL: obserwacja objawow serotoninowych i samobojczych.",
         "EU: obserwacja objawow serotoninowych i samobojczych.",
         "US: monitoruj nastroj i krwawienia."
       ].join("\n"),
       preg: [
-        "PL: brak (RPL niedostepny).",
+        "PL: stosowac gdy korzysc przewyzsza ryzyko.",
         "EU: stosowac gdy korzysc przewyzsza ryzyko.",
         "US: ostroznosc w ciazy i laktacji."
       ].join("\n"),
       renal: [
-        "PL: brak (RPL niedostepny).",
+        "PL: brak istotnej korekty w nerkach; ostroznosc w ciezkiej niewyd. watroby.",
         "EU: brak istotnej korekty w nerkach; ostroznosc w ciezkiej niewyd. watroby.",
         "US: brak istotnej korekty w nerkach; ostroznosc w watrobie."
       ].join("\n"),
-      notes: "Podsumowanie: Brintellix SmPC (emc) + FDA Trintellix label."
+      notes: "Podsumowanie: Brintellix SmPC (emc, 07 Jan 2025) + FDA Trintellix label."
     },
     agomelatyna: {
       source: "EU: Valdoxan SmPC (emc) + US: brak zatwierdzenia. PL: brak (RPL niedostepny).",
@@ -2402,132 +2354,132 @@
       notes: "Podsumowanie: Topiramate SmPC (emc)."
     },
     zaleplon: {
-      source: "US: Zaleplon label (DailyMed). EU/PL: brak (RPL niedostepny).",
+      source: "US: Zaleplon label (DailyMed). EU/PL: RPL/CHPL 500 (01.02.2026) - tymczasowo wg US.",
       dose: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): bezsennosc - zwykle 10 mg przed snem; 5 mg u osob starszych lub o malej masie; 20 mg moze byc rozwazane u wybranych pacjentow.",
         "EU: brak (niezatwierdzony).",
-        "US: bezsennosc - zwykle 10 mg przed snem; 5 mg u osob starszych lub o malej masie; 20 mg moze byc rozważane u wybranych pacjentow."
+        "US: bezsennosc - zwykle 10 mg przed snem; 5 mg u osob starszych lub o malej masie; 20 mg moze byc rozwazane u wybranych pacjentow."
       ].join("\n"),
       indications: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): krotkoterminowe leczenie bezsennosci (trudnosc zasypiania).",
         "EU: brak (niezatwierdzony).",
         "US: krotkoterminowe leczenie bezsennosci (trudnosc zasypiania)."
       ].join("\n"),
       contra: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): nadwrazliwosc; zgloszone zlozone zachowania w czasie snu (przeciwwskazane przy ich wystapieniu).",
         "EU: brak.",
         "US: nadwrazliwosc; zgloszone zlozone zachowania w czasie snu (przeciwwskazane przy ich wystapieniu)."
       ].join("\n"),
       warnings: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): ryzyko zlozonych zachowan podczas snu; depresja OUN i uposledzenie sprawnosci nastepnego dnia.",
         "EU: brak.",
         "US: ryzyko zlozonych zachowan podczas snu; depresja OUN i uposledzenie sprawnosci nastepnego dnia."
       ].join("\n"),
       interactions: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): alkohol i inne depresanty OUN nasilaja sedacje; silne inhibitory (np. cimetydyna) zwiekszaja ekspozycje.",
         "EU: brak.",
         "US: alkohol i inne depresanty OUN nasilaja sedacje; silne inhibitory (np. cimetydyna) zwiekszaja ekspozycje."
       ].join("\n"),
       monitoring: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): obserwuj zachowania w nocy i nadmierna sedacje.",
         "EU: brak.",
         "US: obserwuj zachowania w nocy i nadmierna sedacje."
       ].join("\n"),
       preg: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): patrz label (stosowac tylko gdy konieczne).",
         "EU: brak.",
         "US: patrz label (stosowac tylko gdy konieczne)."
       ].join("\n"),
       renal: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): brak potrzeby korekty w lagodnej/umiark. niewyd. nerek; brak danych w ciezkiej.",
         "EU: brak.",
         "US: brak potrzeby korekty w lagodnej/umiark. niewyd. nerek; brak danych w ciezkiej."
       ].join("\n"),
       notes: "Podsumowanie: DailyMed zaleplon label (US)."
     },
     zolpidem: {
-      source: "EU: Zolpidem Tartrate SmPC (emc) + US: FDA warning o zlozonych zachowaniach podczas snu. PL: brak (RPL niedostepny).",
+      source: "EU: Zolpidem Tartrate SmPC (emc) + US: FDA warning o zlozonych zachowaniach podczas snu. PL: RPL/CHPL 500 (01.02.2026) - tymczasowo wg EU/US.",
       dose: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): krotkoterminowe leczenie bezsennosci; dawka zwykle 10 mg bezposrednio przed snem; osoby starsze 5 mg; czas leczenia zwykle 2-4 tyg. (max 4 tyg.).",
         "EU: krotkoterminowe leczenie bezsennosci; dawka zwykle 10 mg bezposrednio przed snem; osoby starsze 5 mg; czas leczenia zwykle 2-4 tyg. (max 4 tyg.).",
         "US: dawki wg labelu (ambulatoryjnie zwykle 5-10 mg na noc)."
       ].join("\n"),
       indications: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): krotkoterminowe leczenie bezsennosci u doroslych.",
         "EU: krotkoterminowe leczenie bezsennosci u doroslych.",
         "US: bezsennosc (trudnosc zasypiania, utrzymanie snu) wg labelu."
       ].join("\n"),
       contra: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): nadwrazliwosc; ciezka niewyd. watroby; bezdech senny; miastenia; niewyd. oddechowa.",
         "EU: nadwrazliwosc; ciezka niewyd. watroby; bezdech senny; miastenia; niewyd. oddechowa.",
         "US: zlozone zachowania w czasie snu (boxed warning)."
       ].join("\n"),
       warnings: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): ryzyko uzaleznienia i objawow odstawiennych; ostroznosc w depresji i zaburzeniach oddychania.",
         "EU: ryzyko uzaleznienia i objawow odstawiennych; ostroznosc w depresji i zaburzeniach oddychania.",
         "US: boxed warning o zlozonych zachowaniach podczas snu; depresja OUN."
       ].join("\n"),
       interactions: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): alkohol i inne depresanty OUN nasilaja sedacje; ostroznosc z inhibitorami CYP3A4.",
         "EU: alkohol i inne depresanty OUN nasilaja sedacje; ostroznosc z inhibitorami CYP3A4.",
         "US: depresanty OUN i alkohol zwiekszaja ryzyko."
       ].join("\n"),
       monitoring: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): obserwuj skutecznosc, objawy uzaleznienia i zachowania nocne.",
         "EU: obserwuj skutecznosc, objawy uzaleznienia i zachowania nocne.",
         "US: obserwuj zlozone zachowania w czasie snu."
       ].join("\n"),
       preg: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): nie zalecane w ciazy i laktacji.",
         "EU: nie zalecane w ciazy i laktacji.",
         "US: patrz label."
       ].join("\n"),
       renal: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): ostroznosc w niewyd. nerek/watroby.",
         "EU: ostroznosc w niewyd. nerek/watroby.",
         "US: ostroznosc w niewyd. watroby."
       ].join("\n"),
       notes: "Podsumowanie: Zolpidem Tartrate SmPC (emc) + FDA warning o zlozonych zachowaniach."
     },
     zopiklon: {
-      source: "EU: Zimovane SmPC (emc). US: brak (niezatwierdzony). PL: brak (RPL niedostepny).",
+      source: "EU: Zimovane SmPC (emc). US: brak (niezatwierdzony). PL: RPL/CHPL 500 (01.02.2026) - tymczasowo wg EU/US.",
       dose: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): bezsennosc - 7.5 mg przed snem; osoby starsze 3.75 mg; czas leczenia zwykle <=4 tyg.",
         "EU: bezsennosc - 7.5 mg przed snem; osoby starsze 3.75 mg; czas leczenia zwykle <=4 tyg.",
         "US: brak (niezatwierdzony)."
       ].join("\n"),
       indications: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): krotkoterminowe leczenie bezsennosci u doroslych.",
         "EU: krotkoterminowe leczenie bezsennosci u doroslych.",
         "US: brak (niezatwierdzony)."
       ].join("\n"),
       contra: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): nadwrazliwosc; miastenia; ciezka niewyd. oddechowa; bezdech senny; ciezka niewyd. watroby.",
         "EU: nadwrazliwosc; miastenia; ciezka niewyd. oddechowa; bezdech senny; ciezka niewyd. watroby.",
         "US: brak (niezatwierdzony)."
       ].join("\n"),
       warnings: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): ryzyko uzaleznienia i odstawienia; uposledzenie sprawnosci; depresja OUN.",
         "EU: ryzyko uzaleznienia i odstawienia; uposledzenie sprawnosci; depresja OUN.",
         "US: brak (niezatwierdzony)."
       ].join("\n"),
       interactions: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): alkohol i depresanty OUN nasilaja sedacje.",
         "EU: alkohol i depresanty OUN nasilaja sedacje.",
         "US: brak (niezatwierdzony)."
       ].join("\n"),
       monitoring: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): obserwuj uzaleznienie i sedacje.",
         "EU: obserwuj uzaleznienie i sedacje.",
         "US: brak (niezatwierdzony)."
       ].join("\n"),
       preg: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): nie zalecane w ciazy i laktacji.",
         "EU: nie zalecane w ciazy i laktacji.",
         "US: brak (niezatwierdzony)."
       ].join("\n"),
       renal: [
-        "PL: brak (RPL niedostepny).",
+        "PL (tymczasowo - RPL/CHPL 500 na 01.02.2026): ostroznosc w niewyd. nerek/watroby.",
         "EU: ostroznosc w niewyd. nerek/watroby.",
         "US: brak (niezatwierdzony)."
       ].join("\n"),
@@ -2581,7 +2533,7 @@
       source: "EU: Hydroxyzine SmPC (emc). US: Vistaril label (FDA) - info ogolne. PL: brak (RPL niedostepny).",
       dose: [
         "PL: brak (RPL niedostepny).",
-        "EU: lek w lęku - 50-100 mg/d; swiad - 25 mg na noc do 25 mg 3-4x/d; max 100 mg/d u doroslych; osoby starsze max 50 mg/d.",
+        "EU: lek w leku - 50-100 mg/d; swiad - 25 mg na noc do 25 mg 3-4x/d; max 100 mg/d u doroslych; osoby starsze max 50 mg/d.",
         "US: dawkowanie wg labelu."
       ].join("\n"),
       indications: [
