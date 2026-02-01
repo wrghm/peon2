@@ -24,13 +24,15 @@
     padding:6px 10px;
     border-radius:999px;
     border:1px solid var(--line);
-    background: rgba(255,255,255,.65);
+    background: var(--panel);
+    color: var(--text);
     font-size:12px;
     user-select:none;
   }
   .disFlag input{ width:16px; height:16px }
   .disActions{ display:flex; flex-wrap:wrap; gap:8px }
-  .disOut{ min-height:220px }
+  .disWrap textarea{ min-height: 96px }
+  .disOut{ min-height:240px }
   @media(max-width:980px){
     .disGrid2, .disGrid3{ grid-template-columns:1fr }
   }
